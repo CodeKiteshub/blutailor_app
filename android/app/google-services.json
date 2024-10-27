@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "35582500078",
+    "project_id": "blutailor-621af",
+    "storage_bucket": "blutailor-621af.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:35582500078:android:29e23203c14ca99b9ce7ff",
+        "android_client_info": {
+          "package_name": "com.mpf.blutailor"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBGauTrXoFjQMs5ij_K52Oqehlg2i6VFns"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
