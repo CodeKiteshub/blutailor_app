@@ -21,6 +21,7 @@ class AddressRepoImpl implements AddressRepo {
       required String state,
       required String countryCode,
       required String country,
+      required String name,
       required User user,
       String? id}) async {
     try {
@@ -33,6 +34,7 @@ class AddressRepoImpl implements AddressRepo {
           state: state,
           countryCode: countryCode,
           country: country,
+          name: name,
           user: user,
           id: id);
 

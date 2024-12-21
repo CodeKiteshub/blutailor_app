@@ -12,6 +12,7 @@ abstract interface class SettingsDataSource {
       required String profilePic});
   Future<QueryResult> storeOrder();
   Future<QueryResult> appOrder();
+  Future<QueryResult> fetchOrders();
   Future<QueryResult> fetchProfilePictureSignedUrl({required String ext});
 }
 
@@ -138,5 +139,56 @@ query GetUserProfilePictureImageSignedUrl__app($extension: String!, $userId: ID!
 
     return await apiClient.queryData(
         query: userProfilePicSignedUrlSchema, variable: variables);
+  }
+
+  @override
+  Future<QueryResult<Object?>> fetchOrders() async {
+    String fetchOrdersSchema = r"""
+query GetAllUserAlterationOrders($userId: String!, $page: Int, $limit: Int) {
+  getAllUserAlterationOrders(userId: $userId, page: $page, limit: $limit) {
+    orders {
+      isPaid
+      razorPayId
+      orderTotal
+      orderSrNo
+      status {
+        label
+      }
+      items {
+        stitching {
+          styling {
+            styles {
+              label
+              value
+            }
+          }
+          name
+        }
+        alterations {
+          label
+          price
+        }
+      }
+      orderDateTime {
+        day
+        month
+        year
+        hour
+        minute
+        datestamp
+        timestamp
+      }
+    }
+  }
+}
+""";
+
+    final variable = {
+      "userId": sl<SharedPreferences>().getString('userId'),
+      "page": 1,
+      "limit": 20
+    };
+    return await apiClient.queryData(
+        query: fetchOrdersSchema, variable: variable);
   }
 }

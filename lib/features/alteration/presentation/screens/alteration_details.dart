@@ -1,6 +1,6 @@
 import 'package:bluetailor_app/common/models/product_config_model.dart';
 import 'package:bluetailor_app/common/models/selected_cat_model.dart';
-import 'package:bluetailor_app/common/widgets/app_bar_widget.dart';
+import 'package:bluetailor_app/common/widgets/primary_app_bar.dart';
 import 'package:bluetailor_app/common/widgets/primary_gradient_button.dart';
 import 'package:bluetailor_app/core/theme/app_colors.dart';
 import 'package:bluetailor_app/features/alteration/presentation/cubit/alteration_config/alteration_config_cubit.dart';
@@ -40,108 +40,85 @@ class _AlterationDetailsState extends State<AlterationDetails> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: primaryBlue,
+      backgroundColor: Colors.white,
+      appBar: const PrimaryAppBar(title: "Alteration"),
       body: SafeArea(
-          child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const AppBarWidget(),
-          Padding(
-            padding: EdgeInsets.only(left: 3.w, top: 2.h),
-            child: Text(
-              "Alteration",
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 21.sp,
-                  fontWeight: FontWeight.w600),
-            ),
-          ),
-          SizedBox(
-            height: 2.h,
-          ),
-          Expanded(
-              child: Container(
-                  color: Colors.white,
-                  width: double.infinity,
-                  padding: EdgeInsets.only(
-                    left: 7.w,
-                    right: 7.w,
-                    top: 3.h,
-                  ),
-                  child: SingleChildScrollView(
-                    child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                              "Customize your shirt to meet your exact preferences",
-                              style: TextStyle(
-                                  color: const Color(0xFF383A3A),
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 18.sp)),
-                          SizedBox(
-                            height: 3.h,
-                          ),
-                          BlocBuilder<AlterationConfigCubit,
-                              AlterationConfigState>(
-                            builder: (context, state) {
-                              if (state is AlterationConfigLoaded) {
-                                return BlocBuilder<
-                                    AlterationUserMeasurementCubit,
-                                    UserMeasurementState>(
-                                  builder: (context, userMeasurement) {
-                                    if (userMeasurement
-                                        is UserMeasurementLoaded) {
-                                      return ListView.separated(
-                                          shrinkWrap: true,
-                                          physics:
-                                              const NeverScrollableScrollPhysics(),
-                                          separatorBuilder: (context, index) =>
-                                              SizedBox(
-                                                height: 3.h,
-                                              ),
-                                          itemCount: state.config.length,
-                                          itemBuilder: (context, index) =>
-                                              AlterationConfigWidget(
-                                                title:
-                                                    state.config[index].label,
-                                                measurementData: userMeasurement
-                                                    .userAttributes
-                                                    .firstWhere(
-                                                        (element) =>
-                                                            element.label ==
-                                                            state.config[index]
-                                                                .label,
-                                                        orElse: () => Option(
-                                                            label: "",
-                                                            value: 0))
-                                                    .value.toDouble(),
-                                              ));
-                                    } else {
-                                      return Center(
-                                        child: LoadingAnimationWidget.beat(
-                                            color: primaryBlue, size: 50),
-                                      );
-                                    }
-                                  },
-                                );
-                              } else {
-                                return Center(
-                                  child: LoadingAnimationWidget.beat(
-                                      color: primaryBlue, size: 50),
-                                );
-                              }
-                            },
-                          ),
-                          SizedBox(
-                            height: 4.h,
-                          ),
-                          SizedBox(
-                            height: 5.h,
-                          )
-                        ]),
-                  )))
-        ],
-      )),
+          child: Padding(
+              padding: EdgeInsets.only(
+                left: 7.w,
+                right: 7.w,
+                top: 3.h,
+              ),
+              child: SingleChildScrollView(
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                          "Customize your shirt to meet your exact preferences",
+                          style: TextStyle(
+                              color: const Color(0xFF383A3A),
+                              fontWeight: FontWeight.w600,
+                              fontSize: 18.sp)),
+                      SizedBox(
+                        height: 3.h,
+                      ),
+                      BlocBuilder<AlterationConfigCubit, AlterationConfigState>(
+                        builder: (context, state) {
+                          if (state is AlterationConfigLoaded) {
+                            return BlocBuilder<AlterationUserMeasurementCubit,
+                                UserMeasurementState>(
+                              builder: (context, userMeasurement) {
+                                if (userMeasurement is UserMeasurementLoaded) {
+                                  return ListView.separated(
+                                      shrinkWrap: true,
+                                      physics:
+                                          const NeverScrollableScrollPhysics(),
+                                      separatorBuilder: (context, index) =>
+                                          SizedBox(
+                                            height: 3.h,
+                                          ),
+                                      itemCount: state.config.length,
+                                      itemBuilder: (context, index) =>
+                                          AlterationConfigWidget(
+                                            name: state.config[index].name,
+                                            title: state.config[index].label,
+                                            price: state.config[index].price,
+                                            measurementData: userMeasurement
+                                                .userAttributes
+                                                .firstWhere(
+                                                    (element) =>
+                                                        element.name ==
+                                                        state.config[index]
+                                                            .label.toString().replaceAll(" ", "_"),
+                                                    orElse: () => Option(
+                                                        label: "", value: 0))
+                                                .value
+                                                .toDouble(),
+                                          ));
+                                } else {
+                                  return Center(
+                                    child: LoadingAnimationWidget.beat(
+                                        color: primaryBlue, size: 50),
+                                  );
+                                }
+                              },
+                            );
+                          } else {
+                            return Center(
+                              child: LoadingAnimationWidget.beat(
+                                  color: primaryBlue, size: 50),
+                            );
+                          }
+                        },
+                      ),
+                      SizedBox(
+                        height: 4.h,
+                      ),
+                      SizedBox(
+                        height: 8.h,
+                      )
+                    ]),
+              ))),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: BottomAppBar(
         color: Colors.transparent,

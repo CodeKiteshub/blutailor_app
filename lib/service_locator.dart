@@ -10,6 +10,7 @@ import 'package:bluetailor_app/features/address/presentation/cubit/address_cubit
 import 'package:bluetailor_app/features/alteration/data/data_source/alteration_data_source.dart';
 import 'package:bluetailor_app/features/alteration/data/repo/alteration_repo_impl.dart';
 import 'package:bluetailor_app/features/alteration/domain/repo/alteration_repo.dart';
+import 'package:bluetailor_app/features/alteration/domain/usecase/add_alteration_to_cart_usecase.dart';
 import 'package:bluetailor_app/features/alteration/domain/usecase/fetch_alteraion_signed_url_usecase.dart';
 import 'package:bluetailor_app/features/alteration/domain/usecase/fetch_alteration_config_usecase.dart';
 import 'package:bluetailor_app/features/alteration/domain/usecase/fetch_user_measurement_usecase.dart';
@@ -35,6 +36,17 @@ import 'package:bluetailor_app/features/auth/domain/usecases/logout_usecase.dart
 import 'package:bluetailor_app/features/auth/domain/usecases/register_usecase.dart';
 import 'package:bluetailor_app/features/auth/domain/usecases/verify_otp_usecase.dart';
 import 'package:bluetailor_app/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:bluetailor_app/features/cart/data/data_source/cart_data_source.dart';
+import 'package:bluetailor_app/features/cart/data/repo/cart_repo_impl.dart';
+import 'package:bluetailor_app/features/cart/domain/repo/cart_repo.dart';
+import 'package:bluetailor_app/features/cart/domain/usecase/create_alteration_order_usecase.dart';
+import 'package:bluetailor_app/features/cart/domain/usecase/create_stitching_order_usecase.dart';
+import 'package:bluetailor_app/features/cart/domain/usecase/fetch_cart_usecase.dart';
+import 'package:bluetailor_app/features/cart/domain/usecase/process_alteration_order_usecase.dart';
+import 'package:bluetailor_app/features/cart/domain/usecase/process_stitching_order_usecase.dart';
+import 'package:bluetailor_app/features/cart/domain/usecase/remove_cart_item_usecase.dart';
+import 'package:bluetailor_app/features/cart/presentation/cubit/cart_cubit/cart_cubit.dart';
+import 'package:bluetailor_app/features/cart/presentation/cubit/place_order_cubit/place_order_cubit.dart';
 import 'package:bluetailor_app/features/measurement/data/data_source/measurement_data_source.dart';
 import 'package:bluetailor_app/features/measurement/data/repo/measurement_repo_impl.dart';
 import 'package:bluetailor_app/features/measurement/domain/repo/measurement_repo.dart';
@@ -60,10 +72,20 @@ import 'package:bluetailor_app/features/settings/data/data_source/settings_data_
 import 'package:bluetailor_app/features/settings/data/repo/settings_repo_impl.dart';
 import 'package:bluetailor_app/features/settings/domain/repo/settings_repo.dart';
 import 'package:bluetailor_app/features/settings/domain/usecases/edit_profile_usecase.dart';
+import 'package:bluetailor_app/features/settings/domain/usecases/fetch_orders_usecase.dart';
 import 'package:bluetailor_app/features/settings/domain/usecases/fetch_product_order_usecase.dart';
 import 'package:bluetailor_app/features/settings/domain/usecases/fetch_profile_signed_url_usecase.dart';
 import 'package:bluetailor_app/features/settings/domain/usecases/fetch_store_order_usecase.dart';
 import 'package:bluetailor_app/features/settings/presentation/bloc/settings_bloc.dart';
+import 'package:bluetailor_app/features/stitching/data/data_source/stitching_data_source.dart';
+import 'package:bluetailor_app/features/stitching/data/repo/stitching_repo_impl.dart';
+import 'package:bluetailor_app/features/stitching/domain/repo/stitching_repo.dart';
+import 'package:bluetailor_app/features/stitching/domain/usecase/add_item_to_cart_usecase.dart';
+import 'package:bluetailor_app/features/stitching/domain/usecase/fetch_custom_styling_usecase.dart';
+import 'package:bluetailor_app/features/stitching/domain/usecase/fetch_stitching_signed_url_usecase.dart';
+import 'package:bluetailor_app/features/stitching/domain/usecase/save_stitching_usecase.dart';
+import 'package:bluetailor_app/features/stitching/presentation/cubit/stitching_cubit/stitching_cubit.dart';
+import 'package:bluetailor_app/features/stitching/presentation/cubit/styling_cubit/styling_cubit.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

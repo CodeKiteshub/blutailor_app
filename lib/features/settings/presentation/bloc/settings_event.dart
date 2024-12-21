@@ -22,3 +22,5 @@ class EditProfileEvent extends SettingsEvent {
 class FetchStoreOrderEvent extends SettingsEvent {}
 
 class FetchProductOrderEvent extends SettingsEvent {}
+
+class FetchOrderHistoryEvent extends SettingsEvent {}

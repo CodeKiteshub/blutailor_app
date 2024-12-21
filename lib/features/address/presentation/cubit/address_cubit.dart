@@ -16,9 +16,17 @@ class AddressCubit extends Cubit<AddressState> {
       required DeleteAddressUsecase deleteAddressUsecase,
       required FetchAddressListUsecase fetchAddressList})
       : _saveAddressUsecase = saveAddressUsecase,
-      _deleteAddressUsecase = deleteAddressUsecase,
+        _deleteAddressUsecase = deleteAddressUsecase,
         _fetchAddressListUsecase = fetchAddressList,
         super(AddressState.initial());
+
+  int selectedAddress = 0;
+
+
+  changeAddress(int index) {
+    selectedAddress = index;
+    emit(state.copyWith(addressStatus: AddressStatus.loaded));
+  }
 
   fetchAddress() async {
     emit(state.copyWith(addressStatus: AddressStatus.loading));
@@ -40,6 +48,7 @@ class AddressCubit extends Cubit<AddressState> {
       required String stateCountry,
       required String countryCode,
       required String country,
+      required String name,
       required User user,
       String? id}) async {
     emit(state.copyWith(addressStatus: AddressStatus.loading));
@@ -55,16 +64,16 @@ class AddressCubit extends Cubit<AddressState> {
             countryCode: countryCode,
             country: country,
             user: user,
+            name: name,
             id: id));
 
     res.fold((l) => emit(state.copyWith(addressStatus: AddressStatus.error)),
         (r) => emit(state.copyWith(addressStatus: AddressStatus.saved)));
   }
 
-  deleteAddress({required String id})async{
+  deleteAddress({required String id}) async {
     emit(state.copyWith(addressStatus: AddressStatus.loading));
     final res = await _deleteAddressUsecase.call(params: id);
-
 
     res.fold((l) => emit(state.copyWith(addressStatus: AddressStatus.error)),
         (r) => emit(state.copyWith(addressStatus: AddressStatus.deleted)));

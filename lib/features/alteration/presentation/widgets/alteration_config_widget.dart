@@ -7,9 +7,15 @@ import 'package:sizer/sizer.dart';
 
 class AlterationConfigWidget extends StatefulWidget {
   final String title;
+  final String name;
   final dynamic measurementData;
+  final dynamic price;
   const AlterationConfigWidget(
-      {super.key, required this.title, this.measurementData});
+      {super.key,
+      required this.title,
+      this.measurementData,
+      required this.price,
+      required this.name});
 
   @override
   State<AlterationConfigWidget> createState() => _AlterationConfigWidgetState();
@@ -78,14 +84,7 @@ class _AlterationConfigWidgetState extends State<AlterationConfigWidget> {
                                   : differenceController.text) -
                           0.5)
                       .toString();
-                  currentController.text = expectedController.text == "0"
-                      ? "0"
-                      : (double.parse(expectedController.text) -
-                              double.parse(differenceController.text.isEmpty
-                                  ? "0"
-                                  : differenceController.text))
-                          .toString();
-                  addToList();
+                  changeExpected();
                   setState(() {});
                 },
                 child: Icon(Icons.remove,
@@ -104,19 +103,7 @@ class _AlterationConfigWidgetState extends State<AlterationConfigWidget> {
                     fontSize: 14.sp,
                     color: black2),
                 onChanged: (value) {
-                  if ((currentController.text == "0" ||
-                          currentController.text.isEmpty) &&
-                      (expectedController.text == "0.0" ||
-                          expectedController.text == "0" ||
-                          expectedController.text.isEmpty)) {
-                  } else {
-                    if (expectedController.text == "0.0" || expectedController.text == "0" ||
-                        expectedController.text.isEmpty) {
-                      changeExpected();
-                    } else {
-                      changCurrent();
-                    }
-                  }
+                  changeExpected();
                 },
                 decoration: InputDecoration(
                     contentPadding:
@@ -135,17 +122,8 @@ class _AlterationConfigWidgetState extends State<AlterationConfigWidget> {
                                   : differenceController.text) +
                           0.5)
                       .toString();
-                  double current = double.parse(expectedController.text.isEmpty
-                      ? "0"
-                      : expectedController.text);
-                  currentController.text = expectedController.text == "0"
-                      ? "0"
-                      : (current -
-                              double.parse(differenceController.text.isEmpty
-                                  ? "0"
-                                  : differenceController.text))
-                          .toString();
-                  addToList();
+
+                  changeExpected();
                   setState(() {});
                 },
                 child: Icon(Icons.add,
@@ -183,12 +161,7 @@ class _AlterationConfigWidgetState extends State<AlterationConfigWidget> {
                     textAlign: TextAlign.center,
                     keyboardType: TextInputType.number,
                     onChanged: (value) {
-                      if (expectedController.text == "0" ||
-                          expectedController.text.isEmpty) {
-                        changeExpected();
-                      } else {
-                        changDifference();
-                      }
+                      changeExpected();
                     },
                     decoration: InputDecoration(
                         hintText: "Enter Size",
@@ -228,14 +201,15 @@ class _AlterationConfigWidgetState extends State<AlterationConfigWidget> {
                   TextField(
                     controller: expectedController,
                     textAlign: TextAlign.center,
-                    onChanged: (value) {
-                      if (currentController.text == "0" ||
-                          currentController.text.isEmpty) {
-                        changCurrent();
-                      } else {
-                        changDifference();
-                      }
-                    },
+                    // onChanged: (value) {
+                    //   if (currentController.text == "0" ||
+                    //       currentController.text.isEmpty) {
+                    //     changCurrent();
+                    //   } else {
+                    //     changDifference();
+                    //   }
+                    // },
+                    enabled: false,
                     decoration: InputDecoration(
                         hintText: "Enter Size",
                         hintStyle: TextStyle(
@@ -245,7 +219,7 @@ class _AlterationConfigWidgetState extends State<AlterationConfigWidget> {
                         focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(5),
                             borderSide: const BorderSide(color: primaryBlue)),
-                        enabledBorder: OutlineInputBorder(
+                        disabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(5),
                             borderSide:
                                 const BorderSide(color: Color(0xff9d9d9d)))),
@@ -260,17 +234,13 @@ class _AlterationConfigWidgetState extends State<AlterationConfigWidget> {
   }
 
   changeExpected() {
-    if (differenceController.text.isNotEmpty &&
-        differenceController.text != "0" &&
-        currentController.text.isNotEmpty &&
-        currentController.text != "0" &&
-        differenceController.text != "-") {
-      expectedController.text = (double.parse(currentController.text) +
-              double.parse(differenceController.text))
-          .toString();
-      addToList();
-      setState(() {});
-    }
+    expectedController.text = ((currentController.text.isEmpty
+                ? 0
+                : double.parse(currentController.text)) +
+            double.parse(differenceController.text))
+        .toString();
+    addToList();
+    setState(() {});
   }
 
   changCurrent() {
@@ -319,7 +289,9 @@ class _AlterationConfigWidgetState extends State<AlterationConfigWidget> {
             .value = double.parse(differenceController.text);
       } else {
         context.read<AlterationConfigCubit>().alterations.add(AlterationEntity(
+            price: widget.price,
             label: widget.title,
+            name: widget.name,
             value: double.parse(differenceController.text),
             current: double.parse(currentController.text)));
       }

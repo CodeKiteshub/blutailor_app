@@ -10,7 +10,7 @@ class LoadingDialog {
       barrierDismissible: true,
       builder: (context) {
         return PopScope(
-          canPop: false,
+          canPop: true,
           child: LoadingAnimationWidget.beat(
             color: Colors.white,
             size: 50.0,
@@ -32,7 +32,7 @@ class PrimarySnackBar {
 
 class DefaultDialog {
   DefaultDialog(BuildContext context,
-      {required String title, required String message, Function? onConfirm,
+      {required String title, required String message, required String confirmText, required String cancelText, Function? onConfirm,
       Function? onCancel}) {
     showDialog(
       context: context,
@@ -114,7 +114,7 @@ class DefaultDialog {
                                 color: const Color(0XFF34A853),
                                 borderRadius: BorderRadius.circular(5)),
                             child: Text(
-                              "Yes",
+                              confirmText,
                               style: TextStyle(
                                   fontSize: 15.sp,
                                   color: Colors.white,
@@ -134,7 +134,7 @@ class DefaultDialog {
                                 color: primaryRed,
                                 borderRadius: BorderRadius.circular(5)),
                             child: Text(
-                              "No",
+                              cancelText,
                               style: TextStyle(
                                   fontSize: 15.sp,
                                   color: Colors.white,

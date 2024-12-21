@@ -31,3 +31,9 @@ final class ProductOrderLoaded extends SettingsState {
 
   ProductOrderLoaded({required this.productOrders});
 }
+
+final class OrderHistoryLoaded extends SettingsState {
+  final List<OrderEntity> orderHistory;
+
+  OrderHistoryLoaded({required this.orderHistory});
+}

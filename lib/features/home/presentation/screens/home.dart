@@ -35,14 +35,19 @@ class Home extends StatelessWidget {
                       height: 3.h,
                     ),
                   ),
-                  // SizedBox(
-                  //   width: 7.w,
-                  // ),
-                  // Icon(
-                  //   Icons.shopping_cart,
-                  //   color: Colors.white,
-                  //   size: 23.sp,
-                  // )
+                  SizedBox(
+                    width: 7.w,
+                  ),
+                  InkWell(
+                    onTap: () {
+                      Navigator.pushNamed(context, '/cart-screen');
+                    },
+                    child: Icon(
+                      Icons.shopping_cart,
+                      color: Colors.white,
+                      size: 23.sp,
+                    ),
+                  )
                 ],
               ),
             ),
@@ -62,7 +67,8 @@ class Home extends StatelessWidget {
                   ),
                   InkWell(
                     onTap: () {
-                      Navigator.pushNamed(context, "/create-appointment");
+                      Navigator.pushNamed(context, "/create-appointment",
+                          arguments: true);
                     },
                     child: HomeTile(
                       title: homeAppointment,
@@ -96,8 +102,7 @@ class Home extends StatelessWidget {
                       Expanded(
                           child: InkWell(
                         onTap: () {
-                          PrimarySnackBar(context, "Coming soon. Stay Tuned.",
-                              Colors.green);
+                          Navigator.pushNamed(context, '/select-stitching-cat');
                         },
                         child: HomeTile(
                           title: "Stitching",

@@ -1,4 +1,5 @@
 import 'package:bluetailor_app/core/api/api_client.dart';
+import 'package:bluetailor_app/features/alteration/domain/entities/alteration_entity.dart';
 import 'package:bluetailor_app/service_locator.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -12,6 +13,11 @@ abstract interface class AlterationDataSource {
       required List<Map<String, dynamic>> imageAndVirdeo,
       required List<Map<String, dynamic>> alterations});
   Future<QueryResult> fetchAlterationConfig({required String catId});
+  Future<QueryResult> addAlterationItemToCart(
+      {required String catId,
+      required String catName,
+      required String alterationId,
+      required List<AlterationEntity> alterations});
 }
 
 class AlterationDataSourceImpl implements AlterationDataSource {
@@ -78,6 +84,7 @@ query GetProductAlterationConfig($catId: String!, $subCat: String) {
       videoUrl
       name
       label
+      price
     }
     catId
     subCat
@@ -91,8 +98,7 @@ query GetProductAlterationConfig($catId: String!, $subCat: String) {
         query: alterationConfigSchema, variable: variables);
   }
 
-
-    @override
+  @override
   Future<QueryResult<Object?>> fetchUserMeasurement({required String catId}) {
     String userMeasurementSchema = """
 query GetUserMeasurements(\$userId: String!, \$catId: String) {
@@ -111,7 +117,36 @@ query GetUserMeasurements(\$userId: String!, \$catId: String) {
       "catId": catId
     };
 
-    return client.queryData(
-        query: userMeasurementSchema, variable: variable);
+    return client.queryData(query: userMeasurementSchema, variable: variable);
+  }
+
+  @override
+  Future<QueryResult<Object?>> addAlterationItemToCart(
+      {required String catId,
+      required String catName,
+      required String alterationId,
+      required List<AlterationEntity> alterations}) async {
+    String addAlterationToCartSchema = r"""
+mutation AddItemsToAlterationCart($items: [AlterationCartItemInput!]!, $userId: String!) {
+  addItemsToAlterationCart(items: $items, userId: $userId) {
+    _id
+  }
+}
+""";
+
+    final variable = {
+      "items": [
+        {
+          "name": catName,
+          "alterations": [...alterations.map((e) => e.toJson(true))],
+          "catId": catId,
+          "userAlterationId": alterationId
+        }
+      ],
+      "userId": sl<SharedPreferences>().getString("userId")
+    };
+
+    return await client.mutateData(
+        query: addAlterationToCartSchema, variable: variable);
   }
 }

@@ -16,4 +16,9 @@ abstract interface class AlterationRepo {
       {required String catId});
   Future<Either<Failure, List<ProductConfigEntity>>> fetchUserMeasurement(
       {required String catId});
+  Future<Either<Failure, String>> addAlterationToCart(
+      {required String catId,
+      required String catName,
+      required String alterationId,
+      required List<AlterationEntity> alterations});
 }

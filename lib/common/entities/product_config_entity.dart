@@ -10,12 +10,16 @@ class ProductConfigEntity {
 
 class OptionEntity {
   dynamic label;
+  dynamic name;
   String? videoUrl;
   dynamic value;
+  dynamic price;
 
   OptionEntity({
     required this.label,
+    this.name,
     this.videoUrl,
     this.value,
+    this.price
   });
 }

@@ -13,7 +13,8 @@ class SaveAddressUsecase implements UseCase<String, AddressEntity> {
   Future<Either<Failure, String>> call({AddressEntity? params}) async {
     return await addressRepo.saveAddress(
         id: params?.id,
-        landmark: params!.landmark,
+        name: params!.name,
+        landmark: params.landmark,
         phone: params.phone,
         address: params.address,
         pincode: params.pincode,

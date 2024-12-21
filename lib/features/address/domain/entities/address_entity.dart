@@ -11,6 +11,7 @@ class AddressEntity {
   String state;
   String countryCode;
   String country;
+  String name;
   User? user;
   String? id;
   AddressEntity({
@@ -22,6 +23,7 @@ class AddressEntity {
     required this.state,
     required this.countryCode,
     required this.country,
+    required this.name,
     this.user,
     this.id,
   });

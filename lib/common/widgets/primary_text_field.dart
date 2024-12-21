@@ -48,7 +48,7 @@ class _PrimaryTextFieldState extends State<PrimaryTextField> {
         hintText: widget.title,
         hintStyle: TextStyle(
             color: Colors.black.withOpacity(0.27),
-            fontSize: 14.sp,
+            fontSize: 16.sp,
             fontWeight: FontWeight.w400),
       ),
     );

@@ -50,7 +50,11 @@ class _CreateAppointmentState extends State<CreateAppointment> {
                     children: [
                       if(widget.isBack == true) ...[
                       SizedBox(width: 5.w,),
-                      SvgPicture.asset(backIcon),
+                      InkWell(
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                        child: SvgPicture.asset(backIcon)),
                       SizedBox(width: 5.w,),],
                       Text(
                         "Book an Appointment",

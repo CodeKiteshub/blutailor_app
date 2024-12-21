@@ -3,9 +3,11 @@ import 'dart:async';
 import 'package:bluetailor_app/common/models/signed_url_param.dart';
 import 'package:bluetailor_app/core/img/functions_and_aws.dart';
 import 'package:bluetailor_app/features/auth/domain/usecases/login_with_password_usecase.dart';
+import 'package:bluetailor_app/features/settings/domain/entities/order_entity.dart';
 import 'package:bluetailor_app/features/settings/domain/entities/product_order_entity.dart';
 import 'package:bluetailor_app/features/settings/domain/entities/store_order_entity.dart';
 import 'package:bluetailor_app/features/settings/domain/usecases/edit_profile_usecase.dart';
+import 'package:bluetailor_app/features/settings/domain/usecases/fetch_orders_usecase.dart';
 import 'package:bluetailor_app/features/settings/domain/usecases/fetch_product_order_usecase.dart';
 import 'package:bluetailor_app/features/settings/domain/usecases/fetch_profile_signed_url_usecase.dart';
 import 'package:bluetailor_app/features/settings/domain/usecases/fetch_store_order_usecase.dart';
@@ -20,19 +22,23 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
   final FetchProfileSignedUrlUsecase _fetchProfileSignedUrlUsecase;
   final FetchStoreOrderUsecase _fetchStoreOrderUsecase;
   final FetchProductOrderUsecase _fetchProductOrderUsecase;
+  final FetchOrdersUsecase _fetchOrdersUsecase;
   SettingsBloc(
       {required EditProfileUsecase editProfileUsecase,
       required FetchProfileSignedUrlUsecase fetchProfilePictureSignedUrl,
+      required FetchOrdersUsecase fetchOrdersUsecase,
       required FetchStoreOrderUsecase fetchStoreOrderUsecase,
       required FetchProductOrderUsecase fetchProductOrderUsecase})
       : _editProfileUsecase = editProfileUsecase,
         _fetchProfileSignedUrlUsecase = fetchProfilePictureSignedUrl,
+        _fetchOrdersUsecase = fetchOrdersUsecase,
         _fetchStoreOrderUsecase = fetchStoreOrderUsecase,
         _fetchProductOrderUsecase = fetchProductOrderUsecase,
         super(SettingsInitial()) {
     on<EditProfileEvent>(_editProfileEvent);
     on<FetchStoreOrderEvent>(_fetchStoreOrderEvent);
     on<FetchProductOrderEvent>(_fetchProductOrderEvent);
+    on<FetchOrderHistoryEvent>(_fetchOrdersEvent);
   }
 
   FutureOr<void> _editProfileEvent(
@@ -86,5 +92,12 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
         (failure) => emit(SettingsError(message: failure.message)),
         (productOrders) =>
             emit(ProductOrderLoaded(productOrders: productOrders)));
+  }
+
+  FutureOr<void> _fetchOrdersEvent(FetchOrderHistoryEvent event, Emitter<SettingsState> emit) async{
+    emit(SettingsLoading());
+    final result = await _fetchOrdersUsecase.call();
+    result.fold((failure) => emit(SettingsError(message: failure.message)),
+        (orders) => emit(OrderHistoryLoaded(orderHistory: orders)));
   }
 }

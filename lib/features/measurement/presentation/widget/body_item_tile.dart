@@ -61,7 +61,7 @@ class _BodyItemWidgetState extends State<BodyItemWidget> {
           height: 2.h,
         ),
         SizedBox(
-          height: 20.h,
+          height: 15.h,
           child: BlocBuilder<UserAttributeCubit, UserAttributeState>(
             builder: (context, state) {
               if (state is UserAttributeLoaded) {
@@ -100,8 +100,8 @@ class _BodyItemWidgetState extends State<BodyItemWidget> {
                       child: Column(
                         children: [
                           Container(
-                            height: 15.h,
-                            width: 25.w,
+                            height: 10.h,
+                            width: 20.w,
                             padding: EdgeInsets.all(1.w),
                             decoration: BoxDecoration(
                               gradient: selectedId ==

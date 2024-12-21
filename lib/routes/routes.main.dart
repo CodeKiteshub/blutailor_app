@@ -31,6 +31,23 @@ class Routes {
       case '/media-history':
         return MaterialPageRoute(builder: (_) => const MediaHistory());
 
+      case '/cart-screen':
+        return MaterialPageRoute(
+            builder: (_) => MultiBlocProvider(
+                  providers: [
+                    BlocProvider.value(
+                      value: sl<AddressCubit>(),
+                    ),
+                    BlocProvider(
+                      create: (context) => sl<CartCubit>(),
+                    ),
+                    BlocProvider(
+                      create: (context) => sl<PlaceOrderCubit>(),
+                    ),
+                  ],
+                  child: const CartScreen(),
+                ));
+
       case '/settings':
         return MaterialPageRoute(builder: (_) => const Settings());
 
@@ -38,7 +55,7 @@ class Routes {
         return MaterialPageRoute(
             builder: (_) => BlocProvider.value(
                   value: sl<AddressCubit>(),
-                  child: const AddressList(),
+                  child: AddressList(choose: settings.arguments as bool),
                 ));
 
       case '/add-address':
@@ -212,9 +229,7 @@ class Routes {
         return MaterialPageRoute(
             builder: (_) => BlocProvider(
                   create: (context) => sl<AppointmentCubit>(),
-                  child: CreateAppointment(
-                    isBack: settings.arguments as bool?
-                  ),
+                  child: CreateAppointment(isBack: settings.arguments as bool?),
                 ));
 
       case '/appointment-history':
@@ -222,6 +237,62 @@ class Routes {
             builder: (_) => BlocProvider(
                   create: (context) => sl<AppointmentCubit>(),
                   child: const AppointmentHistory(),
+                ));
+
+      case '/select-stitching-cat':
+        return MaterialPageRoute(
+            builder: (_) => BlocProvider(
+                  create: (context) => sl<CategoryCubit>(),
+                  child: const SelectStitchingCat(),
+                ));
+
+      case '/selected-stitching-cat':
+        return MaterialPageRoute(
+            builder: (_) => BlocProvider(
+                  create: (context) => sl<CategoryCubit>(),
+                  child: SelectedStitchingCat(
+                    selectedCat:
+                        settings.arguments as List<SelectedStitchingCatEntity>,
+                  ),
+                ));
+
+      case '/upload-stitching-data':
+        return MaterialPageRoute(
+            builder: (_) => BlocProvider(
+                  create: (context) => sl<CategoryCubit>(),
+                  child: UploadData(
+                      selectedCat:
+                          settings.arguments as SelectedStitchingCatEntity),
+                ));
+
+      case '/stitching-detail':
+        return MaterialPageRoute(
+            builder: (_) => MultiBlocProvider(
+                  providers: [
+                    BlocProvider.value(
+                      value: sl<StylingCubit>(),
+                    ),
+                    BlocProvider.value(
+                      value: sl<StitchingCubit>(),
+                    ),
+                  ],
+                  child: StitchingDetail(
+                    selectedCat: (settings.arguments as Map)["selectedCat"],
+                    fabricLength: (settings.arguments as Map)["fabricLength"],
+                    fabricWidth: (settings.arguments as Map)["fabricWidth"],
+                    name: (settings.arguments as Map)["name"],
+                    note: (settings.arguments as Map)["note"],
+                    image: (settings.arguments as Map)["image"],
+                  ),
+                ));
+
+      case '/custom_filter':
+        return MaterialPageRoute(
+            builder: (_) => BlocProvider.value(
+                  value: sl<StylingCubit>(),
+                  child: CustomFilter(
+                    styling: settings.arguments as List<StylingConfigEntity>,
+                  ),
                 ));
 
       default:

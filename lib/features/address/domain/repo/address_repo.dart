@@ -13,6 +13,7 @@ abstract interface class AddressRepo {
       required String state,
       required String countryCode,
       required String country,
+      required String name,
       required User user,
       String? id});
 

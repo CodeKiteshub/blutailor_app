@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:bluetailor_app/common/entities/user.dart';
 import 'package:bluetailor_app/core/api/api_client.dart';
 import 'package:bluetailor_app/service_locator.dart';
@@ -14,6 +16,7 @@ abstract interface class AddressDataSource {
       required String state,
       required String countryCode,
       required String country,
+      required String name,
       required User user,
       String? id});
   Future<QueryResult> fetchAddressList();
@@ -35,6 +38,7 @@ class AddressDataSourceImpl implements AddressDataSource {
       required String state,
       required String countryCode,
       required String country,
+      required String name,
       required User user,
       String? id}) async {
     String saveAddressSchema = r"""
@@ -48,6 +52,7 @@ mutation SaveAddress($address: UserAddressInput!) {
     final variable = {
       "address": {
         "_id": id,
+        "name": name,
         "address1": address,
         "city": city,
         "country": country,
@@ -74,6 +79,7 @@ query GetUserAddresses($userId: String!) {
   getUserAddresses(userId: $userId) {
     _id
     address1
+    name
     phone
     state
     postalCode

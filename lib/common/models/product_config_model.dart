@@ -12,11 +12,13 @@ class ProductConfigModel extends ProductConfigEntity {
 }
 
 class Option extends OptionEntity {
-  Option({required super.label, super.videoUrl, super.value});
+  Option({required super.label, super.name, super.videoUrl, super.value, super.price});
 
   factory Option.fromJson(Map<String, dynamic> json) => Option(
         label: json["label"],
+        name: json["name"],
         videoUrl: json["videoUrl"],
         value: json["value"],
+        price: json["price"]
       );
 }

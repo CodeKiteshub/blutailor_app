@@ -20,6 +20,8 @@ Future<void> initDependencies() async {
   _initAlteration();
   _initAppointment();
   _initAddress();
+  _initStitching();
+  _initCart();
 }
 
 void _initAuth() {
@@ -62,6 +64,7 @@ _initSettings() {
         fetchProfilePictureSignedUrl: sl(),
         fetchStoreOrderUsecase: sl(),
         fetchProductOrderUsecase: sl(),
+        fetchOrdersUsecase: sl(),
       ));
   // Usecase
   sl.registerFactory<EditProfileUsecase>(
@@ -72,6 +75,8 @@ _initSettings() {
       () => FetchStoreOrderUsecase(settingsRepo: sl()));
   sl.registerFactory<FetchProductOrderUsecase>(
       () => FetchProductOrderUsecase(settingsRepo: sl()));
+  sl.registerFactory<FetchOrdersUsecase>(
+      () => FetchOrdersUsecase(settingsRepo: sl()));
   // Repository
   sl.registerFactory<SettingsRepo>(
       () => SettingsRepoImpl(settingsDataSource: sl()));
@@ -140,7 +145,9 @@ _initAlteration() {
   sl.registerFactory<AlterationConfigCubit>(
       () => AlterationConfigCubit(fetchAlterationConfigUsecase: sl()));
   sl.registerFactory<SaveAlterationCubit>(() => SaveAlterationCubit(
-      fetchAlterationSignedUrl: sl(), saveAlterationUsecase: sl()));
+      fetchAlterationSignedUrl: sl(),
+      saveAlterationUsecase: sl(),
+      addAlterationToCartUsecase: sl()));
   sl.registerFactory<AlterationUserMeasurementCubit>(
       () => AlterationUserMeasurementCubit(fetchUserMeasurementUsecase: sl()));
 
@@ -153,6 +160,8 @@ _initAlteration() {
       () => SaveAlterationUsecase(alterationRepo: sl()));
   sl.registerFactory<FetchAlterationUserMeasurementUsecase>(
       () => FetchAlterationUserMeasurementUsecase(alterationRepo: sl()));
+  sl.registerFactory<AddAlterationToCartUsecase>(
+      () => AddAlterationToCartUsecase(alterationRepo: sl()));
 
   // Repo
   sl.registerFactory<AlterationRepo>(
@@ -205,4 +214,62 @@ _initAddress() {
   // Data Source
   sl.registerFactory<AddressDataSource>(
       () => AddressDataSourceImpl(apiClient: sl()));
+}
+
+_initStitching() {
+  // Data Source
+  sl.registerFactory<FetchCustomStylingUsecase>(
+      () => FetchCustomStylingUsecase(stitchingRepo: sl()));
+
+  sl.registerFactory<FetchStitchingSignedUrlUsecase>(
+      () => FetchStitchingSignedUrlUsecase(stitchingRepo: sl()));
+  sl.registerFactory<SaveStitchingUsecase>(
+      () => SaveStitchingUsecase(stitchingRepo: sl()));
+  sl.registerFactory<AddItemToCartUsecase>(
+      () => AddItemToCartUsecase(stitchingRepo: sl()));
+
+  // Bloc
+  sl.registerLazySingleton<StylingCubit>(
+      () => StylingCubit(fetchCustomStylingUsecase: sl()));
+  sl.registerLazySingleton<StitchingCubit>(() => StitchingCubit(
+      fetchStitchingSignedUrlUseCase: sl(),
+      saveStitchingUsecase: sl(),
+      addItemToCartUsecase: sl()));
+
+  // Repo
+  sl.registerFactory<StitchingRepo>(
+      () => StitchingRepoImpl(stitchingDataSource: sl()));
+
+  // Data Source
+  sl.registerFactory<StitchingDataSource>(
+      () => StitchingDataSourceImpl(apiClient: sl()));
+}
+
+_initCart() {
+  // Bloc
+  sl.registerFactory<CartCubit>(
+      () => CartCubit(fetchCartUsecase: sl(), removeCartItemUsecase: sl()));
+
+  sl.registerFactory<PlaceOrderCubit>(() => PlaceOrderCubit(
+      createAlterationOrderUsecase: sl(), processAlterationOrderUsecase: sl(),
+      createStitchingOrderUsecase: sl(), processStitchingOrderUsecase: sl()));
+
+  // Usecase
+  sl.registerFactory<FetchCartUsecase>(() => FetchCartUsecase(cartRepo: sl()));
+  sl.registerFactory<RemoveCartItemUsecase>(
+      () => RemoveCartItemUsecase(cartRepo: sl()));
+  sl.registerFactory<CreateAlterationOrderUsecase>(
+      () => CreateAlterationOrderUsecase(cartRepo: sl()));
+  sl.registerFactory<ProcessAlterationOrderUsecase>(
+      () => ProcessAlterationOrderUsecase(cartRepo: sl()));
+  sl.registerFactory<CreateStitchingOrderUsecase>(
+      () => CreateStitchingOrderUsecase(cartRepo: sl()));
+  sl.registerFactory<ProcessStitchingOrderUsecase>(
+      () => ProcessStitchingOrderUsecase(cartRepo: sl()));
+
+  // Repo
+  sl.registerFactory<CartRepo>(() => CartRepoImpl(cartDataSource: sl()));
+
+  // Data Source
+  sl.registerFactory<CartDataSource>(() => CartDataSourceImpl(apiClient: sl()));
 }

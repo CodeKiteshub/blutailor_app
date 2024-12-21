@@ -9,6 +9,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizer/sizer.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class Settings extends StatelessWidget {
   const Settings({super.key});
@@ -107,7 +108,7 @@ class Settings extends StatelessWidget {
                         SettingsTileWidget(
                           title: "Address",
                           onTap: () {
-                            Navigator.pushNamed(context, '/address');
+                            Navigator.pushNamed(context, '/address', arguments: false);
                           },
                         ),
                         SizedBox(
@@ -133,7 +134,22 @@ class Settings extends StatelessWidget {
                         ),
                         SettingsTileWidget(
                           title: "Delete Account",
-                          onTap: () {},
+                          onTap: () {
+                            DefaultDialog(context,
+                                title: "Confirm Log Out?",
+                                message: "Are you sure you want to delete account?",
+                                cancelText: "No",
+                                confirmText: "Yes",
+                                onCancel: () {
+                              Navigator.pop(context);
+                            }, onConfirm: () async {
+                              var url =
+                                  "https://www.mpfstyleclub.com/delete-account";
+                              if (!await launchUrl(Uri.parse(url))) {
+                                throw Exception('Could not launch $url');
+                              }
+                            });
+                          },
                         ),
                         const Spacer(),
                         BlocListener<AuthBloc, AuthState>(
@@ -159,6 +175,8 @@ class Settings extends StatelessWidget {
                                     title: "Confirm Log Out?",
                                     message:
                                         "Are you sure you want to log out?",
+                                        cancelText: "No",
+                                        confirmText: "Yes",
                                     onCancel: () {
                                   Navigator.pop(context);
                                 }, onConfirm: () {

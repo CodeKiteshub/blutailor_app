@@ -10,6 +10,7 @@ class AddressModel extends AddressEntity {
       required super.state,
       required super.countryCode,
       required super.country,
+      required super.name,
       super.id});
 
   factory AddressModel.fromMap(Map<String, dynamic> map) {
@@ -22,6 +23,7 @@ class AddressModel extends AddressEntity {
       state: map['state'] as String,
       countryCode: map['countryCode'] as String,
       country: map['country'] as String,
+      name: map['name'] ?? "",
       id: map['_id'] != null ? map['_id'] as String : null,
     );
   }

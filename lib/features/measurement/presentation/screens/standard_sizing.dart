@@ -1,6 +1,6 @@
 import 'package:bluetailor_app/common/cubit/user_cubit/app_user_cubit.dart';
-import 'package:bluetailor_app/common/widgets/app_bar_widget.dart';
 import 'package:bluetailor_app/common/widgets/dialog_and_snackbar.dart.dart';
+import 'package:bluetailor_app/common/widgets/primary_app_bar.dart';
 import 'package:bluetailor_app/common/widgets/primary_gradient_button.dart';
 import 'package:bluetailor_app/common/widgets/primary_text_field.dart';
 import 'package:bluetailor_app/core/theme/app_colors.dart';
@@ -37,385 +37,337 @@ class _StandardSizingState extends State<StandardSizing> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: primaryBlue,
-      body: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const AppBarWidget(),
-            Padding(
-              padding: EdgeInsets.only(left: 3.w, top: 2.h),
-              child: Text(
-                "Measurements",
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 21.sp,
-                    fontWeight: FontWeight.w600),
-              ),
-            ),
-            SizedBox(
-              height: 2.h,
-            ),
-            Expanded(
-              child: Container(
-                color: Colors.white,
-                width: double.infinity,
-                padding: EdgeInsets.only(
-                  left: 7.w,
-                  right: 7.w,
-                  top: 3.h,
+      backgroundColor: Colors.white,
+      appBar: const PrimaryAppBar(title: "Measurements"),
+      body: Padding(
+        padding: EdgeInsets.only(
+          left: 7.w,
+          right: 7.w,
+          top: 3.h,
+        ),
+        child: BlocConsumer<BodyProfileCubit, BodyProfileState>(
+          listener: (context, state) {
+            if (state.status == BodyProfileStatus.error) {
+              Navigator.pop(context);
+              PrimarySnackBar(context, "Something went wrong.", Colors.red);
+            }
+            if (state.status == BodyProfileStatus.saved) {
+              Navigator.pop(context);
+              PrimarySnackBar(context, "Body Profile Updated", Colors.green);
+              Navigator.pop(context);
+            }
+            if (state.status == BodyProfileStatus.loading) {
+              LoadingDialog(context);
+            }
+          },
+          builder: (context, state) {
+            if (state.status == BodyProfileStatus.loading) {
+              return LoadingAnimationWidget.beat(color: primaryBlue, size: 50);
+            }
+            return ListView(
+              //  crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text("Body Profile Details",
+                    style: TextStyle(
+                        color: primaryBlack,
+                        fontSize: 18.sp,
+                        fontWeight: FontWeight.w600)),
+                SizedBox(
+                  height: 2.h,
                 ),
-                child: BlocConsumer<BodyProfileCubit, BodyProfileState>(
-                  listener: (context, state) {
-                    if (state.status == BodyProfileStatus.error) {
-                      Navigator.pop(context);
-                      PrimarySnackBar(
-                          context, "Something went wrong.", Colors.red);
-                    }
-                    if (state.status == BodyProfileStatus.saved) {
-                      Navigator.pop(context);
-                      PrimarySnackBar(
-                          context, "Body Profile Updated", Colors.green);
-                      Navigator.pop(context);
-                    }
-                    if (state.status == BodyProfileStatus.loading) {
-                      LoadingDialog(context);
-                    }
-                  },
+                Text(
+                  "Select Sizing",
+                  style: TextStyle(
+                    color: const Color(0xFF757575),
+                    fontWeight: FontWeight.w500,
+                    fontSize: 15.sp,
+                  ),
+                ),
+                SizedBox(
+                  height: 1.h,
+                ),
+                BlocBuilder<SizeChartCubit, SizeChartState>(
                   builder: (context, state) {
-                    if (state.status == BodyProfileStatus.loading) {
-                      return LoadingAnimationWidget.beat(
-                          color: primaryBlue, size: 50);
-                    }
-                    return ListView(
-                      //  crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text("Body Profile Details",
-                            style: TextStyle(
-                                color: primaryBlack,
-                                fontSize: 18.sp,
-                                fontWeight: FontWeight.w600)),
-                        SizedBox(
-                          height: 2.h,
-                        ),
-                        Text(
-                          "Select Sizing",
-                          style: TextStyle(
-                            color: const Color(0xFF757575),
-                            fontWeight: FontWeight.w500,
-                            fontSize: 15.sp,
-                          ),
-                        ),
-                        SizedBox(
-                          height: 1.h,
-                        ),
-                        BlocBuilder<SizeChartCubit, SizeChartState>(
-                          builder: (context, state) {
-                            if (state is SizeChartLoaded) {
-                              return Wrap(
-                                spacing: 3.w,
-                                runSpacing: 0.5.h,
-                                children: List.generate(
-                                    state.sizeChart.length,
-                                    (index) => InkWell(
-                                          onTap: () {
-                                            context
-                                                    .read<BodyProfileCubit>()
-                                                    .selectedSize =
-                                                state.sizeChart[index].size;
-                                            setState(() {});
-                                          },
-                                          child: Container(
-                                            padding: state.sizeChart[index].size
-                                                        .length ==
-                                                    1
-                                                ? const EdgeInsets.symmetric(
-                                                    horizontal: 11.5,
-                                                    vertical: 8)
-                                                : const EdgeInsets.all(8),
-                                            decoration: BoxDecoration(
-                                                color: context
-                                                            .read<
-                                                                BodyProfileCubit>()
-                                                            .selectedSize ==
-                                                        state.sizeChart[index]
-                                                            .size
-                                                    ? primaryBlue
-                                                    : Colors.white,
-                                                border: Border.all(
-                                                    color: primaryBlack),
-                                                borderRadius:
-                                                    BorderRadius.circular(5)),
-                                            child: Text(
-                                              state.sizeChart[index].size,
-                                              style: TextStyle(
-                                                  fontFamily: "dmsans",
-                                                  fontWeight: FontWeight.w700,
-                                                  fontSize: 14.sp,
-                                                  color: context
-                                                              .read<
-                                                                  BodyProfileCubit>()
-                                                              .selectedSize ==
-                                                          state.sizeChart[index]
-                                                              .size
-                                                      ? Colors.white
-                                                      : primaryBlack),
-                                            ),
-                                          ),
-                                        )),
-                              );
-                            }
-                            return const SizedBox.shrink();
-                          },
-                        ),
-                        SizedBox(
-                          height: 2.h,
-                        ),
-                        Text(
-                          "Age (in years)",
-                          style: TextStyle(
-                            color: const Color(0xFF757575),
-                            fontWeight: FontWeight.w500,
-                            fontSize: 15.sp,
-                          ),
-                        ),
-                        SizedBox(
-                          height: 1.h,
-                        ),
-                        PrimaryTextField(
-                          title: "Age",
-                          border: true,
-                          controller:
-                              context.read<BodyProfileCubit>().ageController,
-                        ),
-                        SizedBox(
-                          height: 2.h,
-                        ),
-                        Text(
-                          "Height",
-                          style: TextStyle(
-                            color: const Color(0xFF757575),
-                            fontWeight: FontWeight.w500,
-                            fontSize: 15.sp,
-                          ),
-                        ),
-                        SizedBox(
-                          height: 1.h,
-                        ),
-                        Row(
-                          children: [
-                            selectedHeightCat == "feet"
-                                ? Expanded(
-                                    child: PrimaryTextField(
-                                    title: "Feet",
-                                    border: true,
-                                    controller: context
-                                        .read<BodyProfileCubit>()
-                                        .feetController,
-                                  ))
-                                : Expanded(
-                                    child: PrimaryTextField(
-                                    title: 'cm',
-                                    border: true,
-                                    controller: context
-                                        .read<BodyProfileCubit>()
-                                        .cmController,
-                                  )),
-                            SizedBox(
-                              width: 2.w,
-                            ),
-                            selectedHeightCat == "feet"
-                                ? Expanded(
-                                    child: PrimaryTextField(
-                                    title: "Inches",
-                                    border: true,
-                                    controller: context
-                                        .read<BodyProfileCubit>()
-                                        .inchesController,
-                                  ))
-                                : const SizedBox.shrink(),
-                            if (selectedHeightCat == "feet")
-                              SizedBox(
-                                width: 2.w,
-                              ),
-                            Expanded(
-                                child: Container(
-                              padding: EdgeInsets.only(left: 3.w, right: 3.w),
-                              constraints: BoxConstraints(minHeight: 6.h),
-                              decoration: BoxDecoration(
-                                  border: Border.all(
-                                      color: const Color(0xffc7c7c7)),
-                                  borderRadius: BorderRadius.circular(5)),
-                              child: DropdownButton<String>(
-                                  items: [
-                                    DropdownMenuItem(
-                                        value: "feet",
-                                        child: Text(
-                                          "Feet",
-                                          style: TextStyle(
-                                              fontFamily: 'dmsans',
-                                              fontWeight: FontWeight.w500,
-                                              fontSize: 15.sp,
-                                              color: const Color(0xff444444)),
-                                        )),
-                                    DropdownMenuItem(
-                                        value: "cm",
-                                        child: Text(
-                                          "Centimeter",
-                                          style: TextStyle(
-                                              fontFamily: 'dmsans',
-                                              fontWeight: FontWeight.w500,
-                                              fontSize: 15.sp,
-                                              color: const Color(0xff444444)),
-                                        )),
-                                  ],
-                                  iconEnabledColor: const Color(0xff444444),
-                                  dropdownColor: Colors.white,
-                                  isExpanded: true,
-                                  underline: Container(),
-                                  value: selectedHeightCat,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      selectedHeightCat = value!;
-                                    });
-                                  }),
-                            )),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 2.h,
-                        ),
-                        Text(
-                          "Weight (in kg)",
-                          style: TextStyle(
-                            color: const Color(0xFF757575),
-                            fontWeight: FontWeight.w500,
-                            fontSize: 15.sp,
-                          ),
-                        ),
-                        SizedBox(
-                          height: 1.h,
-                        ),
-                        PrimaryTextField(
-                          title: "Weight",
-                          border: true,
-                          controller:
-                              context.read<BodyProfileCubit>().weightController,
-                        ),
-                        SizedBox(
-                          height: 2.h,
-                        ),
-                        Text(
-                          "Fit Type",
-                          style: TextStyle(
-                            color: const Color(0xFF757575),
-                              fontWeight: FontWeight.w500,
-                              fontSize: 16.sp,
-                              fontFamily: "dmsans"),
-                        ),
-                        SizedBox(
-                          height: 1.h,
-                        ),
-                        BlocBuilder<UserAttributeCubit, UserAttributeState>(
-                          builder: (context, state) {
-                            if (state is UserAttributeLoaded) {
-                              return Container(
-                                padding: EdgeInsets.only(left: 3.w, right: 3.w),
-                                constraints: BoxConstraints(minHeight: 6.h),
-                                decoration: BoxDecoration(
-                                    border: Border.all(
-                                        color: const Color(0xffc7c7c7)),
-                                    borderRadius: BorderRadius.circular(5)),
-                                child: DropdownButton<String>(
-                                  items: List.generate(
-                                      state.userAttributes.length,
-                                      (index) => DropdownMenuItem(
-                                            value:
-                                                state.userAttributes[index].id,
-                                            child: Text(
-                                              state.userAttributes[index].name,
-                                              style: TextStyle(
-                                                  fontFamily: 'dmsans',
-                                                  fontWeight: FontWeight.w500,
-                                                  fontSize: 15.sp,
-                                                  color:
-                                                      const Color(0xff444444)),
-                                            ),
-                                          )),
-                                  hint: Text(
-                                    "Select Preference",
-                                    style: TextStyle(
-                                        fontFamily: 'dmsans',
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 15.sp,
-                                        color: const Color(0xff444444)),
-                                  ),
-                                  value: context
-                                      .read<BodyProfileCubit>()
-                                      .fitPreferenceId,
-                                  onChanged: (value) {
+                    if (state is SizeChartLoaded) {
+                      return Wrap(
+                        spacing: 3.w,
+                        runSpacing: 0.5.h,
+                        children: List.generate(
+                            state.sizeChart.length,
+                            (index) => InkWell(
+                                  onTap: () {
                                     context
-                                        .read<BodyProfileCubit>()
-                                        .fitPreferenceId = value;
+                                            .read<BodyProfileCubit>()
+                                            .selectedSize =
+                                        state.sizeChart[index].size;
                                     setState(() {});
                                   },
-                                  underline: Container(),
-                                  dropdownColor: Colors.white,
-                                  iconEnabledColor: Colors.black,
-                                  isExpanded: true,
-                                ),
-                              );
-                            } else {
-                              return const Center(
-                                  child: CircularProgressIndicator());
-                            }
-                          },
-                        ),
-                        SizedBox(
-                          height: 2.h,
-                        ),
-                        Text(
-                          "Note",
-                          style: TextStyle(
-                            color: const Color(0xFF757575),
-                            fontWeight: FontWeight.w500,
-                            fontSize: 15.sp,
-                          ),
-                        ),
-                        SizedBox(
-                          height: 1.h,
-                        ),
-                        TextFormField(
-                          controller:
-                              context.read<BodyProfileCubit>().noteController,
-                          maxLines: 3,
-                          decoration: InputDecoration(
-                            fillColor: Colors.white,
-                            filled: true,
-                            constraints: BoxConstraints(
-                              minHeight: 6.h,
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                                borderSide:
-                                    const BorderSide(color: Color(0xFFC7C7C7)),
-                                borderRadius: BorderRadius.circular(5)),
-                            focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(5),
-                                borderSide: const BorderSide(
-                                  color: primaryBlue,
+                                  child: Container(
+                                    padding:
+                                        state.sizeChart[index].size.length == 1
+                                            ? const EdgeInsets.symmetric(
+                                                horizontal: 11.5, vertical: 8)
+                                            : const EdgeInsets.all(8),
+                                    decoration: BoxDecoration(
+                                        color: context
+                                                    .read<BodyProfileCubit>()
+                                                    .selectedSize ==
+                                                state.sizeChart[index].size
+                                            ? primaryBlue
+                                            : Colors.white,
+                                        border: Border.all(color: primaryBlack),
+                                        borderRadius: BorderRadius.circular(5)),
+                                    child: Text(
+                                      state.sizeChart[index].size,
+                                      style: TextStyle(
+                                          fontFamily: "dmsans",
+                                          fontWeight: FontWeight.w700,
+                                          fontSize: 14.sp,
+                                          color: context
+                                                      .read<BodyProfileCubit>()
+                                                      .selectedSize ==
+                                                  state.sizeChart[index].size
+                                              ? Colors.white
+                                              : primaryBlack),
+                                    ),
+                                  ),
                                 )),
-                          ),
-                        ),
-                        SizedBox(
-                          height: 9.h,
-                        ),
-                      ],
-                    );
+                      );
+                    }
+                    return const SizedBox.shrink();
                   },
                 ),
-              ),
-            ),
-          ],
+                SizedBox(
+                  height: 2.h,
+                ),
+                Text(
+                  "Age (in years)",
+                  style: TextStyle(
+                    color: const Color(0xFF757575),
+                    fontWeight: FontWeight.w500,
+                    fontSize: 15.sp,
+                  ),
+                ),
+                SizedBox(
+                  height: 1.h,
+                ),
+                PrimaryTextField(
+                  title: "Age",
+                  border: true,
+                  controller: context.read<BodyProfileCubit>().ageController,
+                ),
+                SizedBox(
+                  height: 2.h,
+                ),
+                Text(
+                  "Height",
+                  style: TextStyle(
+                    color: const Color(0xFF757575),
+                    fontWeight: FontWeight.w500,
+                    fontSize: 15.sp,
+                  ),
+                ),
+                SizedBox(
+                  height: 1.h,
+                ),
+                Row(
+                  children: [
+                    selectedHeightCat == "feet"
+                        ? Expanded(
+                            child: PrimaryTextField(
+                            title: "Feet",
+                            border: true,
+                            controller:
+                                context.read<BodyProfileCubit>().feetController,
+                          ))
+                        : Expanded(
+                            child: PrimaryTextField(
+                            title: 'cm',
+                            border: true,
+                            controller:
+                                context.read<BodyProfileCubit>().cmController,
+                          )),
+                    SizedBox(
+                      width: 2.w,
+                    ),
+                    selectedHeightCat == "feet"
+                        ? Expanded(
+                            child: PrimaryTextField(
+                            title: "Inches",
+                            border: true,
+                            controller: context
+                                .read<BodyProfileCubit>()
+                                .inchesController,
+                          ))
+                        : const SizedBox.shrink(),
+                    if (selectedHeightCat == "feet")
+                      SizedBox(
+                        width: 2.w,
+                      ),
+                    Expanded(
+                        child: Container(
+                      padding: EdgeInsets.only(left: 3.w, right: 3.w),
+                      constraints: BoxConstraints(minHeight: 6.h),
+                      decoration: BoxDecoration(
+                          border: Border.all(color: const Color(0xffc7c7c7)),
+                          borderRadius: BorderRadius.circular(5)),
+                      child: DropdownButton<String>(
+                          items: [
+                            DropdownMenuItem(
+                                value: "feet",
+                                child: Text(
+                                  "Feet",
+                                  style: TextStyle(
+                                      fontFamily: 'dmsans',
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 15.sp,
+                                      color: const Color(0xff444444)),
+                                )),
+                            DropdownMenuItem(
+                                value: "cm",
+                                child: Text(
+                                  "Centimeter",
+                                  style: TextStyle(
+                                      fontFamily: 'dmsans',
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 15.sp,
+                                      color: const Color(0xff444444)),
+                                )),
+                          ],
+                          iconEnabledColor: const Color(0xff444444),
+                          dropdownColor: Colors.white,
+                          isExpanded: true,
+                          underline: Container(),
+                          value: selectedHeightCat,
+                          onChanged: (value) {
+                            setState(() {
+                              selectedHeightCat = value!;
+                            });
+                          }),
+                    )),
+                  ],
+                ),
+                SizedBox(
+                  height: 2.h,
+                ),
+                Text(
+                  "Weight (in kg)",
+                  style: TextStyle(
+                    color: const Color(0xFF757575),
+                    fontWeight: FontWeight.w500,
+                    fontSize: 15.sp,
+                  ),
+                ),
+                SizedBox(
+                  height: 1.h,
+                ),
+                PrimaryTextField(
+                  title: "Weight",
+                  border: true,
+                  controller: context.read<BodyProfileCubit>().weightController,
+                ),
+                SizedBox(
+                  height: 2.h,
+                ),
+                Text(
+                  "Fit Type",
+                  style: TextStyle(
+                      color: const Color(0xFF757575),
+                      fontWeight: FontWeight.w500,
+                      fontSize: 16.sp,
+                      fontFamily: "dmsans"),
+                ),
+                SizedBox(
+                  height: 1.h,
+                ),
+                BlocBuilder<UserAttributeCubit, UserAttributeState>(
+                  builder: (context, state) {
+                    if (state is UserAttributeLoaded) {
+                      return Container(
+                        padding: EdgeInsets.only(left: 3.w, right: 3.w),
+                        constraints: BoxConstraints(minHeight: 6.h),
+                        decoration: BoxDecoration(
+                            border: Border.all(color: const Color(0xffc7c7c7)),
+                            borderRadius: BorderRadius.circular(5)),
+                        child: DropdownButton<String>(
+                          items: List.generate(
+                              state.userAttributes.length,
+                              (index) => DropdownMenuItem(
+                                    value: state.userAttributes[index].id,
+                                    child: Text(
+                                      state.userAttributes[index].name,
+                                      style: TextStyle(
+                                          fontFamily: 'dmsans',
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 15.sp,
+                                          color: const Color(0xff444444)),
+                                    ),
+                                  )),
+                          hint: Text(
+                            "Select Preference",
+                            style: TextStyle(
+                                fontFamily: 'dmsans',
+                                fontWeight: FontWeight.w500,
+                                fontSize: 15.sp,
+                                color: const Color(0xff444444)),
+                          ),
+                          value:
+                              context.read<BodyProfileCubit>().fitPreferenceId,
+                          onChanged: (value) {
+                            context.read<BodyProfileCubit>().fitPreferenceId =
+                                value;
+                            setState(() {});
+                          },
+                          underline: Container(),
+                          dropdownColor: Colors.white,
+                          iconEnabledColor: Colors.black,
+                          isExpanded: true,
+                        ),
+                      );
+                    } else {
+                      return const Center(child: CircularProgressIndicator());
+                    }
+                  },
+                ),
+                SizedBox(
+                  height: 2.h,
+                ),
+                Text(
+                  "Note",
+                  style: TextStyle(
+                    color: const Color(0xFF757575),
+                    fontWeight: FontWeight.w500,
+                    fontSize: 15.sp,
+                  ),
+                ),
+                SizedBox(
+                  height: 1.h,
+                ),
+                TextFormField(
+                  controller: context.read<BodyProfileCubit>().noteController,
+                  maxLines: 3,
+                  decoration: InputDecoration(
+                    fillColor: Colors.white,
+                    filled: true,
+                    constraints: BoxConstraints(
+                      minHeight: 6.h,
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(color: Color(0xFFC7C7C7)),
+                        borderRadius: BorderRadius.circular(5)),
+                    focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(5),
+                        borderSide: const BorderSide(
+                          color: primaryBlue,
+                        )),
+                  ),
+                ),
+                SizedBox(
+                  height: 9.h,
+                ),
+              ],
+            );
+          },
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,

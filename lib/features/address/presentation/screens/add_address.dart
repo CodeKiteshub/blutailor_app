@@ -1,15 +1,13 @@
 import 'package:bluetailor_app/common/cubit/user_cubit/app_user_cubit.dart';
 import 'package:bluetailor_app/common/widgets/dialog_and_snackbar.dart.dart';
 import 'package:bluetailor_app/common/widgets/phone_text_field.dart';
+import 'package:bluetailor_app/common/widgets/primary_app_bar.dart';
 import 'package:bluetailor_app/common/widgets/primary_gradient_button.dart';
 import 'package:bluetailor_app/common/widgets/primary_text_field.dart';
-import 'package:bluetailor_app/core/theme/app_colors.dart';
-import 'package:bluetailor_app/core/theme/app_strings.dart';
 import 'package:bluetailor_app/features/address/domain/entities/address_entity.dart';
 import 'package:bluetailor_app/features/address/presentation/cubit/address_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:sizer/sizer.dart';
 
 class AddAddress extends StatefulWidget {
@@ -22,6 +20,7 @@ class AddAddress extends StatefulWidget {
 
 class _AddAddressState extends State<AddAddress> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  TextEditingController nameController = TextEditingController();
   TextEditingController addressController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
   TextEditingController countryController = TextEditingController();
@@ -34,6 +33,7 @@ class _AddAddressState extends State<AddAddress> {
   @override
   void initState() {
     if (widget.address != null) {
+      nameController.text = widget.address!.name;
       addressController.text = widget.address!.address;
       phoneController.text = widget.address!.phone;
       countryController.text = widget.address!.country;
@@ -47,25 +47,23 @@ class _AddAddressState extends State<AddAddress> {
   }
 
   @override
+  void dispose() {
+    nameController.dispose();
+    addressController.dispose();
+    phoneController.dispose();
+    countryController.dispose();
+    landmarkController.dispose();
+    pincodeController.dispose();
+    cityController.dispose();
+    stateController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: primaryBlue,
-        toolbarHeight: 8.h,
-        leading: InkWell(
-          onTap: () => Navigator.pop(context),
-          child: Padding(
-            padding: const EdgeInsets.all(17),
-            child: SvgPicture.asset(backIcon),
-          ),
-        ),
-        title: Text(
-          "Address",
-          style: TextStyle(
-              fontWeight: FontWeight.w600,
-              fontSize: 20.sp,
-              color: Colors.white),
-        ),
+      appBar: const PrimaryAppBar(
+        title: "Address",
       ),
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
@@ -76,6 +74,14 @@ class _AddAddressState extends State<AddAddress> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              PrimaryTextField(
+                title: "Address Type",
+                border: true,
+                controller: nameController,
+              ),
+              SizedBox(
+                height: 2.h,
+              ),
               PrimaryTextField(
                 title: "Address",
                 border: true,
@@ -156,8 +162,9 @@ class _AddAddressState extends State<AddAddress> {
       floatingActionButton: BottomAppBar(
         color: Colors.transparent,
         child: BlocListener<AddressCubit, AddressState>(
-          listenWhen: (previous, current) =>
-              previous.addressStatus != current.addressStatus,
+          listenWhen: (previous, current) {
+            return previous.addressStatus != current.addressStatus;
+          },
           listener: (context, state) {
             if (state.addressStatus == AddressStatus.loading) {
               LoadingDialog(context);
@@ -168,7 +175,9 @@ class _AddAddressState extends State<AddAddress> {
             }
             if (state.addressStatus == AddressStatus.saved) {
               Navigator.pop(context);
+              Navigator.pop(context);
               context.read<AddressCubit>().fetchAddress();
+              
               PrimarySnackBar(context, "Address is saved", Colors.green);
             }
             if (state.addressStatus == AddressStatus.loaded) {
@@ -184,6 +193,7 @@ class _AddAddressState extends State<AddAddress> {
                       (context.read<AppUserCubit>().state as AppUserLoggedIn)
                           .user;
                   context.read<AddressCubit>().saveAddress(
+                      name: nameController.text,
                       landmark: landmarkController.text,
                       phone: phoneController.text,
                       address: addressController.text,

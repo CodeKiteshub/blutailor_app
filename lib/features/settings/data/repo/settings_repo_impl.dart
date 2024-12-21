@@ -1,7 +1,9 @@
 import 'package:bluetailor_app/core/errors/failure.dart';
 import 'package:bluetailor_app/features/settings/data/data_source/settings_data_source.dart';
+import 'package:bluetailor_app/features/settings/data/model/order_model.dart';
 import 'package:bluetailor_app/features/settings/data/model/product_order_model.dart';
 import 'package:bluetailor_app/features/settings/data/model/store_order_model.dart';
+import 'package:bluetailor_app/features/settings/domain/entities/order_entity.dart';
 import 'package:bluetailor_app/features/settings/domain/entities/product_order_entity.dart';
 import 'package:bluetailor_app/features/settings/domain/entities/store_order_entity.dart';
 import 'package:bluetailor_app/features/settings/domain/repo/settings_repo.dart';
@@ -78,6 +80,26 @@ class SettingsRepoImpl implements SettingsRepo {
 
       return right(result.data!["getUserProfilePictureImageSignedUrl__app"]
           ["signedUrl"]);
+    } catch (e) {
+      return left(Failure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<OrderEntity>>> orderHistory() async {
+    try {
+      final result = await settingsDataSource.fetchOrders();
+      if (result.hasException) {
+        return left(Failure(result.exception.toString()));
+      }
+
+      if (result.data!['getAllUserAlterationOrders']["orders"] == null) {
+        return right([]);
+      }
+
+
+      return right(List<OrderModel>.from(result.data!['getAllUserAlterationOrders']["orders"]
+          .map((order) => OrderModel.fromJson(order))));
     } catch (e) {
       return left(Failure(e.toString()));
     }

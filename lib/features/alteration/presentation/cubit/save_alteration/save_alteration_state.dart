@@ -11,3 +11,5 @@ final class SavedAlteration extends SaveAlterationState {}
 
 final class SaveAlterationError extends SaveAlterationState {}
 
+final class SaveAlterationToCartError extends SaveAlterationState {}
+

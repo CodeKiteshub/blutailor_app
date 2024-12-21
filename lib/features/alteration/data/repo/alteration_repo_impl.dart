@@ -37,7 +37,7 @@ class AlterationRepoImpl implements AlterationRepo {
     try {
       final result = await alterationDataSource.saveAlteration(
           catId: catId,
-          alterations: [...alterations.map((e) => e.toJson())],
+          alterations: [...alterations.map((e) => e.toJson(false))],
           imageAndVirdeo: [...imageAndVideo.map((e) => e.toJson())]);
 
       if (result.hasException) {
@@ -83,6 +83,29 @@ class AlterationRepoImpl implements AlterationRepo {
             .data!["getUserMeasurements"]
             .map((e) => ProductConfigModel.fromJson(e))));
       }
+    } catch (e) {
+      return left(Failure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, String>> addAlterationToCart(
+      {required String catId,
+      required String catName,
+      required String alterationId,
+      required List<AlterationEntity> alterations}) async {
+    try {
+      final result = await alterationDataSource.addAlterationItemToCart(
+          catId: catId,
+          catName: catName,
+          alterationId: alterationId,
+          alterations: alterations);
+
+      if (result.hasException) {
+        return left(Failure(result.exception.toString()));
+      }
+
+      return right(result.data!["addItemsToAlterationCart"]["_id"]);
     } catch (e) {
       return left(Failure(e.toString()));
     }
