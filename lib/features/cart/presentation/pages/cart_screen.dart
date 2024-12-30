@@ -97,33 +97,33 @@ class _CartScreenState extends State<CartScreen> {
                         SizedBox(
                           height: 3.h,
                         ),
-                        Padding(
-                          padding: EdgeInsets.only(left: 5.w, right: 5.w),
-                          child: TextField(
-                            decoration: InputDecoration(
-                                hintText: "Add Coupon",
-                                hintStyle: TextStyle(
-                                    color: Colors.black.withOpacity(0.27),
-                                    fontSize: 16.sp,
-                                    fontWeight: FontWeight.w400),
-                                border: const UnderlineInputBorder(
-                                    borderSide:
-                                        BorderSide(color: Color(0xFFBEBEBE))),
-                                suffix: Container(
-                                  padding: const EdgeInsets.all(8.0),
-                                  decoration: BoxDecoration(
-                                      color: primaryBlue,
-                                      borderRadius: BorderRadius.circular(5)),
-                                  child: const Icon(
-                                    Icons.check,
-                                    color: Colors.white,
-                                  ),
-                                )),
-                          ),
-                        ),
-                        SizedBox(
-                          height: 3.h,
-                        ),
+                        // Padding(
+                        //   padding: EdgeInsets.only(left: 5.w, right: 5.w),
+                        //   child: TextField(
+                        //     decoration: InputDecoration(
+                        //         hintText: "Add Coupon",
+                        //         hintStyle: TextStyle(
+                        //             color: Colors.black.withOpacity(0.27),
+                        //             fontSize: 16.sp,
+                        //             fontWeight: FontWeight.w400),
+                        //         border: const UnderlineInputBorder(
+                        //             borderSide:
+                        //                 BorderSide(color: Color(0xFFBEBEBE))),
+                        //         suffix: Container(
+                        //           padding: const EdgeInsets.all(8.0),
+                        //           decoration: BoxDecoration(
+                        //               color: primaryBlue,
+                        //               borderRadius: BorderRadius.circular(5)),
+                        //           child: const Icon(
+                        //             Icons.check,
+                        //             color: Colors.white,
+                        //           ),
+                        //         )),
+                        //   ),
+                        // ),
+                        // SizedBox(
+                        //   height: 3.h,
+                        // ),
                         PriceBoxWidget(
                           cart: state.cart,
                         ),
@@ -223,7 +223,7 @@ class _CartScreenState extends State<CartScreen> {
                                     .gTotal;
                             context
                                 .read<PlaceOrderCubit>()
-                                .placeAlterationOrder(
+                                .placeStitchingOrder(
                                     addressId: addressId!,
                                     cartId: cartId,
                                     user: user,

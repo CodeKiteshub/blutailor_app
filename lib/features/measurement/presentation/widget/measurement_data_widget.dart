@@ -63,6 +63,15 @@ class _MeasurementDataWidgetState extends State<MeasurementDataWidget> {
       }
     }
     super.initState();
+    debugPrint('Widget initialized: ${identityHashCode(this)}');
+  }
+
+
+
+  @override
+  void dispose() {
+    debugPrint('Widget disposed: ${identityHashCode(this)}');
+    super.dispose();
   }
 
   @override

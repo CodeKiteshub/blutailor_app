@@ -1,5 +1,8 @@
 // ignore_for_file: deprecated_member_use
 
+import 'dart:developer';
+import 'dart:io';
+
 import 'package:bluetailor_app/core/theme/app_colors.dart';
 import 'package:bluetailor_app/core/theme/app_strings.dart';
 import 'package:bluetailor_app/features/appointment/presentation/cubit/appointment_cubit.dart';
@@ -32,6 +35,7 @@ class _BottomNavigationBarWidgetState extends State<BottomNavigationBarWidget> {
 
   @override
   Widget build(BuildContext context) {
+    log('Memory usage before dispose: ${(ProcessInfo.currentRss / 1024 / 1024).toStringAsFixed(2)} MB');
     return Scaffold(
       body: IndexedStack(
         index: currentIndex,

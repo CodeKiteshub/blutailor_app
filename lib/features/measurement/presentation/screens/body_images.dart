@@ -206,7 +206,10 @@ class _BodyImagesState extends State<BodyImages> {
 
                   if (widget.selectedCat.length == 1) {
                     Navigator.pushNamed(context, '/measurement-details',
-                        arguments: widget.selectedCat.first);
+                            arguments: {
+                              'selectedCat': widget.selectedCat.first,
+                              "isSingle": true
+                            });
                   } else {
                     Navigator.of(context).pushNamed('/selected-cat',
                         arguments: {
@@ -224,6 +227,22 @@ class _BodyImagesState extends State<BodyImages> {
                         (sideImg == "" && sidePicture == null)) {
                       PrimarySnackBar(
                           context, "Please Upload Images", Colors.red);
+                    } else if (frontPicture != null ||
+                        backPicture != null ||
+                        sidePicture != null) {
+                      if (widget.selectedCat.length == 1) {
+                        Navigator.pushNamed(context, '/measurement-details',
+                            arguments: {
+                              'selectedCat': widget.selectedCat.first,
+                              "isSingle": true
+                            });
+                      } else {
+                        Navigator.of(context).pushNamed('/selected-cat',
+                            arguments: {
+                              'selectedCat': widget.selectedCat,
+                              'fromCustom': true
+                            });
+                      }
                     } else {
                       final user = (context.read<AppUserCubit>().state
                               as AppUserLoggedIn)

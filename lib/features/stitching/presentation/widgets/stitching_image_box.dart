@@ -67,7 +67,7 @@ class StitchingImageBox extends StatelessWidget {
                           child: CachedNetworkImage(
                             imageUrl: dummyImg,
                             height: 20.h,
-                            width: 40.w,
+                            width: 30.w,
                       
                           ),
                         ),

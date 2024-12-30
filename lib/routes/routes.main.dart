@@ -168,7 +168,10 @@ class Routes {
                     ),
                   ],
                   child: MeasurementDetails(
-                      selectedCat: settings.arguments as SelectedCatModel),
+                    selectedCat: (settings.arguments as Map)["selectedCat"]
+                        as SelectedCatModel,
+                    isSingle: (settings.arguments as Map)["isSingle"] as bool,
+                  ),
                 ));
 
       case '/select-alteration-cat':
@@ -178,16 +181,25 @@ class Routes {
                   child: const SelectAlteraionCat(),
                 ));
 
+      case '/selected-alteration-cat':
+        return MaterialPageRoute(
+            builder: (_) => SelectedAlterationCat(
+                  selectedCat:
+                      settings.arguments as List<SelectedAlterationCatEntity>,
+                ));
+
       case '/alteration-option':
         return MaterialPageRoute(
             builder: (_) => AlterationOption(
-                  selectedCat: settings.arguments as SelectedCatModel,
+                  selectedCat:
+                      settings.arguments as SelectedAlterationCatEntity,
                 ));
 
       case '/upload-image':
         return MaterialPageRoute(
             builder: (_) => UploadImage(
-                  selectedCat: settings.arguments as SelectedCatModel,
+                  selectedCat:
+                      settings.arguments as SelectedAlterationCatEntity,
                 ));
 
       case '/alteration-details':
@@ -206,7 +218,7 @@ class Routes {
                     videoFile:
                         (settings.arguments as Map)["videoFile"] as String,
                     selectedCat: (settings.arguments as Map)["selectedCat"]
-                        as SelectedCatModel,
+                        as SelectedAlterationCatEntity,
                   ),
                 ));
 
@@ -221,7 +233,7 @@ class Routes {
                     videoFile:
                         (settings.arguments as Map)["videoFile"] as String,
                     selectedCat: (settings.arguments as Map)["selectedCat"]
-                        as SelectedCatModel,
+                        as SelectedAlterationCatEntity,
                   ),
                 ));
 

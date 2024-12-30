@@ -1,11 +1,12 @@
-import 'package:bluetailor_app/common/models/selected_cat_model.dart';
+
 import 'package:bluetailor_app/common/widgets/primary_app_bar.dart';
 import 'package:bluetailor_app/common/widgets/primary_gradient_button.dart';
+import 'package:bluetailor_app/features/alteration/domain/entities/selected_alteration_cat_entity.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
 class AlterationOption extends StatefulWidget {
-  final SelectedCatModel selectedCat;
+  final SelectedAlterationCatEntity selectedCat;
   const AlterationOption({super.key, required this.selectedCat});
 
   @override

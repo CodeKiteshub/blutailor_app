@@ -1,3 +1,6 @@
+import 'dart:developer';
+import 'dart:io';
+
 import 'package:bluetailor_app/common/cubit/user_cubit/app_user_cubit.dart';
 import 'package:bluetailor_app/common/widgets/app_bar_widget.dart';
 import 'package:bluetailor_app/common/widgets/dialog_and_snackbar.dart.dart';
@@ -16,6 +19,7 @@ class Settings extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    log('Memory usage before dispose: ${(ProcessInfo.currentRss / 1024 / 1024).toStringAsFixed(2)} MB');
     return Scaffold(
       backgroundColor: primaryBlue,
       body: SafeArea(

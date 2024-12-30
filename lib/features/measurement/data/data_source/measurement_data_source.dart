@@ -1,4 +1,4 @@
-import 'package:bluetailor_app/common/queries/product_queries.dart';
+
 import 'package:bluetailor_app/core/api/api_client.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -49,6 +49,23 @@ class MeasurementDataSourceImpl implements MeasurementDataSource {
 
   @override
   Future<QueryResult<Object?>> fetchOcassions() async {
+    String ocassionSchema = """
+query GetAllOccasions {
+  getAllOccasions {
+    name
+    _id
+    categories {
+      name
+      label
+      _id
+      personalizeImage
+      image
+    }
+  }
+}
+""";
+
+
     return await apiClient.queryData(query: ocassionSchema, variable: {});
   }
 

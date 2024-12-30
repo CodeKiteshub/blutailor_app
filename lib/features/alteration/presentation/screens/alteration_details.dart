@@ -1,8 +1,8 @@
 import 'package:bluetailor_app/common/models/product_config_model.dart';
-import 'package:bluetailor_app/common/models/selected_cat_model.dart';
 import 'package:bluetailor_app/common/widgets/primary_app_bar.dart';
 import 'package:bluetailor_app/common/widgets/primary_gradient_button.dart';
 import 'package:bluetailor_app/core/theme/app_colors.dart';
+import 'package:bluetailor_app/features/alteration/domain/entities/selected_alteration_cat_entity.dart';
 import 'package:bluetailor_app/features/alteration/presentation/cubit/alteration_config/alteration_config_cubit.dart';
 import 'package:bluetailor_app/features/alteration/presentation/cubit/user_measurement/user_measurement_cubit.dart';
 import 'package:bluetailor_app/features/alteration/presentation/widgets/alteration_config_widget.dart';
@@ -12,7 +12,7 @@ import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:sizer/sizer.dart';
 
 class AlterationDetails extends StatefulWidget {
-  final SelectedCatModel selectedCat;
+  final SelectedAlterationCatEntity selectedCat;
   final String imgFile;
   final String videoFile;
   const AlterationDetails(

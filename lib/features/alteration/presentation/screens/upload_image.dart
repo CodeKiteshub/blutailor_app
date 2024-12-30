@@ -1,17 +1,18 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'package:bluetailor_app/common/models/selected_cat_model.dart';
+
 import 'package:bluetailor_app/common/widgets/pick_img_bottomsheet.dart';
 import 'package:bluetailor_app/common/widgets/primary_app_bar.dart';
 import 'package:bluetailor_app/common/widgets/primary_gradient_button.dart';
 import 'package:bluetailor_app/core/img/functions_and_aws.dart';
+import 'package:bluetailor_app/features/alteration/domain/entities/selected_alteration_cat_entity.dart';
 import 'package:bluetailor_app/features/alteration/presentation/widgets/alteration_image_box.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:sizer/sizer.dart';
 
 class UploadImage extends StatefulWidget {
-  final SelectedCatModel selectedCat;
+  final SelectedAlterationCatEntity selectedCat;
   const UploadImage({super.key, required this.selectedCat});
 
   @override

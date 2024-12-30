@@ -38,7 +38,9 @@ class SelectedStitchingCat extends StatelessWidget {
                   theme: const ExpandableThemeData(hasIcon: false),
                   header:  Row(
                     children: [
-                CachedNetworkImage(imageUrl: selectedCat[index].img),
+                CachedNetworkImage(imageUrl: selectedCat[index].img,
+                errorWidget: (context, url, error) => const Icon(Icons.error),
+                height: 15.h,),
                 SizedBox(width: 5.w,),
                 Expanded(child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,

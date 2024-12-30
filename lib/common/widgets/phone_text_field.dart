@@ -73,6 +73,7 @@ class PhoneTextField extends StatelessWidget {
               filled: true,
               constraints: BoxConstraints(
                 minHeight: 6.h,
+                maxHeight: 6.h
               ),
               enabledBorder: OutlineInputBorder(
                   borderSide: border

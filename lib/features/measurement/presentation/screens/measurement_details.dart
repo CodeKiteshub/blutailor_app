@@ -17,7 +17,9 @@ import 'package:sizer/sizer.dart';
 
 class MeasurementDetails extends StatefulWidget {
   final SelectedCatModel selectedCat;
-  const MeasurementDetails({super.key, required this.selectedCat});
+  final bool isSingle;
+  const MeasurementDetails(
+      {super.key, required this.selectedCat, required this.isSingle});
 
   @override
   State<MeasurementDetails> createState() => _MeasurementDetailsState();
@@ -252,8 +254,16 @@ class _MeasurementDetailsState extends State<MeasurementDetails> {
               }
               if (state is MeasurementSaved) {
                 PrimarySnackBar(context, state.message, Colors.green);
-                Navigator.pop(context);
-                Navigator.pop(context);
+                if (widget.isSingle) {
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                } else {
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                }
               }
             },
             child: PrimaryGradientButton(

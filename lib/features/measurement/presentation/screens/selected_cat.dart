@@ -56,9 +56,11 @@ class SelectedCat extends StatelessWidget {
               itemBuilder: (context, index) => InkWell(
                     onTap: () {
                       if (fromCustom) {
-                        Navigator.pushNamed(
-                            context, "/measurement-details",
-                            arguments: selectedCat[index]);
+                       Navigator.pushNamed(context, '/measurement-details',
+                            arguments: {
+                              'selectedCat': selectedCat[index],
+                              "isSingle": false
+                            });
                       } else {
                         Navigator.pushNamed(context, "/standard-size",
                             arguments: selectedCat[index].id);
@@ -112,14 +114,7 @@ class SelectedCat extends StatelessWidget {
       ],
               ),
             ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: Container(
-          height: 6.h,
-          margin: EdgeInsets.only(
-            left: 5.w,
-            right: 5.w,
-          ),
-          child: PrimaryGradientButton(title: "Proceed", onPressed: () {})),
+    
     );
   }
 }

@@ -3,6 +3,7 @@ import 'package:bluetailor_app/features/address/domain/entities/address_entity.d
 import 'package:bluetailor_app/features/address/domain/usecase/delete_address_usecase.dart';
 import 'package:bluetailor_app/features/address/domain/usecase/fetch_address_list_usecase.dart';
 import 'package:bluetailor_app/features/address/domain/usecase/save_address_usecase.dart';
+import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 part 'address_state.dart';

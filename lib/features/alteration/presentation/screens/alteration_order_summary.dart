@@ -4,13 +4,14 @@ import 'package:bluetailor_app/common/widgets/primary_app_bar.dart';
 import 'package:bluetailor_app/common/widgets/primary_gradient_button.dart';
 import 'package:bluetailor_app/core/theme/app_colors.dart';
 import 'package:bluetailor_app/features/alteration/domain/entities/alteration_entity.dart';
+import 'package:bluetailor_app/features/alteration/domain/entities/selected_alteration_cat_entity.dart';
 import 'package:bluetailor_app/features/alteration/presentation/cubit/save_alteration/save_alteration_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizer/sizer.dart';
 
 class AlterationOrderSummary extends StatelessWidget {
-  final SelectedCatModel selectedCat;
+  final SelectedAlterationCatEntity selectedCat;
   final List<AlterationEntity> alterations;
   final String imgFile;
   final String videoFile;
@@ -63,12 +64,14 @@ class AlterationOrderSummary extends StatelessWidget {
                             SizedBox(
                               width: 3.w,
                             ),
-                            Text(
-                              "${alterations[index].label} - Rs.${alterations[index].price}/-",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 16.sp,
-                                  color: black2),
+                            Expanded(
+                              child: Text(
+                                "${alterations[index].label} - Rs.${alterations[index].price}/-",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 16.sp,
+                                    color: black2),
+                              ),
                             )
                           ],
                         );

@@ -13,7 +13,7 @@ class ProductCatModel extends ProductCatEntity {
       id: map['_id'] as String,
       name: map['name'] as String,
       label: map['label'] as String,
-      image: map['image'] as String,
+      image: map['image'] + "?abc",
       personalizeImage: map['personalizeImage'] as dynamic,
     );
   }

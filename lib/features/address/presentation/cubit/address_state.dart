@@ -1,10 +1,10 @@
 part of 'address_cubit.dart';
 
- class AddressState {
+class AddressState extends Equatable {
   final AddressStatus addressStatus;
   final List<AddressEntity>? addresses;
 
- const AddressState({required this.addressStatus, required this.addresses});
+  const AddressState({required this.addressStatus, required this.addresses});
 
   static AddressState initial() =>
       const AddressState(addressStatus: AddressStatus.initial, addresses: null);
@@ -14,6 +14,9 @@ part of 'address_cubit.dart';
       AddressState(
           addressStatus: addressStatus ?? this.addressStatus,
           addresses: addresses ?? this.addresses);
+
+  @override
+  List<Object?> get props => [addressStatus, addresses];
 }
 
-enum AddressStatus { initial, saved, error, loading , loaded, deleted}
+enum AddressStatus { initial, saved, error, loading, loaded, deleted }

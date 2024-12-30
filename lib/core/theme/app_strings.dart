@@ -15,7 +15,7 @@ const otpText = "OTP has been sent to your number for verification";
 
 // Home
 const measurement = "assets/icons/measurement.svg";
-const homeAppointment = "Connect with our tailors and stylists today!";
+const homeAppointment = "Connect with our tailors today!";
 
 // Bottom Bar
 const homeIcon = "assets/icons/home.svg";

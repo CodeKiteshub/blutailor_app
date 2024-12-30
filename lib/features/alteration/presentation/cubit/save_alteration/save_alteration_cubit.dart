@@ -91,7 +91,7 @@ class SaveAlterationCubit extends Cubit<SaveAlterationState> {
     path.fold((l) {
       return null;
     }, (r) {
-      signedUrl = r["signedUrl"];
+      signedUrl = r["getAlterationImagesSignedUrl__app"]["signedUrl"];
     });
     final response = await uploadToAWS(video, signedUrl!);
 

@@ -94,6 +94,30 @@ class _StitchingDetailState extends State<StitchingDetail> {
               ),
               Padding(
                 padding: EdgeInsets.only(left: 5.w, right: 5.w),
+                child: Row(
+                  children: [
+                    Text(
+                      "₹${(context.read<StylingCubit>().standardJson["categories"] as List).firstWhere((e) => e["id"] == widget.selectedCat.id)["price"]}/-",
+                      style: TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 18.sp,
+                          color: black2),
+                    ),
+                    SizedBox(width: 3.w,),
+                    Text("incl. of all taxes",
+                    style: TextStyle(
+                      color: const Color(0xFF625B71),
+                      fontWeight: FontWeight.w400,
+                      fontSize: 15.sp
+                    ),)
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: 3.h,
+              ),
+              Padding(
+                padding: EdgeInsets.only(left: 5.w, right: 5.w),
                 child: Text(
                   widget.note,
                   style: TextStyle(
@@ -449,8 +473,8 @@ class _StitchingDetailState extends State<StitchingDetail> {
                       catId: widget.selectedCat.id,
                       fabricName: widget.name,
                       fabricImage: widget.image,
-                      fabricLength: double.parse(widget.fabricLength),
-                      fabricWidth: double.parse(widget.fabricWidth),
+                      fabricLength: widget.fabricLength.isEmpty ? 0 : double.parse(widget.fabricLength),
+                      fabricWidth: widget.fabricWidth.isEmpty ? 0 : double.parse(widget.fabricWidth),
                       fabricNote: widget.note,
                       stylingNote: remarkController.text,
                       styling: ((context
@@ -460,8 +484,8 @@ class _StitchingDetailState extends State<StitchingDetail> {
                                       (e) => e["id"] == widget.selectedCat.id)[
                               "defaultConfig"] as List)
                           .map((e) => SelectedStylingEntity(
-                              catTag: "",
-                              name: "",
+                              catTag: e["masterName"],
+                              name: e['value'],
                               label: e["name"],
                               value: e["value"]))
                           .toList());

@@ -103,7 +103,7 @@ class PlaceOrderCubit extends Cubit<PlaceOrderState> {
 
   initiatePayment({required User user, required String amount}) async {
     var options = {
-    //  'key': 'rzp_test_UfIqGg33hpskpp',
+      //'key': 'rzp_test_UfIqGg33hpskpp',
          'key': 'rzp_live_yl8ffRosNiw7HV',
       'amount': amount,
       'name': user.firstName + ' ' + user.lastName,

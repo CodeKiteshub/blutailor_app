@@ -1,3 +1,5 @@
+import 'dart:developer';
+import 'dart:io';
 
 import 'package:bluetailor_app/common/cubit/user_cubit/app_user_cubit.dart';
 import 'package:bluetailor_app/common/widgets/bottom_navigation_bar.dart';
@@ -7,24 +9,29 @@ import 'package:bluetailor_app/gen/fonts.gen.dart';
 import 'package:bluetailor_app/routes/routes.dart';
 import 'package:bluetailor_app/service_locator.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizer/sizer.dart';
 
-
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  log('Memory usage before dispose: ${(ProcessInfo.currentRss / 1024 / 1024).toStringAsFixed(2)} MB');
   await initDependencies();
-  runApp(MultiBlocProvider(
-    providers: [
-      BlocProvider(
-        create: (context) => sl<AppUserCubit>(),
-      ),
-      BlocProvider(
-        create: (context) => sl<AuthBloc>(),
-      ),
-    ],
-    child: const MyApp(),
-  ));
+  log('Memory usage before dispose: ${(ProcessInfo.currentRss / 1024 / 1024).toStringAsFixed(2)} MB');
+  Bloc.observer = SimpleBlocDelegate();
+  SystemChrome.setPreferredOrientations(
+    [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown],
+  ).then((_) => runApp(MultiBlocProvider(
+        providers: [
+          BlocProvider(
+            create: (context) => sl<AppUserCubit>(),
+          ),
+          BlocProvider(
+            create: (context) => sl<AuthBloc>(),
+          ),
+        ],
+        child: const MyApp(),
+      )));
 }
 
 class MyApp extends StatefulWidget {
@@ -39,7 +46,6 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     context.read<AuthBloc>().add(AuthIsLoggedIn());
-
   }
 
   // This widget is the root of your application.
@@ -65,5 +71,32 @@ class _MyAppState extends State<MyApp> {
         ),
       );
     });
+  }
+}
+
+class SimpleBlocDelegate extends BlocObserver {
+  @override
+  void onCreate(BlocBase bloc) {
+    super.onCreate(bloc);
+    log('onCreate -- ${bloc.runtimeType}');
+  }
+
+  @override
+  void onChange(BlocBase bloc, Change change) {
+    super.onChange(bloc, change);
+    log('onChange -- ${bloc.runtimeType}, $change');
+  }
+
+  @override
+  void onError(BlocBase bloc, Object error, StackTrace stackTrace) {
+    log('onError -- ${bloc.runtimeType}, $error');
+    super.onError(bloc, error, stackTrace);
+  }
+
+  @override
+  void onClose(BlocBase bloc) {
+    super.onClose(bloc);
+    log('onClose -- ${bloc.runtimeType}');
+    debugPrint('onClose -- ${bloc.runtimeType}');
   }
 }

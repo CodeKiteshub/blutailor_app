@@ -1,4 +1,7 @@
 
+import 'dart:developer';
+import 'dart:io';
+
 import 'package:bluetailor_app/common/widgets/dialog_and_snackbar.dart.dart';
 import 'package:bluetailor_app/common/widgets/primary_app_bar.dart';
 import 'package:bluetailor_app/common/widgets/primary_gradient_button.dart';
@@ -25,7 +28,9 @@ class _SelectGarmentCatState extends State<SelectGarmentCat> {
 
   @override
   void initState() {
-    context.read<CategoryCubit>().fetchGarmentUseCase();
+    log('Memory usage before dispose: ${(ProcessInfo.currentRss / 1024 / 1024).toStringAsFixed(2)} MB');
+    context.read<CategoryCubit>().fetchGarmentUseCase(false, false);
+    log('Memory usage before dispose: ${(ProcessInfo.currentRss / 1024 / 1024).toStringAsFixed(2)} MB');
     super.initState();
   }
 

@@ -1,13 +1,12 @@
 import 'package:bluetailor_app/common/cubit/category_cubit/category_cubit.dart';
-import 'package:bluetailor_app/common/models/selected_cat_model.dart';
 import 'package:bluetailor_app/common/widgets/dialog_and_snackbar.dart.dart';
 import 'package:bluetailor_app/common/widgets/primary_app_bar.dart';
 import 'package:bluetailor_app/common/widgets/primary_gradient_button.dart';
 import 'package:bluetailor_app/core/theme/app_colors.dart';
+import 'package:bluetailor_app/features/alteration/domain/entities/selected_alteration_cat_entity.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:sizer/sizer.dart';
 
@@ -19,11 +18,11 @@ class SelectAlteraionCat extends StatefulWidget {
 }
 
 class _SelectAlteraionCatState extends State<SelectAlteraionCat> {
-  SelectedCatModel? selectedCat;
+  List<SelectedAlterationCatEntity> selectedCat = [];
 
   @override
   void initState() {
-    context.read<CategoryCubit>().fetchGarmentUseCase();
+    context.read<CategoryCubit>().fetchGarmentUseCase(false, true);
     super.initState();
   }
 
@@ -33,8 +32,7 @@ class _SelectAlteraionCatState extends State<SelectAlteraionCat> {
       backgroundColor: Colors.white,
       appBar: const PrimaryAppBar(title: "Alteration"),
       body: Padding(
-        padding: EdgeInsets.only(
-            left: 7.w, right: 7.w, top: 3.h, bottom: 3.h),
+        padding: EdgeInsets.only(left: 7.w, right: 7.w, top: 3.h, bottom: 3.h),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -55,52 +53,145 @@ class _SelectAlteraionCatState extends State<SelectAlteraionCat> {
                 },
                 builder: (context, state) {
                   if (state is CategoryLoaded) {
-                    return MasonryGridView.count(
-                        crossAxisCount: 2,
-                        crossAxisSpacing: 3.w,
-                        mainAxisSpacing: 2.h,
-                        padding: EdgeInsets.only(top: 3.h, bottom: 10.h),
+                    return GridView.builder(
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            crossAxisSpacing: 16,
+                            mainAxisSpacing: 16,
+                            childAspectRatio: 5.w / 3.h),
+                        padding: EdgeInsets.only(top: 3.h),
                         itemCount: state.categories.length,
-                        itemBuilder: (context, index) => InkWell(
-                              onTap: () {
-                                selectedCat = SelectedCatModel(
-                                    id: state.categories[index].id,
-                                    img: state.categories[index].image,
-                                    label:
-                                        state.categories[index].label);
-                                setState(() {});
-                              },
-                              child: Column(
-                                children: [
-                                  Container(
-                                    padding: EdgeInsets.all(0.5.h),
-                                    decoration: BoxDecoration(
-                                      gradient: selectedCat?.id ==
-                                              state.categories[index].id
-                                          ? borderGradient
-                                          : null,
-                                      borderRadius:
-                                          BorderRadius.circular(10),
-                                    ),
-                                    child: CachedNetworkImage(
-                                      imageUrl:
-                                          state.categories[index].image,
+                        itemBuilder: (context, index) => Column(
+                              children: [
+                                Column(
+                                  children: [
+                                  CachedNetworkImage(
+                                      imageUrl:  state.categories[index].image,
                                       height: 15.h,
-                                      fit: BoxFit.fitHeight,
+                                      fit: BoxFit.cover,
                                     ),
-                                  ),
-                                  SizedBox(
-                                    height: 1.h,
-                                  ),
-                                  Text(
-                                    state.categories[index].label,
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 14.sp,
-                                        color: primaryBlack),
-                                  )
-                                ],
-                              ),
+                                    SizedBox(
+                                      height: 0.5.h,
+                                    ),
+                                    Text(
+                                      state.categories[index].label,
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 14.sp,
+                                          color: primaryBlue),
+                                    ),
+                                    SizedBox(
+                                      height: 0.5.h,
+                                    ),
+                                    Row(
+                                        mainAxisSize: MainAxisSize.max,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          InkWell(
+                                            onTap: () {
+                                              if (selectedCat.any((e) =>
+                                                  e.id ==
+                                                  state.categories[index].id)) {
+                                                if (selectedCat
+                                                        .firstWhere((e) =>
+                                                            e.id ==
+                                                            state
+                                                                .categories[
+                                                                    index]
+                                                                .id)
+                                                        .length >
+                                                    0) {
+                                                  selectedCat
+                                                      .firstWhere((e) =>
+                                                          e.id ==
+                                                          state
+                                                              .categories[index]
+                                                              .id)
+                                                      .length--;
+                                                } else {
+                                                  selectedCat.removeWhere((e) =>
+                                                      e.id ==
+                                                      state.categories[index]
+                                                          .id);
+                                                }
+                                              }
+                                              setState(() {});
+                                            },
+                                            child: Container(
+                                                height: 40,
+                                                width: 40,
+                                                decoration: const BoxDecoration(
+                                                    color: Color(0xFFF5F3F3)),
+                                                child: Icon(
+                                                  Icons.remove,
+                                                  size: 18.sp,
+                                                  color: Colors.black,
+                                                )),
+                                          ),
+                                          Container(
+                                              height: 40,
+                                              width: 40,
+                                              alignment: Alignment.center,
+                                              decoration: const BoxDecoration(
+                                                  color: Color(0xFFD9D9D9)),
+                                              child: Text(selectedCat.any((e) =>
+                                                          e.id ==
+                                                          state
+                                                              .categories[index]
+                                                              .id) ==
+                                                      true
+                                                  ? selectedCat
+                                                      .firstWhere((e) =>
+                                                          e.id ==
+                                                          state
+                                                              .categories[index]
+                                                              .id)
+                                                      .length
+                                                      .toString()
+                                                  : "0")),
+                                          InkWell(
+                                            onTap: () {
+                                              if (selectedCat.any((e) =>
+                                                  e.id ==
+                                                  state.categories[index].id)) {
+                                                selectedCat
+                                                    .firstWhere((e) =>
+                                                        e.id ==
+                                                        state.categories[index]
+                                                            .id)
+                                                    .length++;
+                                              } else {
+                                                selectedCat.add(
+                                                    SelectedAlterationCatEntity(
+                                                        id: state
+                                                            .categories[index]
+                                                            .id,
+                                                        label: state
+                                                            .categories[index]
+                                                            .label,
+                                                        img: state
+                                                            .categories[index]
+                                                            .image,
+                                                        length: 1));
+                                              }
+                                              setState(() {});
+                                            },
+                                            child: Container(
+                                                height: 40,
+                                                width: 40,
+                                                decoration: const BoxDecoration(
+                                                    color: Color(0xFFF5F3F3)),
+                                                child: Icon(
+                                                  Icons.add,
+                                                  size: 18.sp,
+                                                  color: Colors.black,
+                                                )),
+                                          ),
+                                        ])
+                                  ],
+                                ),
+                              ],
                             ));
                   }
                   return LoadingAnimationWidget.beat(
@@ -114,14 +205,16 @@ class _SelectAlteraionCatState extends State<SelectAlteraionCat> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: BottomAppBar(
         color: Colors.transparent,
-        child: PrimaryGradientButton(title: "Proceed", onPressed: () {
-          if (selectedCat != null) {
-            Navigator.pushNamed(context, '/alteration-option',
-                arguments: selectedCat);
-          } else {
-            PrimarySnackBar(context, "Please select a garment", Colors.red);
-          }
-        }),
+        child: PrimaryGradientButton(
+            title: "Proceed",
+            onPressed: () {
+              if (selectedCat.isNotEmpty) {
+                Navigator.pushNamed(context, "/selected-alteration-cat",
+                    arguments: selectedCat);
+              } else {
+                PrimarySnackBar(context, "Please select a garment", Colors.red);
+              }
+            }),
       ),
     );
   }

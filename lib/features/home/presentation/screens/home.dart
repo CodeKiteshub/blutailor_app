@@ -72,6 +72,7 @@ class Home extends StatelessWidget {
                     },
                     child: HomeTile(
                       title: homeAppointment,
+                      bottomText: true,
                       child: Assets.images.homeAppointment.image(),
                     ),
                   ),
@@ -114,25 +115,25 @@ class Home extends StatelessWidget {
                   SizedBox(
                     height: 3.h,
                   ),
-                  const HomeHeading(
-                    title: "Alteration Guide",
-                  ),
-                  SizedBox(
-                    height: 2.h,
-                  ),
-                  InkWell(
-                    onTap: () {
-                      PrimarySnackBar(
-                          context, "Coming soon. Stay Tuned.", Colors.green);
-                    },
-                    child: HomeTile(
-                      title: "Our professionally crafted guide, Just for you!",
-                      child: Assets.images.homeGuide.image(),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 3.h,
-                  ),
+                  // const HomeHeading(
+                  //   title: "Alteration Guide",
+                  // ),
+                  // SizedBox(
+                  //   height: 2.h,
+                  // ),
+                  // InkWell(
+                  //   onTap: () {
+                  //     PrimarySnackBar(
+                  //         context, "Coming soon. Stay Tuned.", Colors.green);
+                  //   },
+                  //   child: HomeTile(
+                  //     title: "Our professionally crafted guide, Just for you!",
+                  //     child: Assets.images.homeGuide.image(),
+                  //   ),
+                  // ),
+                  // SizedBox(
+                  //   height: 3.h,
+                  // ),
                   const HomeHeading(
                     title: "Our Journey",
                   ),
@@ -166,11 +167,12 @@ class Home extends StatelessWidget {
 class HomeTile extends StatelessWidget {
   final Widget child;
   final String title;
-  const HomeTile({
-    super.key,
-    required this.child,
-    required this.title,
-  });
+  final bool bottomText;
+  const HomeTile(
+      {super.key,
+      required this.child,
+      required this.title,
+      this.bottomText = false});
 
   @override
   Widget build(BuildContext context) {
@@ -180,35 +182,29 @@ class HomeTile extends StatelessWidget {
         Positioned(
           bottom: 15,
           left: 3.w,
-          right: 12.w,
-          child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 3.w, vertical: 1.h),
-            decoration: BoxDecoration(
-              color: Colors.black.withOpacity(0.3),
-              borderRadius: BorderRadius.circular(15),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.5),
-                  spreadRadius: 0,
-                  blurRadius: 4,
-                  offset: const Offset(0, 0),
+          right: 3.w,
+          child: Column(
+            children: [
+              Text(title,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16.sp,
+                      fontWeight: FontWeight.w500)),
+              if (bottomText) ...[
+                SizedBox(
+                  height: 0.5.h,
                 ),
-              ],
-            ),
-            child: Text(title,
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16.sp,
-                    fontWeight: FontWeight.w500)),
+                Text("Tap to book an appointment now",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.w300)),
+              ]
+            ],
           ),
         ),
-        Positioned(
-            bottom: 25,
-            right: 3.w,
-            child: const Icon(
-              Icons.arrow_forward_ios,
-              color: Colors.white,
-            ))
       ],
     );
   }

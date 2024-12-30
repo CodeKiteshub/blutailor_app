@@ -37,6 +37,7 @@ Future<String?> uploadToAWS(
     var bytes = await File(image).readAsBytes();
     var response = await http
         .put(Uri.parse(url), body: bytes);
+        log(response.statusCode.toString());
     if (response.statusCode == 200) {
       return url.split("?").first;
     } else {

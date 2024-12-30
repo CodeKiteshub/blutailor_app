@@ -1,6 +1,7 @@
 // ignore_for_file: void_checks
 
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:bluetailor_app/common/entities/user.dart';
 import 'package:bluetailor_app/common/models/signed_url_param.dart';
@@ -50,6 +51,25 @@ class BodyProfileCubit extends Cubit<BodyProfileState> {
   final TextEditingController cmController = TextEditingController();
   final TextEditingController noteController = TextEditingController();
 
+
+  @override
+  Future<void> close() {
+    ageController.dispose();
+    weightController.dispose();
+    feetController.dispose();
+    inchesController.dispose();
+    cmController.dispose();
+    noteController.dispose();
+    return super.close();
+  }
+
+
+// Add tracking
+  void trackMemory(String point) {
+    log('Memory at $point: ${(ProcessInfo.currentRss / 1024 / 1024).toStringAsFixed(2)} MB');
+  }
+
+
   void fetchBodyProfile() async {
     emit(BodyProfileState(status: BodyProfileStatus.loading));
     final bodyProfile = await _fetchBodyProfileUsecase.call(params: "");
@@ -80,6 +100,7 @@ class BodyProfileCubit extends Cubit<BodyProfileState> {
       String? frontPicture,
       String? backPicture,
       String? sidePicture}) async {
+        trackMemory('Before save');
     emit(BodyProfileState(status: BodyProfileStatus.loading));
     String height = "";
     if (isFeet ?? true) {
@@ -114,6 +135,7 @@ class BodyProfileCubit extends Cubit<BodyProfileState> {
       }
       emit(BodyProfileState(status: BodyProfileStatus.saved));
     });
+    trackMemory('After save');
   }
 
   void saveStandardSizing({

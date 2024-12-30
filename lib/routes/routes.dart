@@ -5,6 +5,7 @@ import 'package:bluetailor_app/features/address/presentation/cubit/address_cubit
 import 'package:bluetailor_app/features/address/presentation/screens/add_address.dart';
 import 'package:bluetailor_app/features/address/presentation/screens/address_list.dart';
 import 'package:bluetailor_app/features/alteration/domain/entities/alteration_entity.dart';
+import 'package:bluetailor_app/features/alteration/domain/entities/selected_alteration_cat_entity.dart';
 import 'package:bluetailor_app/features/alteration/presentation/cubit/alteration_config/alteration_config_cubit.dart';
 import 'package:bluetailor_app/features/alteration/presentation/cubit/save_alteration/save_alteration_cubit.dart';
 import 'package:bluetailor_app/features/alteration/presentation/cubit/user_measurement/user_measurement_cubit.dart';
@@ -12,6 +13,7 @@ import 'package:bluetailor_app/features/alteration/presentation/screens/alterati
 import 'package:bluetailor_app/features/alteration/presentation/screens/alteration_option.dart';
 import 'package:bluetailor_app/features/alteration/presentation/screens/alteration_order_summary.dart';
 import 'package:bluetailor_app/features/alteration/presentation/screens/select_alteraion_cat.dart';
+import 'package:bluetailor_app/features/alteration/presentation/screens/selected_alteration_cat.dart';
 import 'package:bluetailor_app/features/alteration/presentation/screens/upload_image.dart';
 import 'package:bluetailor_app/features/appointment/domain/entities/appointment_entity.dart';
 import 'package:bluetailor_app/features/appointment/presentation/cubit/appointment_cubit.dart';

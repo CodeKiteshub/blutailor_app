@@ -75,7 +75,7 @@ class _AddAddressState extends State<AddAddress> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               PrimaryTextField(
-                title: "Address Type",
+                title: "Address Name",
                 border: true,
                 controller: nameController,
               ),
@@ -161,10 +161,9 @@ class _AddAddressState extends State<AddAddress> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: BottomAppBar(
         color: Colors.transparent,
-        child: BlocListener<AddressCubit, AddressState>(
-          listenWhen: (previous, current) {
-            return previous.addressStatus != current.addressStatus;
-          },
+        child: BlocConsumer<AddressCubit, AddressState>(
+          bloc: context.read<AddressCubit>(),
+         
           listener: (context, state) {
             if (state.addressStatus == AddressStatus.loading) {
               LoadingDialog(context);
@@ -184,28 +183,32 @@ class _AddAddressState extends State<AddAddress> {
               Navigator.pop(context);
             }
           },
-          child: PrimaryGradientButton(
-              title: "Submit",
-              onPressed: () {
-                final isValid = _formKey.currentState?.validate() ?? false;
-                if (isValid) {
-                  final user =
-                      (context.read<AppUserCubit>().state as AppUserLoggedIn)
-                          .user;
-                  context.read<AddressCubit>().saveAddress(
-                      name: nameController.text,
-                      landmark: landmarkController.text,
-                      phone: phoneController.text,
-                      address: addressController.text,
-                      pincode: pincodeController.text,
-                      city: cityController.text,
-                      stateCountry: stateController.text,
-                      countryCode: countryCode,
-                      country: countryController.text,
-                      user: user,
-                      id: widget.address?.id);
-                }
-              }),
+    
+            builder: (context, state) {
+              return PrimaryGradientButton(
+                  title: "Submit",
+                  onPressed: () {
+                    final isValid = _formKey.currentState?.validate() ?? false;
+                    if (isValid) {
+                      final user =
+                          (context.read<AppUserCubit>().state as AppUserLoggedIn)
+                              .user;
+                      context.read<AddressCubit>().saveAddress(
+                          name: nameController.text,
+                          landmark: landmarkController.text,
+                          phone: phoneController.text,
+                          address: addressController.text,
+                          pincode: pincodeController.text,
+                          city: cityController.text,
+                          stateCountry: stateController.text,
+                          countryCode: countryCode,
+                          country: countryController.text,
+                          user: user,
+                          id: widget.address?.id);
+                    }
+                  });
+            }
+          
         ),
       ),
     );

@@ -65,51 +65,53 @@ class _AddressListState extends State<AddressList> {
           // SizedBox(
           //   height: 2.h,
           // ),
-          BlocConsumer<AddressCubit, AddressState>(
-            listener: (context, state) {
-              if (state.addressStatus == AddressStatus.deleted) {
-                PrimarySnackBar(context, 'Address is deleted', Colors.green);
-                context.read<AddressCubit>().fetchAddress();
-              }
-            },
-            builder: (context, state) {
-              if (state.addressStatus == AddressStatus.loaded) {
-                return ListView.separated(
-                    shrinkWrap: true,
-                    padding: EdgeInsets.only(left: 5.w, right: 5.w),
-                    separatorBuilder: (context, index) => SizedBox(
-                          height: 2.h,
-                        ),
-                    itemCount: state.addresses?.length ?? 0,
-                    itemBuilder: (context, index) {
-                      return Row(
-                        children: [
-                          if (widget.choose) ...[
-                          Radio(
-                              value: index,
-                              groupValue: selected,
-                              onChanged: (value) {
-                                selected = value as int;
-                                setState(() {});
-                              }),
-                          SizedBox(
-                            width: 3.w,
+          Expanded(
+            child: BlocConsumer<AddressCubit, AddressState>(
+              listener: (context, state) {
+                if (state.addressStatus == AddressStatus.deleted) {
+                  PrimarySnackBar(context, 'Address is deleted', Colors.green);
+                  context.read<AddressCubit>().fetchAddress();
+                }
+              },
+              builder: (context, state) {
+                if (state.addressStatus == AddressStatus.loaded) {
+                  return ListView.separated(
+                      shrinkWrap: true,
+                      padding: EdgeInsets.only(left: 5.w, right: 5.w, bottom: 9.h),
+                      separatorBuilder: (context, index) => SizedBox(
+                            height: 2.h,
                           ),
+                      itemCount: state.addresses?.length ?? 0,
+                      itemBuilder: (context, index) {
+                        return Row(
+                          children: [
+                            if (widget.choose) ...[
+                            Radio(
+                                value: index,
+                                groupValue: selected,
+                                onChanged: (value) {
+                                  selected = value as int;
+                                  setState(() {});
+                                }),
+                            SizedBox(
+                              width: 3.w,
+                            ),
+                            ],
+                            Expanded(
+                                child: AddressBoxWidget(
+                              address: state.addresses![index],
+                            )),
                           ],
-                          Expanded(
-                              child: AddressBoxWidget(
-                            address: state.addresses![index],
-                          )),
-                        ],
-                      );
-                    });
-              } else {
-                return Center(
-                  child:
-                      LoadingAnimationWidget.beat(color: primaryBlue, size: 50),
-                );
-              }
-            },
+                        );
+                      });
+                } else {
+                  return Center(
+                    child:
+                        LoadingAnimationWidget.beat(color: primaryBlue, size: 50),
+                  );
+                }
+              },
+            ),
           )
         ],
       ),

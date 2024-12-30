@@ -22,7 +22,7 @@ class _SelectStitchingCatState extends State<SelectStitchingCat> {
 
   @override
   void initState() {
-    context.read<CategoryCubit>().fetchGarmentUseCase();
+    context.read<CategoryCubit>().fetchGarmentUseCase(true, false);
     super.initState();
   }
 

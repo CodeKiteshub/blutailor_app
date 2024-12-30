@@ -47,6 +47,8 @@ class _CreateAppointmentState extends State<CreateAppointment> {
                   left: 0,
                   right: 0,
                   child: Row(
+                    mainAxisAlignment: widget.isBack == true ? MainAxisAlignment.start :
+                    MainAxisAlignment.center,
                     children: [
                       if(widget.isBack == true) ...[
                       SizedBox(width: 5.w,),

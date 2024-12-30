@@ -69,7 +69,7 @@ class _AlterationConfigWidgetState extends State<AlterationConfigWidget> {
           height: 1.h,
         ),
         Container(
-          width: 55.w,
+          width: 73.w,
           decoration: BoxDecoration(
               border: Border.all(color: const Color(0xFF9D9D9D)),
               borderRadius: BorderRadius.circular(5)),
@@ -142,7 +142,7 @@ class _AlterationConfigWidgetState extends State<AlterationConfigWidget> {
         Row(
           children: [
             SizedBox(
-              width: 25.w,
+              width: 35.w,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [

@@ -51,4 +51,16 @@ class ProductConfigCubit extends Cubit<ProductConfigState> {
       },
     );
   }
+
+
+  @override
+  Future<void> close() {
+    // Clean up answer controllers
+    for (var answer in answers) {
+      answer.inchController?.dispose();
+      answer.cmController?.dispose();
+    }
+    answers.clear();
+    return super.close();
+  }
 }

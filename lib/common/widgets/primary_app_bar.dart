@@ -14,10 +14,11 @@ class PrimaryAppBar extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       backgroundColor: primaryBlue,
       toolbarHeight: 8.h,
+      titleSpacing: 0,
       leading: InkWell(
         onTap: () => Navigator.pop(context),
         child: Padding(
-          padding: const EdgeInsets.all(17),
+          padding:  EdgeInsets.only( top: 2.8.h, bottom: 2.8.h),
           child: SvgPicture.asset(backIcon),
         ),
       ),

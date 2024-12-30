@@ -35,7 +35,7 @@ class _YoutubePlayerWidgetState extends State<YoutubePlayerWidget> {
     return Container(
       decoration: BoxDecoration(
           border: Border.all(
-            color: Colors.white,
+            color: Colors.white.withOpacity(0.3)
           ),
           borderRadius: BorderRadius.circular(20)),
       child: ClipRRect(
