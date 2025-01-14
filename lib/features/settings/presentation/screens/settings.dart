@@ -8,7 +8,6 @@ import 'package:bluetailor_app/common/widgets/primary_gradient_button.dart';
 import 'package:bluetailor_app/core/theme/app_colors.dart';
 import 'package:bluetailor_app/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:bluetailor_app/features/settings/presentation/widgets/settings_tile_widget.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizer/sizer.dart';
@@ -23,50 +22,55 @@ class Settings extends StatelessWidget {
     return Scaffold(
       backgroundColor: primaryBlue,
       body: SafeArea(
-        child: Column(
-          children: [
-            const AppBarWidget(),
-            BlocBuilder<AppUserCubit, AppUserState>(
-              bloc: context.read<AppUserCubit>(),
-              builder: (context, state) {
-                if (state is AppUserLoggedIn) {
-                  return Column(
-                    children: [
-                      CircleAvatar(
-                          radius: 20.w,
-                          backgroundImage: state.user.profilePic == ""
-                              ? null
-                              : CachedNetworkImageProvider(
-                                  state.user.profilePic)),
-                      SizedBox(
-                        height: 2.h,
-                      ),
-                      Text(
-                        "${state.user.firstName} ${state.user.lastName}",
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.w500,
-                            fontSize: 20.sp),
-                      ),
-                      //  SizedBox(height: 1.h,),
-                      Text(state.user.location,
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              const AppBarWidget(),
+              BlocBuilder<AppUserCubit, AppUserState>(
+                bloc: context.read<AppUserCubit>(),
+                builder: (context, state) {
+                  if (state is AppUserLoggedIn) {
+                    return Column(
+                      children: [
+                        CircleAvatar(
+                            radius: 20.w,
+                            backgroundImage: state.user.profilePic == ""
+                                ? null
+                                : NetworkImage(
+                                    state.user.profilePic,
+                                    headers: {
+                                      'Cache-Control': 'no-cache',
+                                      'Pragma': 'no-cache',
+                                    },
+                                  )),
+                        SizedBox(
+                          height: 2.h,
+                        ),
+                        Text(
+                          "${state.user.firstName} ${state.user.lastName}",
                           style: TextStyle(
                               color: Colors.white,
-                              fontWeight: FontWeight.w400,
-                              fontSize: 15.sp)),
-                    ],
-                  );
-                }
-                return Container();
-              },
-            ),
-            SizedBox(
-              height: 3.h,
-            ),
-            Expanded(
-              child: Container(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 20.sp),
+                        ),
+                        //  SizedBox(height: 1.h,),
+                        Text(state.user.location,
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w400,
+                                fontSize: 15.sp)),
+                      ],
+                    );
+                  }
+                  return Container();
+                },
+              ),
+              SizedBox(
+                height: 3.h,
+              ),
+              Container(
                   padding: EdgeInsets.only(
-                      left: 7.w, right: 7.w, top: 3.h, bottom: 3.h),
+                      left: 7.w, right: 7.w, top: 3.h,),
                   decoration: const BoxDecoration(
                     color: Colors.white,
                   ),
@@ -110,9 +114,19 @@ class Settings extends StatelessWidget {
                           height: 3.h,
                         ),
                         SettingsTileWidget(
+                          title: "Custom Made",
+                          onTap: () {
+                            Navigator.pushNamed(context, '/custom-made-home');
+                          },
+                        ),
+                        SizedBox(
+                          height: 3.h,
+                        ),
+                        SettingsTileWidget(
                           title: "Address",
                           onTap: () {
-                            Navigator.pushNamed(context, '/address', arguments: false);
+                            Navigator.pushNamed(context, '/address',
+                                arguments: false);
                           },
                         ),
                         SizedBox(
@@ -141,10 +155,10 @@ class Settings extends StatelessWidget {
                           onTap: () {
                             DefaultDialog(context,
                                 title: "Confirm Log Out?",
-                                message: "Are you sure you want to delete account?",
+                                message:
+                                    "Are you sure you want to delete account?",
                                 cancelText: "No",
-                                confirmText: "Yes",
-                                onCancel: () {
+                                confirmText: "Yes", onCancel: () {
                               Navigator.pop(context);
                             }, onConfirm: () async {
                               var url =
@@ -155,7 +169,8 @@ class Settings extends StatelessWidget {
                             });
                           },
                         ),
-                        const Spacer(),
+                        //  const Spacer(),
+                        SizedBox(height: 4.h,),
                         BlocListener<AuthBloc, AuthState>(
                           bloc: context.read<AuthBloc>(),
                           listener: (context, state) {
@@ -179,18 +194,17 @@ class Settings extends StatelessWidget {
                                     title: "Confirm Log Out?",
                                     message:
                                         "Are you sure you want to log out?",
-                                        cancelText: "No",
-                                        confirmText: "Yes",
-                                    onCancel: () {
+                                    cancelText: "No",
+                                    confirmText: "Yes", onCancel: () {
                                   Navigator.pop(context);
                                 }, onConfirm: () {
                                   context.read<AuthBloc>().add(LogoutEvent());
                                 });
                               }),
                         )
-                      ])),
-            )
-          ],
+                      ]))
+            ],
+          ),
         ),
       ),
     );

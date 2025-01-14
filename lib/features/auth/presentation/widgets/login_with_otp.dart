@@ -66,11 +66,11 @@ class LoginWithOTP extends StatelessWidget {
                   fontSize: 14.sp,
                   fontWeight: FontWeight.w700)),
         ),
-        SizedBox(height: 2.h),
-        PrimaryIconButton(
-            title: "Continue with Google",
-            icon: google,
-            onPressed: onGooglePressed),
+          // SizedBox(height: 2.h),
+          // PrimaryIconButton(
+          //     title: "Continue with Google",
+          //     icon: google,
+          //     onPressed: onGooglePressed),
       ],
     );
   }

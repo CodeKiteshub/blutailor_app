@@ -30,12 +30,11 @@ class _BottomNavigationBarWidgetState extends State<BottomNavigationBarWidget> {
       create: (context) => sl<AppointmentCubit>(),
       child: const CreateAppointment(),
     ),
-  //  const Home(),
+    //  const Home(),
   ];
 
   @override
   Widget build(BuildContext context) {
-    log('Memory usage before dispose: ${(ProcessInfo.currentRss / 1024 / 1024).toStringAsFixed(2)} MB');
     return Scaffold(
       body: IndexedStack(
         index: currentIndex,

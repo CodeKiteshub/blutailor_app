@@ -8,7 +8,7 @@ import 'package:bluetailor_app/common/widgets/primary_gradient_button.dart';
 import 'package:bluetailor_app/core/img/functions_and_aws.dart';
 import 'package:bluetailor_app/core/theme/app_colors.dart';
 import 'package:bluetailor_app/common/models/selected_cat_model.dart';
-import 'package:bluetailor_app/features/measurement/presentation/cubit/body_profile/body_profile_cubit.dart';
+import 'package:bluetailor_app/common/cubit/body_profile/body_profile_cubit.dart';
 import 'package:bluetailor_app/features/measurement/presentation/widget/body_image_box.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -262,7 +262,10 @@ class _BodyImagesState extends State<BodyImages> {
               onTap: () {
                 if (widget.selectedCat.length == 1) {
                   Navigator.pushNamed(context, '/measurement-details',
-                      arguments: widget.selectedCat.first);
+                      arguments: {
+                        'selectedCat': widget.selectedCat.first,
+                        "isSingle": true
+                      });
                 } else {
                   Navigator.of(context).pushNamed('/selected-cat',
                       arguments: widget.selectedCat);

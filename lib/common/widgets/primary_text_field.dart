@@ -7,8 +7,10 @@ class PrimaryTextField extends StatefulWidget {
   final String title;
   final bool border;
   final int maxLines;
+  final String? suffixText;
+  final TextInputType? keyboardType;
   const PrimaryTextField(
-      {super.key, this.controller, required this.title, this.border = false, this.maxLines = 1});
+      {super.key, this.controller, required this.title,this.keyboardType, this.border = false, this.maxLines = 1, this.suffixText});
 
   @override
   State<PrimaryTextField> createState() => _PrimaryTextFieldState();
@@ -20,6 +22,7 @@ class _PrimaryTextFieldState extends State<PrimaryTextField> {
     return TextFormField(
       controller: widget.controller,
       maxLines: widget.maxLines,
+      keyboardType: widget.keyboardType,
       onTapOutside: (event) {
         FocusScope.of(context).unfocus();
       },
@@ -29,12 +32,14 @@ class _PrimaryTextFieldState extends State<PrimaryTextField> {
         }
         return null;
       },
+      style: TextStyle(fontSize: Device.screenType == ScreenType.tablet ? 16.sp : null),
       decoration: InputDecoration(
         fillColor: Colors.white,
         filled: true,
-        constraints: BoxConstraints(
-          minHeight: 6.h,
-        ),
+        contentPadding: EdgeInsets.symmetric(horizontal: 3.w, vertical: 2.h),
+        // constraints: BoxConstraints(
+        //   minHeight: 6.h,
+        // ),
         enabledBorder: OutlineInputBorder(
             borderSide: widget.border
                 ? const BorderSide(color: Color(0xFFC7C7C7))
@@ -47,7 +52,12 @@ class _PrimaryTextFieldState extends State<PrimaryTextField> {
             )),
         hintText: widget.title,
         hintStyle: TextStyle(
-            color: Colors.black.withOpacity(0.27),
+            color: Colors.black.withValues(alpha: 0.27),
+            fontSize: 16.sp,
+            fontWeight: FontWeight.w400),
+            suffixText: widget.suffixText,
+        suffixStyle: TextStyle(
+            color: Colors.black.withValues(alpha: 0.27),
             fontSize: 16.sp,
             fontWeight: FontWeight.w400),
       ),

@@ -12,6 +12,9 @@ class ApiClient {
     QueryResult result = await client.query(
       QueryOptions(document: gql(query), variables: variable),
     );
+    if (result.hasException) {
+       log(result.exception.toString());
+    }
     log(result.data.toString());
     return result;
   }
@@ -22,6 +25,9 @@ class ApiClient {
     QueryResult result = await client.mutate(
       MutationOptions(document: gql(query), variables: variable),
     );
+    if (result.hasException) {
+       log(result.exception.toString());
+    }
     log(result.data.toString());
     return result;
   }

@@ -4,9 +4,9 @@ import 'package:bluetailor_app/common/widgets/primary_app_bar.dart';
 import 'package:bluetailor_app/common/widgets/primary_gradient_button.dart';
 import 'package:bluetailor_app/common/widgets/primary_text_field.dart';
 import 'package:bluetailor_app/core/theme/app_colors.dart';
-import 'package:bluetailor_app/features/measurement/presentation/cubit/body_profile/body_profile_cubit.dart';
-import 'package:bluetailor_app/features/measurement/presentation/cubit/size_chart/size_chart_cubit.dart';
-import 'package:bluetailor_app/features/measurement/presentation/cubit/user_attribue/user_attribute_cubit.dart';
+import 'package:bluetailor_app/common/cubit/body_profile/body_profile_cubit.dart';
+import 'package:bluetailor_app/common/cubit/size_chart/size_chart_cubit.dart';
+import 'package:bluetailor_app/common/cubit/user_attribue/user_attribute_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
@@ -106,8 +106,8 @@ class _StandardSizingState extends State<StandardSizing> {
                                     padding:
                                         state.sizeChart[index].size.length == 1
                                             ? const EdgeInsets.symmetric(
-                                                horizontal: 11.5, vertical: 8)
-                                            : const EdgeInsets.all(8),
+                                                horizontal: 16, vertical: 12)
+                                            : const EdgeInsets.all(12),
                                     decoration: BoxDecoration(
                                         color: context
                                                     .read<BodyProfileCubit>()
@@ -122,7 +122,7 @@ class _StandardSizingState extends State<StandardSizing> {
                                       style: TextStyle(
                                           fontFamily: "dmsans",
                                           fontWeight: FontWeight.w700,
-                                          fontSize: 14.sp,
+                                          fontSize: 15.sp,
                                           color: context
                                                       .read<BodyProfileCubit>()
                                                       .selectedSize ==

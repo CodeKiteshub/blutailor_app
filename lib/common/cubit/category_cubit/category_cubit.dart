@@ -18,11 +18,14 @@ class CategoryCubit extends Cubit<CategoryState> {
       if (isStitching) {
         r.removeWhere((e) =>
             e.id == "5e6c843c3a2df13444183298" || e.id == "636f3012feea0816508c5c45" ||
+            e.id == "65d0cb5c77b0fedc13f0dae7" ||
             e.id == "5e6c845a3a2df13444183299");
         emit(CategoryLoaded(categories: r));
       } else if (isAlteration) {
         r.removeWhere((e) =>
             e.id == "5e6c843c3a2df13444183298" ||
+            e.id == "65d0cb5c77b0fedc13f0dae7" ||
+            e.id == "636f3012feea0816508c5c45" ||
             e.id == "5e6c845a3a2df13444183299");
         emit(CategoryLoaded(categories: r));
       } else {

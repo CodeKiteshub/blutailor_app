@@ -34,6 +34,7 @@ class StitchingDataModel {
   double fabricWidth;
   String fabricNote;
   String stylingNote;
+  dynamic price;
   List<SelectedStylingEntity> styling;
 
   StitchingDataModel(
@@ -45,5 +46,6 @@ class StitchingDataModel {
       required this.fabricWidth,
       required this.fabricNote,
       required this.stylingNote,
+      required this.price,
       required this.styling});
 }

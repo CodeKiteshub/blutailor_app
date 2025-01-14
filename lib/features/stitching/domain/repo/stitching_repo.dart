@@ -22,5 +22,6 @@ abstract interface class StitchingRepo {
       required String stitchingId,
       required String fabricName,
       required String stylingNote,
+      required dynamic price,
       required List<SelectedStylingEntity> styling});
 }

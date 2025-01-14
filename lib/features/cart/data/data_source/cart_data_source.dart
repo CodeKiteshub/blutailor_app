@@ -10,8 +10,11 @@ abstract interface class CartDataSource {
       {required String cartId, required String addressId});
   Future<QueryResult> processAlterationOrder(
       {required String orderId, required String razorpayId});
-  Future<QueryResult> createStitchingOrder({required String cartId, required String addressId});
-  Future<QueryResult> processStitchingOrder({required String orderId, required String razorpayId});
+  Future<QueryResult> createStitchingOrder(
+      {required String cartId, required String addressId});
+  Future<QueryResult> processStitchingOrder(
+      {required String orderId, required String razorpayId});
+  Future<QueryResult> fetchProductCart();
 }
 
 class CartDataSourceImpl implements CartDataSource {
@@ -84,6 +87,7 @@ query GetUserAlterationCart($userId: String!) {
 mutation CreateAlterationOrder($userId: String!, $addressId: String!, $cartId: String!) {
   createAlterationOrder(userId: $userId, addressId: $addressId, cartId: $cartId) {
     orderSrNo
+    _id
   }
 }
 ''';
@@ -111,15 +115,18 @@ mutation ProcessAlterationOrderPayment($orderId: ID!, $razorpayIntentId: String!
 
     final variable = {"orderId": orderId, "razorpayIntentId": razorpayId};
 
-    return await apiClient.mutateData(query: processOrderSchema, variable: variable);
+    return await apiClient.mutateData(
+        query: processOrderSchema, variable: variable);
   }
-  
+
   @override
-  Future<QueryResult<Object?>> createStitchingOrder({required String cartId, required String addressId}) async{
+  Future<QueryResult<Object?>> createStitchingOrder(
+      {required String cartId, required String addressId}) async {
     String createStitchingOrderSchema = r'''
 mutation CreateStitchingOrder($userId: String!, $addressId: String!, $cartId: String!) {
   createStitchingOrder(userId: $userId, addressId: $addressId, cartId: $cartId) {
     orderSrNo
+    _id
   }
 }
 ''';
@@ -130,13 +137,13 @@ mutation CreateStitchingOrder($userId: String!, $addressId: String!, $cartId: St
       "cartId": cartId
     };
 
-    return await apiClient.mutateData(query: createStitchingOrderSchema, variable: variable);
-
-
+    return await apiClient.mutateData(
+        query: createStitchingOrderSchema, variable: variable);
   }
-  
+
   @override
-  Future<QueryResult<Object?>> processStitchingOrder({required String orderId, required String razorpayId}) async {
+  Future<QueryResult<Object?>> processStitchingOrder(
+      {required String orderId, required String razorpayId}) async {
     String processOrderSchema = r'''
 mutation ProcessStitchingOrderPayment($orderId: ID!, $razorpayIntentId: String!) {
   processStitchingOrderPayment(orderId: $orderId, razorpayIntentId: $razorpayIntentId) {
@@ -147,6 +154,33 @@ mutation ProcessStitchingOrderPayment($orderId: ID!, $razorpayIntentId: String!)
 
     final variable = {"orderId": orderId, "razorpayIntentId": razorpayId};
 
-    return await apiClient.mutateData(query: processOrderSchema, variable: variable);
+    return await apiClient.mutateData(
+        query: processOrderSchema, variable: variable);
+  }
+
+  @override
+  Future<QueryResult<Object?>> fetchProductCart() async {
+    String cartSchema = r'''
+query GetUserCart($userId: String!) {
+  getUserCart(userId: $userId) {
+    discTotal
+    gTotal
+    totalAmount
+    items {
+      price
+      name
+      qty
+      itemId
+      images
+      discPrice
+      disc
+    }
+  }
+}
+''';
+
+    return await apiClient.queryData(
+        query: cartSchema,
+        variable: {"userId": sl<SharedPreferences>().getString("userId")});
   }
 }

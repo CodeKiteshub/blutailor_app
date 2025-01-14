@@ -1,13 +1,16 @@
 
 import 'package:bluetailor_app/core/theme/app_colors.dart';
-import 'package:bluetailor_app/features/cart/domain/entities/cart_entity.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
 class PriceBoxWidget extends StatelessWidget {
-  final CartEntity cart;
+  final dynamic total;
+  final dynamic gTotal;
+  final dynamic discTotal;
   const PriceBoxWidget({
-    super.key, required this.cart,
+    super.key, required this.gTotal,
+    required this.total,
+    required this.discTotal,
   });
 
   @override
@@ -32,7 +35,7 @@ class PriceBoxWidget extends StatelessWidget {
                     color: black2),
               ),
               Text(
-                "Rs.${cart.totalAmount}/-",
+                "Rs.$total/-",
                 style: TextStyle(
                     fontWeight: FontWeight.w400,
                     fontSize: 15.sp,
@@ -54,7 +57,7 @@ class PriceBoxWidget extends StatelessWidget {
                     color: black2),
               ),
               Text(
-                "Rs.${cart.discTotal}/-",
+                "Rs.$discTotal/-",
                 style: TextStyle(
                     fontWeight: FontWeight.w400,
                     fontSize: 15.sp,
@@ -124,7 +127,7 @@ class PriceBoxWidget extends StatelessWidget {
                     color: black2),
               ),
               Text(
-                "Rs.${cart.gTotal}/-",
+                "Rs.$gTotal/-",
                 style: TextStyle(
                     fontWeight: FontWeight.w600,
                     fontSize: 16.sp,

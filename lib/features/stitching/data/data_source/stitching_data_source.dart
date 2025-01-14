@@ -21,6 +21,7 @@ abstract interface class StitchingDataSource {
       required String fabricName,
       required String stylingNote,
       required String stitchingId,
+      required dynamic price,
       required List<Map<String, dynamic>> styling});
 }
 
@@ -34,6 +35,7 @@ class StitchingDataSourceImpl implements StitchingDataSource {
       required String fabricName,
       required String stylingNote,
       required String stitchingId,
+      required dynamic price,
       required List<Map<String, dynamic>> styling}) async {
     String addItemToStitchingCartSchema = r'''
 mutation AddStitchingItemToAlterationCart($items: [StitchingCartItemInput!]!, $userId: String!) {
@@ -50,6 +52,7 @@ mutation AddStitchingItemToAlterationCart($items: [StitchingCartItemInput!]!, $u
           "name": fabricName,
           "catId": catId,
           "stitching": {
+            "price": price,
             "styling": {
               "note": stylingNote,
               "styles": [...styling]

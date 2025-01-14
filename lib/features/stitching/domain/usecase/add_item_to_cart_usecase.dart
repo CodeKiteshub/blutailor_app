@@ -15,6 +15,7 @@ class AddItemToCartUsecase implements UseCase<String, StitchingDataModel>{
         stitchingId: params.stitchingId,
         fabricName: params.fabricName,
         stylingNote: params.stylingNote,
+        price: params.price,
         styling: params.styling
     );
   }

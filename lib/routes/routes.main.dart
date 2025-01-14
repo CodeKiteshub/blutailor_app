@@ -42,6 +42,9 @@ class Routes {
                       create: (context) => sl<CartCubit>(),
                     ),
                     BlocProvider(
+                      create: (context) => sl<ProductCartCubit>(),
+                    ),
+                    BlocProvider(
                       create: (context) => sl<PlaceOrderCubit>(),
                     ),
                   ],
@@ -90,7 +93,10 @@ class Routes {
         return MaterialPageRoute(builder: (_) => const MeasurementHome());
 
       case '/order-detail':
-        return MaterialPageRoute(builder: (_) => const OrderDetail());
+        return MaterialPageRoute(
+            builder: (_) => OrderDetail(
+                  order: settings.arguments as OrderEntity,
+                ));
 
       case '/select-garment-cat':
         return MaterialPageRoute(
@@ -305,6 +311,60 @@ class Routes {
                   child: CustomFilter(
                     styling: settings.arguments as List<StylingConfigEntity>,
                   ),
+                ));
+
+      case '/custom-made-home':
+        return MaterialPageRoute(
+            builder: (_) => MultiBlocProvider(
+                  providers: [
+                    BlocProvider(
+                      create: (context) => sl<CategoryCubit>(),
+                    ),
+                    BlocProvider(
+                      create: (context) => sl<ProductCubit>(),
+                    ),
+                  ],
+                  child: const CustomMadeHome(),
+                ));
+
+      case '/product-cat-details':
+        return MaterialPageRoute(
+            builder: (_) => BlocProvider(
+                  create: (context) => sl<ProductCubit>(),
+                  child: ProductCategoryDetails(
+                    title: (settings.arguments as Map)["title"] as String,
+                    id: (settings.arguments as Map)["id"] as String,
+                  ),
+                ));
+
+      case '/search-product':
+        return MaterialPageRoute(
+            builder: (_) => BlocProvider(
+                  create: (context) => sl<ProductCubit>(),
+                  child: SearchProduct(
+                    id: (settings.arguments as Map)["id"] as String,
+                  ),
+                ));
+
+      case '/product-details':
+        return MaterialPageRoute(
+            builder: (_) => MultiBlocProvider(
+                  providers: [
+                    BlocProvider.value(
+                      value: sl<StylingCubit>(),
+                    ),
+                    BlocProvider(
+                      create: (context) => sl<BodyProfileCubit>(),
+                    ),
+                    BlocProvider(
+                      create: (context) => sl<SizeChartCubit>(),
+                    ),
+                    BlocProvider(
+                      create: (context) => sl<ProductCubit>(),
+                    ),
+                  ],
+                  child: ProductDetails(
+                      product: settings.arguments as ProductEntities),
                 ));
 
       default:

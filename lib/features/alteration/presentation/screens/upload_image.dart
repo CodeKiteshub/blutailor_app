@@ -28,7 +28,7 @@ class _UploadImageState extends State<UploadImage> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: const PrimaryAppBar(title: "Alteration"),
-      body: Padding(
+      body: SingleChildScrollView(
         padding: EdgeInsets.only(left: 7.w, right: 7.w, top: 3.h, bottom: 3.h),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

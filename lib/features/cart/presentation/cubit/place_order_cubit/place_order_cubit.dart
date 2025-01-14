@@ -32,7 +32,7 @@ class PlaceOrderCubit extends Cubit<PlaceOrderState> {
   }
 
   bool isAlteration = true;
-  String orderId = '';
+  String orderId = "";
 
   placeAlterationOrder(
       {required String addressId,
@@ -40,7 +40,7 @@ class PlaceOrderCubit extends Cubit<PlaceOrderState> {
       required User user,
       required String amount}) async {
     emit(PlaceOrderLoading());
-
+    isAlteration = true;
     final order = await _createAlterationOrderUsecase(
         params: CreateOrderParams(addressId: addressId, cartId: cartId));
 
@@ -70,7 +70,7 @@ class PlaceOrderCubit extends Cubit<PlaceOrderState> {
       required User user,
       required String amount}) async {
     emit(PlaceOrderLoading());
-
+    isAlteration = false;
     final order = await _createStitchingOrderUsecase(
         params: CreateOrderParams(addressId: addressId, cartId: cartId));
 
@@ -103,8 +103,8 @@ class PlaceOrderCubit extends Cubit<PlaceOrderState> {
 
   initiatePayment({required User user, required String amount}) async {
     var options = {
-      //'key': 'rzp_test_UfIqGg33hpskpp',
-         'key': 'rzp_live_yl8ffRosNiw7HV',
+     // 'key': 'rzp_test_eNOPyOQE9LDqG1',
+         'key': 'rzp_live_b0QHv1mxIL2uZp',
       'amount': amount,
       'name': user.firstName + ' ' + user.lastName,
       'description': user.id,

@@ -1,12 +1,14 @@
+import 'package:bluetailor_app/common/standard_styling_data.dart';
 import 'package:bluetailor_app/common/widgets/dialog_and_snackbar.dart.dart';
+import 'package:bluetailor_app/common/widgets/gradient_text.dart';
 import 'package:bluetailor_app/common/widgets/primary_gradient_button.dart';
 import 'package:bluetailor_app/common/widgets/primary_text_field.dart';
 import 'package:bluetailor_app/core/theme/app_colors.dart';
 import 'package:bluetailor_app/core/theme/app_strings.dart';
-import 'package:bluetailor_app/features/stitching/domain/entities/selected_stitching_cat_entity.dart';
+import 'package:bluetailor_app/common/models/selected_stitching_cat_entity.dart';
 import 'package:bluetailor_app/features/stitching/domain/entities/selected_styling_entity.dart';
 import 'package:bluetailor_app/features/stitching/presentation/cubit/stitching_cubit/stitching_cubit.dart';
-import 'package:bluetailor_app/features/stitching/presentation/cubit/styling_cubit/styling_cubit.dart';
+import 'package:bluetailor_app/common/cubit/styling_cubit/styling_cubit.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -60,7 +62,7 @@ class _StitchingDetailState extends State<StitchingDetail> {
                     imageUrl: widget.selectedCat.img,
                     height: 30.h,
                     width: 100.w,
-                    fit: BoxFit.fill,
+                  
                   ),
                   Positioned(
                     top: 2.h,
@@ -97,19 +99,22 @@ class _StitchingDetailState extends State<StitchingDetail> {
                 child: Row(
                   children: [
                     Text(
-                      "₹${(context.read<StylingCubit>().standardJson["categories"] as List).firstWhere((e) => e["id"] == widget.selectedCat.id)["price"]}/-",
+                      "₹${(standardJson["categories"] as List).firstWhere((e) => e["id"] == widget.selectedCat.id)["price"]}/-",
                       style: TextStyle(
                           fontWeight: FontWeight.w600,
                           fontSize: 18.sp,
                           color: black2),
                     ),
-                    SizedBox(width: 3.w,),
-                    Text("incl. of all taxes",
-                    style: TextStyle(
-                      color: const Color(0xFF625B71),
-                      fontWeight: FontWeight.w400,
-                      fontSize: 15.sp
-                    ),)
+                    SizedBox(
+                      width: 3.w,
+                    ),
+                    Text(
+                      "incl. of all taxes",
+                      style: TextStyle(
+                          color: const Color(0xFF625B71),
+                          fontWeight: FontWeight.w400,
+                          fontSize: 15.sp),
+                    )
                   ],
                 ),
               ),
@@ -141,17 +146,7 @@ class _StitchingDetailState extends State<StitchingDetail> {
                     SizedBox(
                       height: 2.h,
                     ),
-                    ShaderMask(
-                      shaderCallback: (bounds) =>
-                          primaryGradient.createShader(bounds),
-                      child: Text(
-                        "Styling",
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.w600,
-                            fontSize: 18.sp),
-                      ),
-                    ),
+                    const GradientText(text: "Styling"),
                     SizedBox(
                       height: 2.h,
                     ),
@@ -290,19 +285,7 @@ class _StitchingDetailState extends State<StitchingDetail> {
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: [
-                                          ShaderMask(
-                                            shaderCallback: (bounds) =>
-                                                primaryGradient
-                                                    .createShader(bounds),
-                                            child: Text(
-                                              custom.name,
-                                              overflow: TextOverflow.ellipsis,
-                                              style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontWeight: FontWeight.w600,
-                                                  fontSize: 18.sp),
-                                            ),
-                                          ),
+                                          GradientText(text: custom.name),
                                           SizedBox(
                                             height: 2.h,
                                           ),
@@ -360,17 +343,12 @@ class _StitchingDetailState extends State<StitchingDetail> {
                           crossAxisCount: 3,
                           mainAxisSpacing: 2.h,
                           crossAxisSpacing: 3.w,
-                          itemCount: ((context
-                                          .read<StylingCubit>()
-                                          .standardJson["categories"] as List)
-                                      .firstWhere((e) =>
+                          itemCount: ((standardJson["categories"] as List).firstWhere((e) =>
                                           e["id"] == widget.selectedCat.id)[
                                   "defaultConfig"] as List)
                               .length,
                           itemBuilder: (context, index) {
-                            final standard = ((context
-                                        .read<StylingCubit>()
-                                        .standardJson["categories"] as List)
+                            final standard = ((standardJson["categories"] as List)
                                     .firstWhere((e) =>
                                         e["id"] ==
                                         widget.selectedCat.id)["defaultConfig"]
@@ -382,23 +360,12 @@ class _StitchingDetailState extends State<StitchingDetail> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  ShaderMask(
-                                    shaderCallback: (bounds) =>
-                                        primaryGradient.createShader(bounds),
-                                    child: Text(
-                                      standard["name"],
-                                      overflow: TextOverflow.ellipsis,
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.w600,
-                                          fontSize: 16.sp),
-                                    ),
-                                  ),
+                                GradientText(text: standard["label"]),
                                   SizedBox(
                                     height: 1.h,
                                   ),
                                   Text(
-                                    standard["value"],
+                                    standard["name"],
                                     overflow: TextOverflow.ellipsis,
                                     style: TextStyle(
                                         fontWeight: FontWeight.w600,
@@ -466,6 +433,9 @@ class _StitchingDetailState extends State<StitchingDetail> {
                       fabricWidth: double.parse(widget.fabricWidth),
                       fabricNote: widget.note,
                       stylingNote: remarkController.text,
+                      price: (standardJson["categories"] as List)
+                          .firstWhere(
+                              (e) => e["id"] == widget.selectedCat.id)["price"],
                       styling:
                           context.read<StylingCubit>().selectedStylingList);
                 } else {
@@ -473,20 +443,24 @@ class _StitchingDetailState extends State<StitchingDetail> {
                       catId: widget.selectedCat.id,
                       fabricName: widget.name,
                       fabricImage: widget.image,
-                      fabricLength: widget.fabricLength.isEmpty ? 0 : double.parse(widget.fabricLength),
-                      fabricWidth: widget.fabricWidth.isEmpty ? 0 : double.parse(widget.fabricWidth),
+                      fabricLength: widget.fabricLength.isEmpty
+                          ? 0
+                          : double.parse(widget.fabricLength),
+                      fabricWidth: widget.fabricWidth.isEmpty
+                          ? 0
+                          : double.parse(widget.fabricWidth),
                       fabricNote: widget.note,
                       stylingNote: remarkController.text,
-                      styling: ((context
-                                      .read<StylingCubit>()
-                                      .standardJson["categories"] as List)
-                                  .firstWhere(
-                                      (e) => e["id"] == widget.selectedCat.id)[
-                              "defaultConfig"] as List)
+                      price:  (standardJson["categories"] as List)
+                          .firstWhere(
+                              (e) => e["id"] == widget.selectedCat.id)["price"],
+                      styling: ((standardJson["categories"] as List)
+                                  .firstWhere((e) => e["id"] == widget.selectedCat.id)["defaultConfig"]
+                              as List)
                           .map((e) => SelectedStylingEntity(
                               catTag: e["masterName"],
-                              name: e['value'],
-                              label: e["name"],
+                              name: e['name'],
+                              label: e["label"],
                               value: e["value"]))
                           .toList());
                 }

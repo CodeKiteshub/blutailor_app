@@ -6,7 +6,7 @@ import 'package:bluetailor_app/common/widgets/primary_gradient_button.dart';
 import 'package:bluetailor_app/common/widgets/primary_text_field.dart';
 import 'package:bluetailor_app/core/img/functions_and_aws.dart';
 import 'package:bluetailor_app/core/theme/app_colors.dart';
-import 'package:bluetailor_app/features/stitching/domain/entities/selected_stitching_cat_entity.dart';
+import 'package:bluetailor_app/common/models/selected_stitching_cat_entity.dart';
 import 'package:bluetailor_app/features/stitching/presentation/widgets/stitching_image_box.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -88,6 +88,7 @@ class _UploadDataState extends State<UploadData> {
                 title: "Length",
                 border: true,
                 controller: lengthController,
+                keyboardType: TextInputType.number,
               ),
               SizedBox(
                 height: 2.h,
@@ -106,6 +107,7 @@ class _UploadDataState extends State<UploadData> {
                 title: "Width",
                 border: true,
                 controller: widthController,
+                keyboardType: TextInputType.number,
               ),
               SizedBox(
                 height: 2.h,

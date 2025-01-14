@@ -1,3 +1,6 @@
+import 'dart:developer';
+
+import 'package:bluetailor_app/common/entities/product_cart_entity.dart';
 import 'package:bluetailor_app/core/errors/failure.dart';
 import 'package:bluetailor_app/features/cart/data/data_source/cart_data_source.dart';
 import 'package:bluetailor_app/features/cart/data/model/cart_model.dart';
@@ -57,7 +60,7 @@ class CartRepoImpl implements CartRepo {
         return left(Failure(result.exception.toString()));
       }
 
-      return right(result.data!["createAlterationOrder"]["orderSrNo"]);
+      return right(result.data!["createAlterationOrder"]["_id"]);
     } catch (e) {
       return left(Failure(e.toString()));
     }
@@ -74,7 +77,7 @@ class CartRepoImpl implements CartRepo {
         return left(Failure(result.exception.toString()));
       }
 
-      return right(result.data!["createStitchingOrder"]["orderSrNo"]);
+      return right(result.data!["createStitchingOrder"]["_id"]);
     } catch (e) {
       return left(Failure(e.toString()));
     }
@@ -103,12 +106,27 @@ class CartRepoImpl implements CartRepo {
     try {
       final result = await cartDataSource.processStitchingOrder(
           orderId: orderId, razorpayId: razorpayId);
-
+      log(razorpayId, name: "rpay");
       if (result.hasException) {
         return left(Failure(result.exception.toString()));
       }
 
       return right(result.data!.toString());
+    } catch (e) {
+      return left(Failure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, ProductCartEntity>> fetchProductCart() async {
+    try {
+      final result = await cartDataSource.fetchProductCart();
+
+      if (result.hasException) {
+        return left(Failure(result.exception.toString()));
+      }
+
+      return right(ProductCartEntity.fromMap(result.data!["getUserCart"]));
     } catch (e) {
       return left(Failure(e.toString()));
     }

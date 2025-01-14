@@ -42,11 +42,18 @@ import 'package:bluetailor_app/features/cart/domain/repo/cart_repo.dart';
 import 'package:bluetailor_app/features/cart/domain/usecase/create_alteration_order_usecase.dart';
 import 'package:bluetailor_app/features/cart/domain/usecase/create_stitching_order_usecase.dart';
 import 'package:bluetailor_app/features/cart/domain/usecase/fetch_cart_usecase.dart';
+import 'package:bluetailor_app/features/cart/domain/usecase/fetch_product_cart_usecase.dart';
 import 'package:bluetailor_app/features/cart/domain/usecase/process_alteration_order_usecase.dart';
 import 'package:bluetailor_app/features/cart/domain/usecase/process_stitching_order_usecase.dart';
 import 'package:bluetailor_app/features/cart/domain/usecase/remove_cart_item_usecase.dart';
 import 'package:bluetailor_app/features/cart/presentation/cubit/cart_cubit/cart_cubit.dart';
 import 'package:bluetailor_app/features/cart/presentation/cubit/place_order_cubit/place_order_cubit.dart';
+import 'package:bluetailor_app/features/cart/presentation/cubit/product_cart_cubit/product_cart_cubit.dart';
+import 'package:bluetailor_app/features/custom_made/data/repo/custom_made_repo_impl.dart';
+import 'package:bluetailor_app/features/custom_made/domain/repo/custom_made_repo.dart';
+import 'package:bluetailor_app/features/custom_made/domain/usecase/add_item_to_cart_usecase.dart';
+import 'package:bluetailor_app/features/custom_made/domain/usecase/fetch_product_usecase.dart';
+import 'package:bluetailor_app/features/custom_made/presentation/cubit/product_cubit.dart';
 import 'package:bluetailor_app/features/measurement/data/data_source/measurement_data_source.dart';
 import 'package:bluetailor_app/features/measurement/data/repo/measurement_repo_impl.dart';
 import 'package:bluetailor_app/features/measurement/domain/repo/measurement_repo.dart';
@@ -61,12 +68,12 @@ import 'package:bluetailor_app/features/measurement/domain/usecases/fetch_user_s
 import 'package:bluetailor_app/features/measurement/domain/usecases/save_body_profile_usecase.dart';
 import 'package:bluetailor_app/features/measurement/domain/usecases/save_measurement_usecase.dart';
 import 'package:bluetailor_app/features/measurement/domain/usecases/save_standard_sizing_usecase.dart';
-import 'package:bluetailor_app/features/measurement/presentation/cubit/body_profile/body_profile_cubit.dart';
+import 'package:bluetailor_app/common/cubit/body_profile/body_profile_cubit.dart';
 import 'package:bluetailor_app/common/cubit/category_cubit/category_cubit.dart';
 import 'package:bluetailor_app/features/measurement/presentation/cubit/measurement/measurement_cubit.dart';
 import 'package:bluetailor_app/features/measurement/presentation/cubit/product_config/product_config_cubit.dart';
-import 'package:bluetailor_app/features/measurement/presentation/cubit/size_chart/size_chart_cubit.dart';
-import 'package:bluetailor_app/features/measurement/presentation/cubit/user_attribue/user_attribute_cubit.dart';
+import 'package:bluetailor_app/common/cubit/size_chart/size_chart_cubit.dart';
+import 'package:bluetailor_app/common/cubit/user_attribue/user_attribute_cubit.dart';
 import 'package:bluetailor_app/features/measurement/presentation/cubit/user_measurement/user_measurement_cubit.dart';
 import 'package:bluetailor_app/features/settings/data/data_source/settings_data_source.dart';
 import 'package:bluetailor_app/features/settings/data/repo/settings_repo_impl.dart';
@@ -85,9 +92,11 @@ import 'package:bluetailor_app/features/stitching/domain/usecase/fetch_custom_st
 import 'package:bluetailor_app/features/stitching/domain/usecase/fetch_stitching_signed_url_usecase.dart';
 import 'package:bluetailor_app/features/stitching/domain/usecase/save_stitching_usecase.dart';
 import 'package:bluetailor_app/features/stitching/presentation/cubit/stitching_cubit/stitching_cubit.dart';
-import 'package:bluetailor_app/features/stitching/presentation/cubit/styling_cubit/styling_cubit.dart';
+import 'package:bluetailor_app/common/cubit/styling_cubit/styling_cubit.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'features/custom_made/data/data_source/custom_made_data_source.dart';
 
 part 'service_locator.main.dart';
 

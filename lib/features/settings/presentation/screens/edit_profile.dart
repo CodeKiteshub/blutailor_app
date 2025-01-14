@@ -14,7 +14,6 @@ import 'package:bluetailor_app/core/img/functions_and_aws.dart';
 import 'package:bluetailor_app/core/theme/app_strings.dart';
 import 'package:bluetailor_app/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:bluetailor_app/features/settings/presentation/bloc/settings_bloc.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -115,8 +114,7 @@ class _EditProfileState extends State<EditProfile> {
                           ? CircleAvatar(
                               radius: 20.w,
                               backgroundColor: const Color(0xFFEAEAEA),
-                              backgroundImage:
-                                  CachedNetworkImageProvider(profilePic))
+                              backgroundImage: NetworkImage(profilePic))
                           : CircleAvatar(
                               radius: 20.w,
                               backgroundColor: const Color(0xFFEAEAEA),
@@ -195,6 +193,13 @@ class _EditProfileState extends State<EditProfile> {
                 if (state is EditProfileDone) {
                   context.read<AuthBloc>().add(AuthIsLoggedIn());
                   Navigator.pop(context);
+                  Navigator.pop(context);
+                  imageCache.clear();
+                  imageCache.clearLiveImages();
+                  imageCache.evict((context.read<AppUserCubit>().state
+                          as AppUserLoggedIn)
+                      .user
+                      .profilePic);
                   PrimarySnackBar(context, state.message, Colors.green);
                 }
                 if (state is SettingsError) {

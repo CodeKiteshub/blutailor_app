@@ -1,9 +1,9 @@
 
 
 class CartItemEntity {
-  String id;
-  String catId;
-  String name;
+  dynamic id;
+  dynamic catId;
+  dynamic name;
   dynamic totalAmount;
   List<CartItemChangeEntity>? alterations;
   StitchingCartEntity? stitching;
@@ -34,7 +34,7 @@ class CartItemEntity {
 }
 
 class CartItemChangeEntity {
-  String name;
+  dynamic name;
   String label;
   dynamic price;
   CartItemChangeEntity({
@@ -72,14 +72,14 @@ StitchingCartEntity({
 
 
 class StitchingStylingEntity {
-  List<StitchingStyleEntity> styles;
+  List<StitchingStyleEntity>? styles;
   StitchingStylingEntity({
     required this.styles,
   });
 
     factory StitchingStylingEntity.fromMap(Map<String, dynamic> map) {
     return StitchingStylingEntity(
-      styles: List<StitchingStyleEntity>.from(
+      styles: map['styles'] == null ? null  : List<StitchingStyleEntity>.from(
         (map['styles']).map<StitchingStyleEntity>(
           (x) => StitchingStyleEntity.fromMap(x as Map<String, dynamic>),
         ),

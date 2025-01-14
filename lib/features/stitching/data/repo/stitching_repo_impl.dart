@@ -1,5 +1,7 @@
 
 
+import 'dart:developer';
+
 import 'package:bluetailor_app/core/errors/failure.dart';
 import 'package:bluetailor_app/features/stitching/data/data_source/stitching_data_source.dart';
 import 'package:bluetailor_app/features/stitching/data/model/styling_config_model.dart';
@@ -86,13 +88,24 @@ class StitchingRepoImpl implements StitchingRepo {
       required String stitchingId,
       required String fabricName,
       required String stylingNote,
+      required dynamic price,
       required List<SelectedStylingEntity> styling}) async {
     try {
+      var body = {
+        "stitchingId": stitchingId,
+        "price": price,
+        "catId": catId,
+        "fabricName": fabricName,
+        "stylingNote": stylingNote,
+        "styling": [...styling.map((e) => e.toMap())]
+      };
+      log(body.toString());
       final result = await stitchingDataSource.addItemToStitchingCart(
           catId: catId,
           fabricName: fabricName,
           stylingNote: stylingNote,
           stitchingId: stitchingId,
+          price: price,
           styling: [...styling.map((e) => e.toMap())]);
 
       if (result.hasException) {

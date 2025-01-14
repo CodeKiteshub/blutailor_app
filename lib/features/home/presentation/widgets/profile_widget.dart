@@ -1,6 +1,5 @@
 import 'package:bluetailor_app/common/cubit/user_cubit/app_user_cubit.dart';
 import 'package:bluetailor_app/core/theme/app_colors.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizer/sizer.dart';
@@ -36,7 +35,7 @@ class ProfileWidget extends StatelessWidget {
                           backgroundColor: Colors.black,
                           backgroundImage: state.user.profilePic == ""
                               ? null
-                              : CachedNetworkImageProvider(
+                              : NetworkImage(
                                   state.user.profilePic)),
                     ),
                     SizedBox(
@@ -47,15 +46,17 @@ class ProfileWidget extends StatelessWidget {
                       children: [
                         Text(
                           "Hi ${state.user.firstName}",
-                          style: const TextStyle(
+                          style:  TextStyle(
+                              fontSize: Device.screenType == ScreenType.tablet ? 16.sp : null,
                               fontFamily: "dmsans",
                               color: Colors.white,
                               fontWeight: FontWeight.w700),
                         ),
                         Text(
                           state.user.location,
-                          style: const TextStyle(
+                          style: TextStyle(
                               fontFamily: "dmsans",
+                              fontSize: Device.screenType == ScreenType.tablet ? 16.sp : null,
                               color: Colors.white,
                               fontWeight: FontWeight.w400),
                         )

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:bluetailor_app/common/cubit/user_cubit/app_user_cubit.dart';
 import 'package:bluetailor_app/common/widgets/dialog_and_snackbar.dart.dart';
 import 'package:bluetailor_app/common/widgets/phone_text_field.dart';
@@ -161,10 +163,11 @@ class _AddAddressState extends State<AddAddress> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: BottomAppBar(
         color: Colors.transparent,
-        child: BlocConsumer<AddressCubit, AddressState>(
-          bloc: context.read<AddressCubit>(),
-         
+        child: BlocListener<AddressCubit, AddressState>(
+          listenWhen: (previous, current) =>
+              current.addressStatus != previous.addressStatus,
           listener: (context, state) {
+            log(state.addressStatus.toString());
             if (state.addressStatus == AddressStatus.loading) {
               LoadingDialog(context);
             }
@@ -175,40 +178,36 @@ class _AddAddressState extends State<AddAddress> {
             if (state.addressStatus == AddressStatus.saved) {
               Navigator.pop(context);
               Navigator.pop(context);
-              context.read<AddressCubit>().fetchAddress();
-              
               PrimarySnackBar(context, "Address is saved", Colors.green);
+              context.read<AddressCubit>().fetchAddress();
             }
             if (state.addressStatus == AddressStatus.loaded) {
               Navigator.pop(context);
             }
           },
-    
-            builder: (context, state) {
-              return PrimaryGradientButton(
-                  title: "Submit",
-                  onPressed: () {
-                    final isValid = _formKey.currentState?.validate() ?? false;
-                    if (isValid) {
-                      final user =
-                          (context.read<AppUserCubit>().state as AppUserLoggedIn)
-                              .user;
-                      context.read<AddressCubit>().saveAddress(
-                          name: nameController.text,
-                          landmark: landmarkController.text,
-                          phone: phoneController.text,
-                          address: addressController.text,
-                          pincode: pincodeController.text,
-                          city: cityController.text,
-                          stateCountry: stateController.text,
-                          countryCode: countryCode,
-                          country: countryController.text,
-                          user: user,
-                          id: widget.address?.id);
-                    }
-                  });
-            }
-          
+          child: PrimaryGradientButton(
+            title: "Submit",
+            onPressed: () {
+              final isValid = _formKey.currentState?.validate() ?? false;
+              if (isValid) {
+                final user =
+                    (context.read<AppUserCubit>().state as AppUserLoggedIn)
+                        .user;
+                context.read<AddressCubit>().saveAddress(
+                    name: nameController.text,
+                    landmark: landmarkController.text,
+                    phone: phoneController.text,
+                    address: addressController.text,
+                    pincode: pincodeController.text,
+                    city: cityController.text,
+                    stateCountry: stateController.text,
+                    countryCode: countryCode,
+                    country: countryController.text,
+                    user: user,
+                    id: widget.address?.id);
+              }
+            },
+          ),
         ),
       ),
     );

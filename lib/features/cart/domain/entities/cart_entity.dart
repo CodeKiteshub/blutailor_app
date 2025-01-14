@@ -3,7 +3,7 @@
 import 'package:bluetailor_app/common/entities/cart_item_entity.dart';
 
 class CartEntity {
-  String id;
+  dynamic id;
   dynamic totalAmount;
   dynamic gTotal;
   dynamic discTotal;

@@ -42,6 +42,8 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+
+
   @override
   void initState() {
     super.initState();
@@ -51,7 +53,9 @@ class _MyAppState extends State<MyApp> {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return ResponsiveSizer(builder: (context, orientation, screenType) {
+    return ResponsiveSizer(
+      maxTabletWidth: 1640,
+      builder: (context, orientation, screenType) {
       return MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'BLUTAILOR',

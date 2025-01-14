@@ -70,6 +70,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     res.fold((l) {
       return null;
     }, (r) {
+      imageCache.clear();
       url = r;
     });
     final response = await uploadToAWS(image, url ?? "");

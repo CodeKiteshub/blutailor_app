@@ -1,6 +1,6 @@
 import 'package:bluetailor_app/core/theme/app_colors.dart';
-import 'package:bluetailor_app/features/measurement/presentation/cubit/body_profile/body_profile_cubit.dart';
-import 'package:bluetailor_app/features/measurement/presentation/cubit/user_attribue/user_attribute_cubit.dart';
+import 'package:bluetailor_app/common/cubit/body_profile/body_profile_cubit.dart';
+import 'package:bluetailor_app/common/cubit/user_attribue/user_attribute_cubit.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

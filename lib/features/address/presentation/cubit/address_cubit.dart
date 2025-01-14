@@ -23,7 +23,6 @@ class AddressCubit extends Cubit<AddressState> {
 
   int selectedAddress = 0;
 
-
   changeAddress(int index) {
     selectedAddress = index;
     emit(state.copyWith(addressStatus: AddressStatus.loaded));
@@ -54,19 +53,20 @@ class AddressCubit extends Cubit<AddressState> {
       String? id}) async {
     emit(state.copyWith(addressStatus: AddressStatus.loading));
 
-    final res = await _saveAddressUsecase.call(
-        params: AddressEntity(
-            landmark: landmark,
-            phone: phone,
-            address: address,
-            pincode: pincode,
-            city: city,
-            state: stateCountry,
-            countryCode: countryCode,
-            country: country,
-            user: user,
-            name: name,
-            id: id));
+    final res = await _saveAddressUsecase(
+      params: AddressEntity(
+          landmark: landmark,
+          phone: phone,
+          address: address,
+          pincode: pincode,
+          city: city,
+          state: stateCountry,
+          countryCode: countryCode,
+          country: country,
+          user: user,
+          name: name,
+          id: id),
+    );
 
     res.fold((l) => emit(state.copyWith(addressStatus: AddressStatus.error)),
         (r) => emit(state.copyWith(addressStatus: AddressStatus.saved)));

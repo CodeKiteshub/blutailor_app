@@ -29,6 +29,7 @@ class StitchingCubit extends Cubit<StitchingState> {
       required double fabricWidth,
       required String fabricNote,
       required String stylingNote,
+      required dynamic price,
       required List<SelectedStylingEntity> styling}) async {
     emit(StitchingLoading());
     String imageUrl = "";
@@ -45,6 +46,7 @@ class StitchingCubit extends Cubit<StitchingState> {
       fabricWidth: fabricWidth,
       fabricNote: fabricNote,
       stylingNote: stylingNote,
+      price: price,
       styling: styling,
     ));
 
@@ -64,6 +66,7 @@ class StitchingCubit extends Cubit<StitchingState> {
         fabricWidth: fabricWidth,
         fabricNote: fabricNote,
         stylingNote: stylingNote,
+        price: price,
         styling: styling,
       ));
 

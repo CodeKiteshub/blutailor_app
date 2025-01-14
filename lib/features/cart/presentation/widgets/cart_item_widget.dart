@@ -58,12 +58,22 @@ class CartItemWidget extends StatelessWidget {
                                   color: black2),
                             )
                           : Text(
-                              "Total stitching : ${cartItem[index].stitching?.styling.styles.length ?? 0}",
+                              "Total stitching : ${cartItem[index].stitching?.styling.styles?.length ?? 0}",
                               style: TextStyle(
                                   fontWeight: FontWeight.w500,
                                   fontSize: 16.sp,
                                   color: black2),
                             ),
+                      SizedBox(
+                        height: 1.h,
+                      ),
+                      Text(
+                        "₹${cartItem[index].totalAmount}/-",
+                        style: TextStyle(
+                            fontWeight: FontWeight.w500,
+                            fontSize: 16.sp,
+                            color: black2),
+                      ),
                       SizedBox(
                         height: 1.h,
                       ),
@@ -150,17 +160,17 @@ class CartItemWidget extends StatelessWidget {
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
                       itemCount:
-                          cartItem[index].stitching?.styling.styles.length ?? 0,
+                          cartItem[index].stitching?.styling.styles?.length ?? 0,
                       itemBuilder: (context, indx) {
                         return Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
                               cartItem[index]
-                                      .stitching!
-                                      .styling
-                                      .styles[indx]
-                                      .label,
+                                  .stitching!
+                                  .styling
+                                  .styles?[indx]
+                                  .label ?? "",
                               style: TextStyle(
                                   fontWeight: FontWeight.w500,
                                   fontSize: 17.sp,

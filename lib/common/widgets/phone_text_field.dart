@@ -15,9 +15,8 @@ class PhoneTextField extends StatelessWidget {
     return Row(
       children: [
         Container(
-          height: 6.h,
           alignment: Alignment.center,
-          padding: EdgeInsets.symmetric(horizontal: 3.w),
+          padding: EdgeInsets.symmetric(horizontal: 3.w, vertical: 2.h),
           decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(5),
@@ -68,13 +67,18 @@ class PhoneTextField extends StatelessWidget {
               }
               return null;
             },
+            style: TextStyle(
+              fontSize: Device.screenType == ScreenType.tablet ? 16.sp : null
+            ),
             decoration: InputDecoration(
               fillColor: Colors.white,
               filled: true,
-              constraints: BoxConstraints(
-                minHeight: 6.h,
-                maxHeight: 6.h
-              ),
+              contentPadding:
+                  EdgeInsets.symmetric(horizontal: 3.w, vertical: 2.h),
+              // constraints: BoxConstraints(
+              //   minHeight: 6.h,
+              //   maxHeight: 6.h
+              // ),
               enabledBorder: OutlineInputBorder(
                   borderSide: border
                       ? const BorderSide(color: Color(0xFFC7C7C7))

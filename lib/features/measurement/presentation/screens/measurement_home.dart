@@ -17,13 +17,16 @@ class MeasurementHome extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       extendBodyBehindAppBar: true,
-      appBar: PrimaryAppBar(title: "Measurement"),
+      appBar: const PrimaryAppBar(title: "Measurement"),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Stack(
             children: [
-              Image.asset(measurementBack),
+              Image.asset(measurementBack,
+              fit: BoxFit.fill,
+              height: Device.screenType == ScreenType.tablet ? 40.h : null,
+              width: 100.w,),
               Positioned(
                 bottom: 6.h,
                 left: 0,
@@ -217,7 +220,11 @@ class MeasurementHome extends StatelessWidget {
                   child: Stack(
                     alignment: Alignment.center,
                     children: [
-                      Assets.images.customSize.image(),
+                      Assets.images.customSize.image(
+                        height: Device.screenType == ScreenType.tablet ? 20.h : null,
+                        width: 100.w,
+                        fit: BoxFit.fill,
+                      ),
                       Positioned(
                         top: 1.h,
                         right: 3.w,
@@ -250,7 +257,12 @@ class MeasurementHome extends StatelessWidget {
                   child: Stack(
                     alignment: Alignment.center,
                     children: [
-                      Assets.images.standardSize.image(),
+                      Assets.images.standardSize.image(
+
+                        height: Device.screenType == ScreenType.tablet ? 20.h : null,
+                        width: 100.w,
+                        fit: BoxFit.fill,
+                      ),
                       Positioned(
                         top: 1.h,
                         right: 3.w,

@@ -3,7 +3,7 @@ import 'package:bluetailor_app/common/widgets/primary_app_bar.dart';
 import 'package:bluetailor_app/common/widgets/primary_gradient_button.dart';
 import 'package:bluetailor_app/core/theme/app_colors.dart';
 import 'package:bluetailor_app/common/cubit/category_cubit/category_cubit.dart';
-import 'package:bluetailor_app/features/stitching/domain/entities/selected_stitching_cat_entity.dart';
+import 'package:bluetailor_app/common/models/selected_stitching_cat_entity.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

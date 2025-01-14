@@ -22,6 +22,7 @@ Future<void> initDependencies() async {
   _initAddress();
   _initStitching();
   _initCart();
+  _initCustomMade();
 }
 
 void _initAuth() {
@@ -193,12 +194,6 @@ _initAppointment() {
 }
 
 _initAddress() {
-  // Bloc
-  sl.registerFactory<AddressCubit>(() => AddressCubit(
-      saveAddressUsecase: sl(),
-      deleteAddressUsecase: sl(),
-      fetchAddressList: sl()));
-
   // Usecase
   sl.registerFactory<SaveAddressUsecase>(
       () => SaveAddressUsecase(addressRepo: sl()));
@@ -214,6 +209,11 @@ _initAddress() {
   // Data Source
   sl.registerFactory<AddressDataSource>(
       () => AddressDataSourceImpl(apiClient: sl()));
+  // Bloc
+  sl.registerLazySingleton<AddressCubit>(() => AddressCubit(
+      saveAddressUsecase: sl(),
+      deleteAddressUsecase: sl(),
+      fetchAddressList: sl()));
 }
 
 _initStitching() {
@@ -249,10 +249,13 @@ _initCart() {
   // Bloc
   sl.registerFactory<CartCubit>(
       () => CartCubit(fetchCartUsecase: sl(), removeCartItemUsecase: sl()));
-
+  sl.registerFactory<ProductCartCubit>(
+      () => ProductCartCubit(fetchProductCart: sl()));
   sl.registerFactory<PlaceOrderCubit>(() => PlaceOrderCubit(
-      createAlterationOrderUsecase: sl(), processAlterationOrderUsecase: sl(),
-      createStitchingOrderUsecase: sl(), processStitchingOrderUsecase: sl()));
+      createAlterationOrderUsecase: sl(),
+      processAlterationOrderUsecase: sl(),
+      createStitchingOrderUsecase: sl(),
+      processStitchingOrderUsecase: sl()));
 
   // Usecase
   sl.registerFactory<FetchCartUsecase>(() => FetchCartUsecase(cartRepo: sl()));
@@ -266,10 +269,32 @@ _initCart() {
       () => CreateStitchingOrderUsecase(cartRepo: sl()));
   sl.registerFactory<ProcessStitchingOrderUsecase>(
       () => ProcessStitchingOrderUsecase(cartRepo: sl()));
+  sl.registerFactory<FetchProductCartUsecase>(
+      () => FetchProductCartUsecase(cartRepo: sl()));
 
   // Repo
   sl.registerFactory<CartRepo>(() => CartRepoImpl(cartDataSource: sl()));
 
   // Data Source
   sl.registerFactory<CartDataSource>(() => CartDataSourceImpl(apiClient: sl()));
+}
+
+_initCustomMade() {
+  // Bloc
+  sl.registerFactory<ProductCubit>(() => ProductCubit(
+      fetchProductUsecase: sl(), addProductItemToCartUsecase: sl()));
+
+  // Usecase
+  sl.registerFactory<FetchProductUsecase>(
+      () => FetchProductUsecase(customMadeRepo: sl()));
+  sl.registerFactory<AddProductItemToCartUsecase>(
+      () => AddProductItemToCartUsecase(customMadeRepo: sl()));
+
+  // Repo
+  sl.registerFactory<CustomMadeRepo>(
+      () => CustomMadeRepoImpl(customMadeDataSource: sl()));
+
+  // Data Source
+  sl.registerFactory<CustomMadeDataSource>(
+      () => CustomMadeDataSourceImpl(client: sl()));
 }

@@ -1,8 +1,9 @@
 import 'package:bluetailor_app/common/widgets/primary_app_bar.dart';
 import 'package:bluetailor_app/common/widgets/primary_gradient_button.dart';
 import 'package:bluetailor_app/core/theme/app_colors.dart';
+import 'package:bluetailor_app/core/theme/app_strings.dart';
 import 'package:bluetailor_app/features/stitching/domain/entities/styling_config_entity.dart';
-import 'package:bluetailor_app/features/stitching/presentation/cubit/styling_cubit/styling_cubit.dart';
+import 'package:bluetailor_app/common/cubit/styling_cubit/styling_cubit.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -139,7 +140,7 @@ class _CustomFilterState extends State<CustomFilter> {
                                       borderRadius: BorderRadius.circular(5),
                                       child: CachedNetworkImage(
                                           imageUrl: option.image ??
-                                       "https://cdn-icons-png.flaticon.com/512/12225/12225935.png",   )),
+                                       emtyImage,   )),
                                   Positioned(
                                     left: 3.w,
                                     bottom: 1.h,

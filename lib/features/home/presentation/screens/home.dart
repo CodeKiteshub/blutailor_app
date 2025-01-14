@@ -73,7 +73,12 @@ class Home extends StatelessWidget {
                     child: HomeTile(
                       title: homeAppointment,
                       bottomText: true,
-                      child: Assets.images.homeAppointment.image(),
+                      child: Assets.images.homeAppointment.image(
+                        
+                        height: Device.screenType == ScreenType.tablet ? 30.h : null,
+                        width: 100.w,
+                        fit: BoxFit.fill,
+                      ),
                     ),
                   ),
                   SizedBox(

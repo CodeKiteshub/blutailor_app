@@ -1,3 +1,4 @@
+import 'package:bluetailor_app/common/entities/product_cart_entity.dart';
 import 'package:bluetailor_app/core/errors/failure.dart';
 import 'package:bluetailor_app/features/cart/domain/entities/cart_entity.dart';
 import 'package:fpdart/fpdart.dart';
@@ -18,4 +19,6 @@ abstract interface class CartRepo {
       {required String cartId, required String addressId});
   Future<Either<Failure, String>> processStitchingOrder(
       {required String orderId, required String razorpayId});
+
+  Future<Either<Failure, ProductCartEntity>> fetchProductCart();
 }

@@ -34,3 +34,8 @@ const String cameraIcon = "assets/icons/camera.svg";
 const String hanger = "assets/icons/hanger.svg";
 
 const String measurementBack = "assets/images/measurement_back.png";
+
+const String customMadeTop = "assets/images/custom_made_top.png";
+
+
+const String emtyImage = "https://wiki.tripwireinteractive.com/TWIimages/4/47/Placeholder.png?20121020050736";

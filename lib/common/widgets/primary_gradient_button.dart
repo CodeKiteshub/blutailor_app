@@ -18,7 +18,7 @@ class PrimaryGradientButton extends StatelessWidget {
       onTap: onPressed,
       child: Container(
         width: double.infinity,
-        padding: EdgeInsets.symmetric(vertical: 1.5.h),
+        padding: EdgeInsets.symmetric(vertical: Device.screenType == ScreenType.tablet ? 3.h : 1.5.h),
         alignment: Alignment.center,
         decoration: BoxDecoration(
             color: isRedButton == true ? primaryRed : null,
@@ -38,17 +38,11 @@ class PrimaryGradientButton extends StatelessWidget {
               ),
             ],
             borderRadius: BorderRadius.circular(5.0)),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(title,
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 15.sp,
-                    fontWeight: FontWeight.w500)),
-          ],
-        ),
+        child: Text(title,
+            style: TextStyle(
+                color: Colors.white,
+                fontSize: 15.sp,
+                fontWeight: FontWeight.w500)),
       ),
     );
   }
