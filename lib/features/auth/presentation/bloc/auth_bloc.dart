@@ -54,6 +54,12 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<GoogleLoginEvent>(_googleLoginEvent);
     on<AuthIsLoggedIn>(_onIsLoggedInEvent);
     on<LogoutEvent>(_onLogoutEvent);
+    on<LoggedInAsGuest>(_onLoggedInAsGuest);
+  }
+
+  _onLoggedInAsGuest(LoggedInAsGuest event, Emitter<AuthState> emit) async {
+    _emitAuthSuccess(emit,
+        User(id: "", email: "", firstName: "Guest", lastName: "", phone: ""));
   }
 
   _onLoginWithOtpEvent(LoginWithOtpEvent event, Emitter<AuthState> emit) async {
@@ -147,13 +153,14 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     result.fold(
       (failure) => emit(AuthError(message: failure.message)),
       (success) {
-      //  _appUserCubit.updateUser(null);
+        //  _appUserCubit.updateUser(null);
         emit(AuthLoggedOut());
       },
     );
   }
 
-  FutureOr<void> _googleLoginEvent(GoogleLoginEvent event, Emitter<AuthState> emit) {
+  FutureOr<void> _googleLoginEvent(
+      GoogleLoginEvent event, Emitter<AuthState> emit) {
     emit(AuthLoading());
     _loginWithGoogleUsecase.call().then((result) {
       result.fold(

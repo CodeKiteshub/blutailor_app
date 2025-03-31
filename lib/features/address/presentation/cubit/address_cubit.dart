@@ -65,6 +65,9 @@ class AddressCubit extends Cubit<AddressState> {
           country: country,
           user: user,
           name: name,
+          email: user.email,
+          firstName: user.firstName,
+          lastName: user.lastName,
           id: id),
     );
 

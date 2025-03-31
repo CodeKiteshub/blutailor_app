@@ -32,7 +32,11 @@ class PrimarySnackBar {
 
 class DefaultDialog {
   DefaultDialog(BuildContext context,
-      {required String title, required String message, required String confirmText, required String cancelText, Function? onConfirm,
+      {required String title,
+      required String message,
+      required String confirmText,
+      required String cancelText,
+      Function? onConfirm,
       Function? onCancel}) {
     showDialog(
       context: context,

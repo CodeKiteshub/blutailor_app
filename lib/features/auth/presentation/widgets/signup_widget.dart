@@ -67,5 +67,6 @@ class SignupWidget extends StatelessWidget {
         PrimaryGradientButton(title: "Agree and Continue", onPressed: onSignupPressed)
       ],
     );
+  
   }
 }

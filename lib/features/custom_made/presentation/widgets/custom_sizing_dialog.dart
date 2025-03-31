@@ -66,7 +66,7 @@ class _CustomSizingDialogState extends State<CustomSizingDialog> {
                     title: "Height",
                     border: true,
                     suffixText: "cm",
-                    controller: context.read<BodyProfileCubit>().ageController),
+                    controller: context.read<BodyProfileCubit>().cmController),
                 SizedBox(
                   height: 1.h,
                 ),

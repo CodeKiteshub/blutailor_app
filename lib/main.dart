@@ -42,8 +42,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-
-
   @override
   void initState() {
     super.initState();
@@ -53,28 +51,28 @@ class _MyAppState extends State<MyApp> {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return ResponsiveSizer(
-      maxTabletWidth: 1640,
-      builder: (context, orientation, screenType) {
-      return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'BLUTAILOR',
-        theme: ThemeData(useMaterial3: true, fontFamily: FontFamily.inter),
-        onGenerateRoute: Routes.onGenerateRoutes,
-        // initialRoute: "/",
-        home: BlocSelector<AppUserCubit, AppUserState, bool>(
-          selector: (state) {
-            return state is AppUserLoggedIn;
-          },
-          builder: (context, isUserLoggedIn) {
-            if (isUserLoggedIn) {
-              return const BottomNavigationBarWidget();
-            }
-            return const LoadingScreen();
-          },
-        ),
-      );
-    });
+    return Sizer(
+        maxTabletWidth: 1640,
+        builder: (context, orientation, screenType) {
+          return MaterialApp(
+            debugShowCheckedModeBanner: false,
+            title: 'BLUTAILOR',
+            theme: ThemeData(useMaterial3: true, fontFamily: FontFamily.inter),
+            onGenerateRoute: Routes.onGenerateRoutes,
+            // initialRoute: "/",
+            home: BlocSelector<AppUserCubit, AppUserState, bool>(
+              selector: (state) {
+                return state is AppUserLoggedIn;
+              },
+              builder: (context, isUserLoggedIn) {
+                if (isUserLoggedIn) {
+                  return const BottomNavigationBarWidget();
+                }
+                return const LoadingScreen();
+              },
+            ),
+          );
+        });
   }
 }
 

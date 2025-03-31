@@ -2,6 +2,7 @@
 
 import 'package:bluetailor_app/common/cubit/user_cubit/app_user_cubit.dart';
 import 'package:bluetailor_app/common/widgets/dialog_and_snackbar.dart.dart';
+import 'package:bluetailor_app/common/widgets/image_box.dart';
 import 'package:bluetailor_app/common/widgets/pick_img_bottomsheet.dart';
 import 'package:bluetailor_app/common/widgets/primary_app_bar.dart';
 import 'package:bluetailor_app/common/widgets/primary_gradient_button.dart';
@@ -9,7 +10,6 @@ import 'package:bluetailor_app/core/img/functions_and_aws.dart';
 import 'package:bluetailor_app/core/theme/app_colors.dart';
 import 'package:bluetailor_app/common/models/selected_cat_model.dart';
 import 'package:bluetailor_app/common/cubit/body_profile/body_profile_cubit.dart';
-import 'package:bluetailor_app/features/measurement/presentation/widget/body_image_box.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
@@ -68,10 +68,9 @@ class _BodyImagesState extends State<BodyImages> {
         ),
         child: ListView(
           children: [
-            BodyImageBox(
+            ImgBox(
                 title: "Front Facing Image",
-                img: frontImg,
-                dummyImg: "assets/images/front_img.png",
+                selectedImg: frontImg,
                 savedImg: frontPicture,
                 onTap: () {
                   showModalBottomSheet(
@@ -108,10 +107,9 @@ class _BodyImagesState extends State<BodyImages> {
             SizedBox(
               height: 3.h,
             ),
-            BodyImageBox(
+            ImgBox(
                 title: "Back Facing Image",
-                img: backImg,
-                dummyImg: "assets/images/back_img.png",
+                selectedImg: backImg,
                 savedImg: backPicture,
                 onTap: () {
                   showModalBottomSheet(
@@ -148,10 +146,9 @@ class _BodyImagesState extends State<BodyImages> {
             SizedBox(
               height: 3.h,
             ),
-            BodyImageBox(
+            ImgBox(
                 title: "Side Facing Image",
-                img: sideImg,
-                dummyImg: "assets/images/side_img.png",
+                selectedImg: sideImg,
                 savedImg: sidePicture,
                 onTap: () {
                   showModalBottomSheet(
@@ -206,10 +203,10 @@ class _BodyImagesState extends State<BodyImages> {
 
                   if (widget.selectedCat.length == 1) {
                     Navigator.pushNamed(context, '/measurement-details',
-                            arguments: {
-                              'selectedCat': widget.selectedCat.first,
-                              "isSingle": true
-                            });
+                        arguments: {
+                          'selectedCat': widget.selectedCat.first,
+                          "isSingle": true
+                        });
                   } else {
                     Navigator.of(context).pushNamed('/selected-cat',
                         arguments: {

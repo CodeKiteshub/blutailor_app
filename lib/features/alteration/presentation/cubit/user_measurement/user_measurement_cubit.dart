@@ -18,7 +18,7 @@ class AlterationUserMeasurementCubit extends Cubit<UserMeasurementState> {
     emit(UserMeasurementLoading());
     final response = await _fetchUserMeasurementUsecase.call(params: catId);
 
-    response.fold((l) => emit(UserMeasurementError(message: l.message)), (r) {
+    response.fold((l) => emit(UserMeasurementLoaded(userAttributes: const [])), (r) {
       emit(UserMeasurementLoaded(userAttributes: r.firstOrNull?.options ?? []));
     });
   }

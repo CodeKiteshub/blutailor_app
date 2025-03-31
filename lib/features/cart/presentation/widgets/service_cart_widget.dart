@@ -58,23 +58,26 @@ class ServiceCartWidget extends StatelessWidget {
                         //               fontSize: 16.sp,
                         //               color: primaryRed))
                         //     ])),
-                        BlocBuilder<AddressCubit, AddressState>(
-                          builder: (context, state) {
-                            if (state.addressStatus == AddressStatus.loaded) {
-                              return Padding(
-                                padding: EdgeInsets.only(left: 5.w, right: 5.w),
-                                child: AddressBoxWidget(
-                                  address: state.addresses!.elementAt(context
-                                      .read<AddressCubit>()
-                                      .selectedAddress),
-                                  changeAddress: true,
-                                ),
-                              );
-                            } else {
-                              return const SizedBox.shrink();
-                            }
-                          },
-                        ),
+                    BlocBuilder<AddressCubit, AddressState>(
+                      builder: (context, state) {
+                        if (state.addressStatus == AddressStatus.loaded &&
+                            state.addresses!.isNotEmpty) {
+                          return Padding(
+                            padding: EdgeInsets.only(left: 5.w, right: 5.w),
+                            child: AddressBoxWidget(
+                              address: state.addresses!.elementAt(
+                                  context.read<AddressCubit>().selectedAddress),
+                              changeAddress: true,
+                            ),
+                          );
+                        } else {
+                          return Padding(
+                            padding: EdgeInsets.only(left: 5.w, right: 5.w),
+                            child: const EmptyAddressBox(),
+                          );
+                        }
+                      },
+                    ),
                         SizedBox(
                           height: 3.h,
                         ),

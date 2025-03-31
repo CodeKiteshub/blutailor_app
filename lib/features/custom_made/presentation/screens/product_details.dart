@@ -2,9 +2,11 @@ import 'package:bluetailor_app/common/cubit/size_chart/size_chart_cubit.dart';
 import 'package:bluetailor_app/common/standard_styling_data.dart';
 import 'package:bluetailor_app/common/widgets/dialog_and_snackbar.dart.dart';
 import 'package:bluetailor_app/common/widgets/gradient_text.dart';
+import 'package:bluetailor_app/common/widgets/img_slider.dart';
 import 'package:bluetailor_app/common/widgets/primary_gradient_button.dart';
 import 'package:bluetailor_app/core/theme/app_colors.dart';
 import 'package:bluetailor_app/core/theme/app_strings.dart';
+import 'package:bluetailor_app/features/cart/presentation/cubit/product_cart_cubit/product_cart_cubit.dart';
 import 'package:bluetailor_app/features/custom_made/domain/entities/product_entities.dart';
 import 'package:bluetailor_app/common/cubit/styling_cubit/styling_cubit.dart';
 import 'package:bluetailor_app/common/cubit/body_profile/body_profile_cubit.dart';
@@ -13,11 +15,12 @@ import 'package:bluetailor_app/features/custom_made/presentation/widgets/custom_
 import 'package:bluetailor_app/common/cubit/user_attribue/user_attribute_cubit.dart';
 import 'package:bluetailor_app/features/stitching/domain/entities/selected_styling_entity.dart';
 import 'package:bluetailor_app/service_locator.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:readmore/readmore.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:sizer/sizer.dart';
 
@@ -59,11 +62,7 @@ class _ProductDetailsState extends State<ProductDetails> {
             children: [
               Stack(
                 children: [
-                  CachedNetworkImage(
-                    imageUrl: widget.product.images.firstOrNull ?? emtyImage,
-                    height: 30.h,
-                    width: 100.w,
-                  ),
+                  ImgSlider(imgList: widget.product.images, height: 75.h),
                   Positioned(
                     top: 2.h,
                     left: 5.w,
@@ -72,21 +71,18 @@ class _ProductDetailsState extends State<ProductDetails> {
                       children: [
                         InkWell(
                           onTap: () => Navigator.pop(context),
-                          child: SvgPicture.asset(
-                            backIcon,
-                            color: primaryBlue,
-                            height: 2.5.h,
+                          child: Container(
+                            padding: EdgeInsets.all(1.5.w),
+                            decoration: const BoxDecoration(
+                                color: primaryBlue, shape: BoxShape.circle),
+                            child: SvgPicture.asset(
+                              backIcon,
+                              height: 2.h,
+                            ),
                           ),
                         ),
                         SizedBox(
                           width: 5.w,
-                        ),
-                        Text(
-                          "Product Details",
-                          style: TextStyle(
-                              color: primaryBlue,
-                              fontSize: 18.sp,
-                              fontWeight: FontWeight.w600),
                         ),
                       ],
                     ),
@@ -131,12 +127,21 @@ class _ProductDetailsState extends State<ProductDetails> {
                     SizedBox(
                       height: 2.h,
                     ),
-                    Text(
+                    ReadMoreText(
                       widget.product.description,
                       style: TextStyle(
-                          color: const Color(0xFF7D7D7D),
+                          fontWeight: FontWeight.w600,
                           fontSize: 15.sp,
-                          fontWeight: FontWeight.w600),
+                          color: const Color(0xFF7D7D7D)),
+                      trimMode: TrimMode.Line,
+                      trimLines: 3,
+                      colorClickableText: Colors.pink,
+                      trimCollapsedText: 'Show more',
+                      trimExpandedText: 'Show less',
+                      moreStyle: TextStyle(
+                          fontSize: 14.sp,
+                          fontWeight: FontWeight.bold,
+                          color: primaryRed),
                     ),
                   ],
                 ),
@@ -581,6 +586,7 @@ class _ProductDetailsState extends State<ProductDetails> {
           listener: (context, state) {
             if (state is ProductAddedToCart) {
               Navigator.pop(context);
+              context.read<ProductCartCubit>().fetchProductCart();
               PrimarySnackBar(context, "Added to cart", Colors.green);
             }
             if (state is ProductError) {
@@ -594,44 +600,58 @@ class _ProductDetailsState extends State<ProductDetails> {
           child: PrimaryGradientButton(
               title: "Add to Cart",
               onPressed: () {
-                if (isCustom) {
-                  context.read<ProductCubit>().addProductToCart(
-                      catId: widget.product.catId,
-                      deliveryDays: widget.product.deliveryDays,
-                      disc: widget.product.disc,
-                      discPrice: widget.product.discPrice,
-                      isPer: widget.product.isPer,
-                      price: widget.product.price,
-                      name: widget.product.name,
-                      itemId: widget.product.id,
-                      images: widget.product.images,
-                      producttypeId: widget.product.producttypeId,
-                      styles: categoryList.contains(widget.product.catId)
-                          ? []
-                          : context.read<StylingCubit>().selectedStylingList);
+                if (sl<SharedPreferences>().getString("userId") == null) {
+                  DefaultDialog(context,
+                      title: "Alert!",
+                      message:
+                          "To use this feature, you will need to login as it is tied to your user specific profile",
+                      cancelText: "Cancel",
+                      confirmText: "Login/Signup", onCancel: () {
+                    Navigator.pop(context);
+                  }, onConfirm: () {
+                    Navigator.pushNamedAndRemoveUntil(
+                        context, "/auth-selection", (route) => false);
+                  });
                 } else {
-                  context.read<ProductCubit>().addProductToCart(
-                      catId: widget.product.catId,
-                      deliveryDays: widget.product.deliveryDays,
-                      disc: widget.product.disc,
-                      discPrice: widget.product.discPrice,
-                      isPer: widget.product.isPer,
-                      price: widget.product.price,
-                      name: widget.product.name,
-                      itemId: widget.product.id,
-                      images: widget.product.images,
-                      producttypeId: widget.product.producttypeId,
-                      styles: categoryList.contains(widget.product.catId)
-                          ? []
-                          : ((standardJson["categories"] as List).firstWhere(
-                                      (e) => e["id"] == widget.product.catId)[
-                                  "defaultConfig"] as List)
-                              .map((e) => SelectedStylingEntity(
-                                  catTag: e["masterName"],
-                                  name: e['name'],
-                                  label: e["label"],
-                                  value: e["value"]))
-                              .toList());
+                  if (isCustom) {
+                    context.read<ProductCubit>().addProductToCart(
+                        catId: widget.product.catId,
+                        deliveryDays: widget.product.deliveryDays,
+                        disc: widget.product.disc,
+                        discPrice: widget.product.discPrice,
+                        isPer: widget.product.isPer,
+                        price: widget.product.price,
+                        name: widget.product.title,
+                        itemId: widget.product.id,
+                        images: widget.product.images,
+                        producttypeId: widget.product.producttypeId,
+                        styles: categoryList.contains(widget.product.catId)
+                            ? []
+                            : context.read<StylingCubit>().selectedStylingList);
+                  } else {
+                    context.read<ProductCubit>().addProductToCart(
+                        catId: widget.product.catId,
+                        deliveryDays: widget.product.deliveryDays,
+                        disc: widget.product.disc,
+                        discPrice: widget.product.discPrice,
+                        isPer: widget.product.isPer,
+                        price: widget.product.price,
+                        name: widget.product.title,
+                        itemId: widget.product.id,
+                        images: widget.product.images,
+                        producttypeId: widget.product.producttypeId,
+                        styles: categoryList.contains(widget.product.catId)
+                            ? []
+                            : ((standardJson["categories"] as List).firstWhere(
+                                        (e) => e["id"] == widget.product.catId)[
+                                    "defaultConfig"] as List)
+                                .map((e) => SelectedStylingEntity(
+                                    catTag: e["masterName"],
+                                    name: e['name'],
+                                    label: e["label"],
+                                    value: e["value"]))
+                                .toList());
+                  }
                 }
               }),
         ),

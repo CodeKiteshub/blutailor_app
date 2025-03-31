@@ -1,19 +1,20 @@
 // ignore_for_file: use_build_context_synchronously
 
-
 import 'package:bluetailor_app/common/widgets/pick_img_bottomsheet.dart';
 import 'package:bluetailor_app/common/widgets/primary_app_bar.dart';
 import 'package:bluetailor_app/common/widgets/primary_gradient_button.dart';
 import 'package:bluetailor_app/core/img/functions_and_aws.dart';
 import 'package:bluetailor_app/features/alteration/domain/entities/selected_alteration_cat_entity.dart';
-import 'package:bluetailor_app/features/alteration/presentation/widgets/alteration_image_box.dart';
+import 'package:bluetailor_app/common/widgets/image_box.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:sizer/sizer.dart';
 
 class UploadImage extends StatefulWidget {
+  final Function onTap;
   final SelectedAlterationCatEntity selectedCat;
-  const UploadImage({super.key, required this.selectedCat});
+  const UploadImage(
+      {super.key, required this.selectedCat, required this.onTap});
 
   @override
   State<UploadImage> createState() => _UploadImageState();
@@ -49,9 +50,8 @@ class _UploadImageState extends State<UploadImage> {
             SizedBox(
               height: 3.h,
             ),
-            AlterationImageBox(
-                img: img,
-                dummyImg: widget.selectedCat.img!,
+            ImgBox(
+                selectedImg: img,
                 onTap: () {
                   showModalBottomSheet(
                       context: context,
@@ -88,9 +88,36 @@ class _UploadImageState extends State<UploadImage> {
             SizedBox(
               height: 4.h,
             ),
-            AlterationImageBox(
-                img: video,
-                dummyImg: widget.selectedCat.img!,
+            Row(
+              children: [
+                Expanded(
+                    child: Container(
+                  height: 2,
+                  color: const Color(0xFF3B3B3A).withValues(alpha: 0.75),
+                )),
+                SizedBox(
+                  width: 3.w,
+                ),
+                Text(
+                  "OR",
+                  style:
+                      TextStyle(fontWeight: FontWeight.w600, fontSize: 14.sp),
+                ),
+                SizedBox(
+                  width: 3.w,
+                ),
+                Expanded(
+                    child: Container(
+                  height: 2,
+                  color: const Color(0xFF3B3B3A).withValues(alpha: 0.75),
+                )),
+              ],
+            ),
+            SizedBox(
+              height: 4.h,
+            ),
+            ImgBox(
+                selectedImg: video,
                 onTap: () {
                   showModalBottomSheet(
                       context: context,
@@ -131,6 +158,7 @@ class _UploadImageState extends State<UploadImage> {
                 "selectedCat": widget.selectedCat,
                 "imgFile": img,
                 "videoFile": video,
+                "onTap": widget.onTap
               });
             }),
       ),

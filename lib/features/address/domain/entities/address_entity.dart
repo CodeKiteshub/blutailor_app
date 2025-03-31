@@ -1,4 +1,4 @@
-
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 
 import 'package:bluetailor_app/common/entities/user.dart';
 
@@ -12,6 +12,9 @@ class AddressEntity {
   String countryCode;
   String country;
   String name;
+  String email;
+  String firstName;
+  String lastName;
   User? user;
   String? id;
   AddressEntity({
@@ -24,7 +27,11 @@ class AddressEntity {
     required this.countryCode,
     required this.country,
     required this.name,
+    required this.email,
+    required this.firstName,
+    required this.lastName,
     this.user,
     this.id,
   });
+
 }

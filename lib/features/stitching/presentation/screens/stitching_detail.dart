@@ -6,14 +6,17 @@ import 'package:bluetailor_app/common/widgets/primary_text_field.dart';
 import 'package:bluetailor_app/core/theme/app_colors.dart';
 import 'package:bluetailor_app/core/theme/app_strings.dart';
 import 'package:bluetailor_app/common/models/selected_stitching_cat_entity.dart';
+import 'package:bluetailor_app/features/cart/presentation/cubit/cart_cubit/cart_cubit.dart';
 import 'package:bluetailor_app/features/stitching/domain/entities/selected_styling_entity.dart';
 import 'package:bluetailor_app/features/stitching/presentation/cubit/stitching_cubit/stitching_cubit.dart';
 import 'package:bluetailor_app/common/cubit/styling_cubit/styling_cubit.dart';
+import 'package:bluetailor_app/service_locator.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
 
 class StitchingDetail extends StatefulWidget {
@@ -23,6 +26,7 @@ class StitchingDetail extends StatefulWidget {
   final String name;
   final String note;
   final String image;
+  final Function onTap;
   const StitchingDetail(
       {super.key,
       required this.selectedCat,
@@ -30,7 +34,7 @@ class StitchingDetail extends StatefulWidget {
       required this.fabricWidth,
       required this.name,
       required this.note,
-      required this.image});
+      required this.image, required this.onTap});
 
   @override
   State<StitchingDetail> createState() => _StitchingDetailState();
@@ -62,19 +66,23 @@ class _StitchingDetailState extends State<StitchingDetail> {
                     imageUrl: widget.selectedCat.img,
                     height: 30.h,
                     width: 100.w,
-                  
                   ),
                   Positioned(
                     top: 2.h,
                     left: 5.w,
-                    child: InkWell(
-                      onTap: () => Navigator.pop(context),
-                      child: SvgPicture.asset(
-                        backIcon,
-                        color: primaryBlue,
-                        height: 2.5.h,
-                      ),
-                    ),
+                    child: 
+                        InkWell(
+                          onTap: () => Navigator.pop(context),
+                          child: Container(
+                            padding: EdgeInsets.all(1.5.w),
+                            decoration: const BoxDecoration(
+                                color: primaryBlue, shape: BoxShape.circle),
+                            child: SvgPicture.asset(
+                              backIcon,
+                              height: 2.h,
+                            ),
+                          ),
+                        ),
                   )
                 ],
               ),
@@ -343,12 +351,14 @@ class _StitchingDetailState extends State<StitchingDetail> {
                           crossAxisCount: 3,
                           mainAxisSpacing: 2.h,
                           crossAxisSpacing: 3.w,
-                          itemCount: ((standardJson["categories"] as List).firstWhere((e) =>
+                          itemCount: ((standardJson["categories"] as List)
+                                      .firstWhere((e) =>
                                           e["id"] == widget.selectedCat.id)[
                                   "defaultConfig"] as List)
                               .length,
                           itemBuilder: (context, index) {
-                            final standard = ((standardJson["categories"] as List)
+                            final standard = ((standardJson["categories"]
+                                        as List)
                                     .firstWhere((e) =>
                                         e["id"] ==
                                         widget.selectedCat.id)["defaultConfig"]
@@ -360,7 +370,7 @@ class _StitchingDetailState extends State<StitchingDetail> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                GradientText(text: standard["label"]),
+                                  GradientText(text: standard["label"]),
                                   SizedBox(
                                     height: 1.h,
                                   ),
@@ -406,9 +416,11 @@ class _StitchingDetailState extends State<StitchingDetail> {
               LoadingDialog(context);
             }
             if (state is StitchingSaved) {
+              context.read<CartCubit>().fetchCart();
               Navigator.pop(context);
               Navigator.pop(context);
               Navigator.pop(context);
+              widget.onTap();
               PrimarySnackBar(
                   context, "Your stitching order is saved.", Colors.green);
             }
@@ -424,45 +436,57 @@ class _StitchingDetailState extends State<StitchingDetail> {
           child: PrimaryGradientButton(
               title: "Add to Cart",
               onPressed: () {
-                if (isCustom) {
-                  context.read<StitchingCubit>().saveStiching(
-                      catId: widget.selectedCat.id,
-                      fabricName: widget.name,
-                      fabricImage: widget.image,
-                      fabricLength: double.parse(widget.fabricLength),
-                      fabricWidth: double.parse(widget.fabricWidth),
-                      fabricNote: widget.note,
-                      stylingNote: remarkController.text,
-                      price: (standardJson["categories"] as List)
-                          .firstWhere(
-                              (e) => e["id"] == widget.selectedCat.id)["price"],
-                      styling:
-                          context.read<StylingCubit>().selectedStylingList);
+                if (sl<SharedPreferences>().getString("userId") == null) {
+                  DefaultDialog(context,
+                      title: "Alert!",
+                      message:
+                          "To use this feature, you will need to login as it is tied to your user specific profile",
+                      cancelText: "Cancel",
+                      confirmText: "Login/Signup", onCancel: () {
+                    Navigator.pop(context);
+                  }, onConfirm: () {
+                    Navigator.pushNamedAndRemoveUntil(
+                        context, "/auth-selection", (route) => false);
+                  });
                 } else {
-                  context.read<StitchingCubit>().saveStiching(
-                      catId: widget.selectedCat.id,
-                      fabricName: widget.name,
-                      fabricImage: widget.image,
-                      fabricLength: widget.fabricLength.isEmpty
-                          ? 0
-                          : double.parse(widget.fabricLength),
-                      fabricWidth: widget.fabricWidth.isEmpty
-                          ? 0
-                          : double.parse(widget.fabricWidth),
-                      fabricNote: widget.note,
-                      stylingNote: remarkController.text,
-                      price:  (standardJson["categories"] as List)
-                          .firstWhere(
-                              (e) => e["id"] == widget.selectedCat.id)["price"],
-                      styling: ((standardJson["categories"] as List)
-                                  .firstWhere((e) => e["id"] == widget.selectedCat.id)["defaultConfig"]
-                              as List)
-                          .map((e) => SelectedStylingEntity(
-                              catTag: e["masterName"],
-                              name: e['name'],
-                              label: e["label"],
-                              value: e["value"]))
-                          .toList());
+                  if (isCustom) {
+                    context.read<StitchingCubit>().saveStiching(
+                        catId: widget.selectedCat.id,
+                        fabricName: widget.name,
+                        fabricImage: widget.image,
+                        fabricLength: double.parse(widget.fabricLength),
+                        fabricWidth: double.parse(widget.fabricWidth),
+                        fabricNote: widget.note,
+                        stylingNote: remarkController.text,
+                        price: (standardJson["categories"] as List).firstWhere(
+                            (e) => e["id"] == widget.selectedCat.id)["price"],
+                        styling:
+                            context.read<StylingCubit>().selectedStylingList);
+                  } else {
+                    context.read<StitchingCubit>().saveStiching(
+                        catId: widget.selectedCat.id,
+                        fabricName: widget.name,
+                        fabricImage: widget.image,
+                        fabricLength: widget.fabricLength.isEmpty
+                            ? 0
+                            : double.parse(widget.fabricLength),
+                        fabricWidth: widget.fabricWidth.isEmpty
+                            ? 0
+                            : double.parse(widget.fabricWidth),
+                        fabricNote: widget.note,
+                        stylingNote: remarkController.text,
+                        price: (standardJson["categories"] as List).firstWhere(
+                            (e) => e["id"] == widget.selectedCat.id)["price"],
+                        styling: ((standardJson["categories"] as List)
+                                    .firstWhere((e) => e["id"] == widget.selectedCat.id)[
+                                "defaultConfig"] as List)
+                            .map((e) => SelectedStylingEntity(
+                                catTag: e["masterName"],
+                                name: e['name'],
+                                label: e["label"],
+                                value: e["value"]))
+                            .toList());
+                  }
                 }
               }),
         ),

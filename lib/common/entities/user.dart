@@ -40,6 +40,21 @@ class User {
         location: location ?? this.location,
         profilePic: profilePic ?? this.profilePic);
   }
+
+
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'id': id,
+      'email': email,
+      'firstName': firstName,
+      'lastName': lastName,
+      'phone': phone,
+      'countryCode': countryCode,
+      'profilePic': profilePic,
+      'location': location,
+    };
+  }
+
 }
 
 class StylistEntity {

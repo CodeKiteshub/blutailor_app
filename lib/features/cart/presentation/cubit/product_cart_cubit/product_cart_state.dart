@@ -17,3 +17,5 @@ final class ProductCartLoaded extends ProductCartState {
 }
 
 final class ProductCartError extends ProductCartState {}
+
+final class ProductCartCouponError extends ProductCartState {}

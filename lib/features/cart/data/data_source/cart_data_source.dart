@@ -1,3 +1,5 @@
+import 'package:bluetailor_app/common/entities/product_cart_entity.dart';
+import 'package:bluetailor_app/common/models/address_model.dart';
 import 'package:bluetailor_app/core/api/api_client.dart';
 import 'package:bluetailor_app/service_locator.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
@@ -15,6 +17,12 @@ abstract interface class CartDataSource {
   Future<QueryResult> processStitchingOrder(
       {required String orderId, required String razorpayId});
   Future<QueryResult> fetchProductCart();
+  Future<QueryResult> createProductOrder(
+      {required String razorpayId,
+      required AddressModel address,
+      required ProductCartEntity cart});
+  Future<QueryResult> validateProductCartCoupon({required String code});
+  Future<QueryResult> removeProductItemFromCart({required String itemId});
 }
 
 class CartDataSourceImpl implements CartDataSource {
@@ -174,6 +182,10 @@ query GetUserCart($userId: String!) {
       images
       discPrice
       disc
+      catId
+      deliveryDays
+      isPer
+      producttypeId
     }
   }
 }
@@ -182,5 +194,101 @@ query GetUserCart($userId: String!) {
     return await apiClient.queryData(
         query: cartSchema,
         variable: {"userId": sl<SharedPreferences>().getString("userId")});
+  }
+
+  @override
+  Future<QueryResult<Object?>> createProductOrder(
+      {required String razorpayId,
+      required AddressModel address,
+      required ProductCartEntity cart}) async {
+    String createOrderSchema = r'''
+mutation CreateProductOrder($order: ProductOrderInput!) {
+  createProductOrder(order: $order) {
+    _id
+  }
+}
+''';
+
+    final variable = {
+      "order": {
+        "razorPayId": razorpayId,
+        "address":
+            address.toMap(userId: sl<SharedPreferences>().getString("userId") ?? ""),
+        "cart": cart.toMap()
+      }
+    };
+
+    return await apiClient.mutateData(
+        query: createOrderSchema, variable: variable);
+  }
+
+  @override
+  Future<QueryResult<Object?>> validateProductCartCoupon(
+      {required String code}) async {
+    String validateCouponSchema = r'''
+query ValidateCoupons($userId: String!, $couponcode: String!) {
+  validateCoupons(userId: $userId, couponcode: $couponcode) {
+    discTotal
+    gTotal
+    totalAmount
+    items {
+      price
+      name
+      qty
+      itemId
+      images
+      discPrice
+      disc
+      catId
+      deliveryDays
+      isPer
+      producttypeId
+    }
+  }
+}
+''';
+
+    final variable = {
+      "userId": sl<SharedPreferences>().getString("userId"),
+      "couponcode": code
+    };
+
+    return await apiClient.mutateData(
+        query: validateCouponSchema, variable: variable);
+  }
+
+  @override
+  Future<QueryResult<Object?>> removeProductItemFromCart(
+      {required String itemId}) async {
+    String removeItemFromCartSchema = r'''
+mutation RemoveItemFromCart($itemId: String!, $userId: String!) {
+  removeItemFromCart(itemId: $itemId, userId: $userId) {
+        discTotal
+    gTotal
+    totalAmount
+    items {
+      price
+      name
+      qty
+      itemId
+      images
+      discPrice
+      disc
+      catId
+      deliveryDays
+      isPer
+      producttypeId
+    }
+  }
+}
+''';
+
+    final variable = {
+      "itemId": itemId,
+      "userId": sl<SharedPreferences>().getString("userId")
+    };
+
+    return await apiClient.mutateData(
+        query: removeItemFromCartSchema, variable: variable);
   }
 }

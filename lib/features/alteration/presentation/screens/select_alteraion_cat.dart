@@ -4,10 +4,12 @@ import 'package:bluetailor_app/common/widgets/primary_app_bar.dart';
 import 'package:bluetailor_app/common/widgets/primary_gradient_button.dart';
 import 'package:bluetailor_app/core/theme/app_colors.dart';
 import 'package:bluetailor_app/features/alteration/domain/entities/selected_alteration_cat_entity.dart';
+import 'package:bluetailor_app/service_locator.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
 
 class SelectAlteraionCat extends StatefulWidget {
@@ -23,6 +25,7 @@ class _SelectAlteraionCatState extends State<SelectAlteraionCat> {
   @override
   void initState() {
     context.read<CategoryCubit>().fetchGarmentUseCase(false, true);
+    sl<SharedPreferences>().remove("alterationCatList");
     super.initState();
   }
 
@@ -36,11 +39,22 @@ class _SelectAlteraionCatState extends State<SelectAlteraionCat> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text("Select the garment you want altered",
-                style: TextStyle(
-                    color: primaryBlack,
-                    fontSize: 18.sp,
-                    fontWeight: FontWeight.w600)),
+            Text.rich(
+              TextSpan(
+                  text: "Select the garment you want to be ",
+                  style: TextStyle(
+                      color: primaryBlack,
+                      fontSize: 18.sp,
+                      fontWeight: FontWeight.w600),
+                  children: [
+                    TextSpan(
+                        text: "altered",
+                        style: TextStyle(
+                            color: primaryBlack,
+                            fontSize: 18.sp,
+                            fontWeight: FontWeight.w800))
+                  ]),
+            ),
             SizedBox(
               height: 2.h,
             ),
@@ -65,8 +79,8 @@ class _SelectAlteraionCatState extends State<SelectAlteraionCat> {
                               children: [
                                 Column(
                                   children: [
-                                  CachedNetworkImage(
-                                      imageUrl:  state.categories[index].image,
+                                    CachedNetworkImage(
+                                      imageUrl: state.categories[index].image,
                                       height: 15.h,
                                       fit: BoxFit.cover,
                                     ),
@@ -173,6 +187,7 @@ class _SelectAlteraionCatState extends State<SelectAlteraionCat> {
                                                         img: state
                                                             .categories[index]
                                                             .image,
+                                                        completedIndex: [],
                                                         length: 1));
                                               }
                                               setState(() {});

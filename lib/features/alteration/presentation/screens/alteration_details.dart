@@ -1,4 +1,5 @@
 import 'package:bluetailor_app/common/models/product_config_model.dart';
+import 'package:bluetailor_app/common/widgets/dialog_and_snackbar.dart.dart';
 import 'package:bluetailor_app/common/widgets/primary_app_bar.dart';
 import 'package:bluetailor_app/common/widgets/primary_gradient_button.dart';
 import 'package:bluetailor_app/core/theme/app_colors.dart';
@@ -14,12 +15,13 @@ import 'package:sizer/sizer.dart';
 class AlterationDetails extends StatefulWidget {
   final SelectedAlterationCatEntity selectedCat;
   final String imgFile;
+  final Function onTap;
   final String videoFile;
   const AlterationDetails(
       {super.key,
       required this.selectedCat,
       required this.imgFile,
-      required this.videoFile});
+      required this.videoFile, required this.onTap});
 
   @override
   State<AlterationDetails> createState() => _AlterationDetailsState();
@@ -88,8 +90,11 @@ class _AlterationDetailsState extends State<AlterationDetails> {
                                                 .firstWhere(
                                                     (element) =>
                                                         element.name ==
-                                                        state.config[index]
-                                                            .label.toString().replaceAll(" ", "_"),
+                                                        state
+                                                            .config[index].label
+                                                            .toString()
+                                                            .replaceAll(
+                                                                " ", "_"),
                                                     orElse: () => Option(
                                                         label: "", value: 0))
                                                 .value
@@ -125,14 +130,23 @@ class _AlterationDetailsState extends State<AlterationDetails> {
         child: PrimaryGradientButton(
             title: "Proceed",
             onPressed: () {
-              Navigator.pushNamed(context, '/alteration-order-summary',
-                  arguments: {
-                    "selectedCat": widget.selectedCat,
-                    "imgFile": widget.imgFile,
-                    "videoFile": widget.videoFile,
-                    "alterations":
-                        context.read<AlterationConfigCubit>().alterations
-                  });
+              if (context
+                  .read<AlterationConfigCubit>()
+                  .alterations
+                  .isNotEmpty) {
+                Navigator.pushNamed(context, '/alteration-order-summary',
+                    arguments: {
+                      "selectedCat": widget.selectedCat,
+                      "imgFile": widget.imgFile,
+                      "videoFile": widget.videoFile,
+                      "alterations":
+                          context.read<AlterationConfigCubit>().alterations,
+                      "onTap": widget.onTap
+                    });
+              } else {
+                PrimarySnackBar(
+                    context, "Please select alterations", Colors.red);
+              }
             }),
       ),
     );

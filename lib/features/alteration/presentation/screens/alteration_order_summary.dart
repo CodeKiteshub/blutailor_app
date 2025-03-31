@@ -1,4 +1,3 @@
-import 'package:bluetailor_app/common/models/selected_cat_model.dart';
 import 'package:bluetailor_app/common/widgets/dialog_and_snackbar.dart.dart';
 import 'package:bluetailor_app/common/widgets/primary_app_bar.dart';
 import 'package:bluetailor_app/common/widgets/primary_gradient_button.dart';
@@ -6,21 +5,25 @@ import 'package:bluetailor_app/core/theme/app_colors.dart';
 import 'package:bluetailor_app/features/alteration/domain/entities/alteration_entity.dart';
 import 'package:bluetailor_app/features/alteration/domain/entities/selected_alteration_cat_entity.dart';
 import 'package:bluetailor_app/features/alteration/presentation/cubit/save_alteration/save_alteration_cubit.dart';
+import 'package:bluetailor_app/features/cart/presentation/cubit/cart_cubit/cart_cubit.dart';
+import 'package:bluetailor_app/service_locator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
 
 class AlterationOrderSummary extends StatelessWidget {
   final SelectedAlterationCatEntity selectedCat;
   final List<AlterationEntity> alterations;
   final String imgFile;
+  final Function onTap;
   final String videoFile;
   const AlterationOrderSummary(
       {super.key,
       required this.alterations,
       required this.imgFile,
       required this.videoFile,
-      required this.selectedCat});
+      required this.selectedCat, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -148,6 +151,23 @@ class AlterationOrderSummary extends StatelessWidget {
                                             ? primaryRed
                                             : Colors.green),
                                   ),
+                                  SizedBox(
+                                    width: 2.w,
+                                  ),
+                                  Text(
+                                    "(" +
+                                        (alterations[index].value).toString() +
+                                        '")',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.w400,
+                                        fontSize: 15.sp,
+                                        color: alterations[index]
+                                                .value
+                                                .toString()
+                                                .startsWith("-")
+                                            ? primaryRed
+                                            : Colors.green),
+                                  ),
                                 ],
                               )
                             ],
@@ -208,11 +228,13 @@ class AlterationOrderSummary extends StatelessWidget {
               LoadingDialog(context);
             }
             if (state is SavedAlteration) {
+              context.read<CartCubit>().fetchCart();
               Navigator.pop(context);
               Navigator.pop(context);
               Navigator.pop(context);
               Navigator.pop(context);
               Navigator.pop(context);
+              onTap();
               PrimarySnackBar(
                   context, "Your alteration is saved.", Colors.green);
             }
@@ -224,12 +246,26 @@ class AlterationOrderSummary extends StatelessWidget {
           child: PrimaryGradientButton(
               title: "Add to Cart",
               onPressed: () {
-                context.read<SaveAlterationCubit>().saveAlteration(
-                    catId: selectedCat.id,
-                    catName: selectedCat.label,
-                    imgFile: imgFile,
-                    videoFile: videoFile,
-                    alterations: alterations);
+                if (sl<SharedPreferences>().getString("userId") == null) {
+                  DefaultDialog(context,
+                      title: "Alert!",
+                      message:
+                          "To use this feature, you will need to login as it is tied to your user specific profile",
+                      cancelText: "Cancel",
+                      confirmText: "Login/Signup", onCancel: () {
+                    Navigator.pop(context);
+                  }, onConfirm: () {
+                    Navigator.pushNamedAndRemoveUntil(
+                        context, "/auth-selection", (route) => false);
+                  });
+                } else {
+                  context.read<SaveAlterationCubit>().saveAlteration(
+                      catId: selectedCat.id,
+                      catName: selectedCat.label,
+                      imgFile: imgFile,
+                      videoFile: videoFile,
+                      alterations: alterations);
+                }
               }),
         ),
       ),

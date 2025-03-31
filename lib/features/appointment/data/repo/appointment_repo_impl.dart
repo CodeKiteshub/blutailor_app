@@ -20,7 +20,8 @@ class AppointmentRepoImpl implements AppointmentRepo {
       required String appointmentType,
       required DateEntity appointmentDate,
       required String appointmentSelectedTime,
-      required String lookingFor}) async {
+      required String lookingFor,
+      Map<String, dynamic>? address}) async {
     try {
       final result = await appointmentDataSource.saveAppointment(
           firstName: firstName,
@@ -31,7 +32,8 @@ class AppointmentRepoImpl implements AppointmentRepo {
           appointmentType: appointmentType,
           appointmentDate: appointmentDate,
           appointmentSelectedTime: appointmentSelectedTime,
-          lookingFor: lookingFor);
+          lookingFor: lookingFor,
+          address: address);
 
       if (result.hasException) {
         return left(Failure(result.exception.toString()));

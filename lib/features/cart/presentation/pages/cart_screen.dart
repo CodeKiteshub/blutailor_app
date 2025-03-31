@@ -1,4 +1,5 @@
 import 'package:bluetailor_app/common/cubit/user_cubit/app_user_cubit.dart';
+import 'package:bluetailor_app/common/models/address_model.dart';
 import 'package:bluetailor_app/common/widgets/dialog_and_snackbar.dart.dart';
 import 'package:bluetailor_app/common/widgets/primary_app_bar.dart';
 import 'package:bluetailor_app/common/widgets/primary_gradient_button.dart';
@@ -103,7 +104,14 @@ class _CartScreenState extends State<CartScreen> {
                       : const SizedBox.shrink();
                 },
               )
-            : BlocBuilder<ProductCartCubit, ProductCartState>(
+            : BlocConsumer<ProductCartCubit, ProductCartState>(
+                listener: (context, state) {
+                  if (state is ProductCartCouponError) {
+                    context.read<ProductCartCubit>().fetchProductCart();
+
+                    PrimarySnackBar(context, "Coupan is not valid", Colors.red);
+                  }
+                },
                 builder: (context, state) {
                   return state is ProductCartLoaded &&
                           state.cart.items.isNotEmpty
@@ -129,7 +137,23 @@ class _CartScreenState extends State<CartScreen> {
                           },
                           child: PrimaryGradientButton(
                               title: "Proceed to Payment Portal",
-                              onPressed: () {}),
+                              onPressed: () {
+                                final user = (context.read<AppUserCubit>().state
+                                        as AppUserLoggedIn)
+                                    .user;
+                                final address =
+                                    (context.read<AddressCubit>().state)
+                                        .addresses!
+                                        .elementAt(context
+                                            .read<AddressCubit>()
+                                            .selectedAddress);
+                                context
+                                    .read<PlaceOrderCubit>()
+                                    .createProductOrder(
+                                        user: user,
+                                        cart: state.cart,
+                                        address: address as AddressModel);
+                              }),
                         )
                       : const SizedBox.shrink();
                 },

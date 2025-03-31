@@ -1,4 +1,3 @@
-import 'dart:io';
 
 import 'package:bluetailor_app/common/entities/user.dart';
 import 'package:bluetailor_app/core/api/api_client.dart';
@@ -80,6 +79,9 @@ query GetUserAddresses($userId: String!) {
     _id
     address1
     name
+    email
+    firstName
+    lastName
     phone
     state
     postalCode

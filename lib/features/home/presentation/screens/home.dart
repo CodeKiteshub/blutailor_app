@@ -1,3 +1,4 @@
+import 'package:bluetailor_app/common/widgets/cart_icon_widget.dart';
 import 'package:bluetailor_app/common/widgets/dialog_and_snackbar.dart.dart';
 import 'package:bluetailor_app/common/widgets/youtube_player_widget.dart';
 import 'package:bluetailor_app/core/theme/app_colors.dart';
@@ -5,8 +6,10 @@ import 'package:bluetailor_app/core/theme/app_strings.dart';
 import 'package:bluetailor_app/features/home/presentation/widgets/home_heading.dart';
 import 'package:bluetailor_app/features/home/presentation/widgets/profile_widget.dart';
 import 'package:bluetailor_app/gen/assets.gen.dart';
+import 'package:bluetailor_app/service_locator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
 
 class Home extends StatelessWidget {
@@ -28,7 +31,21 @@ class Home extends StatelessWidget {
                   const Spacer(),
                   InkWell(
                     onTap: () {
-                      Navigator.pushNamed(context, '/measurement-home');
+                      if (sl<SharedPreferences>().getString('userId') == null) {
+                        DefaultDialog(context,
+                            title: "Alert!",
+                            message:
+                                "To use this feature, you will need to login as it is tied to your user specific profile",
+                            cancelText: "Cancel",
+                            confirmText: "Login/Signup", onCancel: () {
+                          Navigator.pop(context);
+                        }, onConfirm: () {
+                          Navigator.pushNamedAndRemoveUntil(
+                              context, "/auth-selection", (route) => false);
+                        });
+                      } else {
+                        Navigator.pushNamed(context, '/measurement-home');
+                      }
                     },
                     child: SvgPicture.asset(
                       measurement,
@@ -38,16 +55,7 @@ class Home extends StatelessWidget {
                   SizedBox(
                     width: 7.w,
                   ),
-                  InkWell(
-                    onTap: () {
-                      Navigator.pushNamed(context, '/cart-screen');
-                    },
-                    child: Icon(
-                      Icons.shopping_cart,
-                      color: Colors.white,
-                      size: 23.sp,
-                    ),
-                  )
+                  const CartIconWidget()
                 ],
               ),
             ),
@@ -74,8 +82,9 @@ class Home extends StatelessWidget {
                       title: homeAppointment,
                       bottomText: true,
                       child: Assets.images.homeAppointment.image(
-                        
-                        height: Device.screenType == ScreenType.tablet ? 30.h : null,
+                        height: Device.screenType == ScreenType.tablet
+                            ? 30.h
+                            : null,
                         width: 100.w,
                         fit: BoxFit.fill,
                       ),
@@ -120,25 +129,63 @@ class Home extends StatelessWidget {
                   SizedBox(
                     height: 3.h,
                   ),
-                  // const HomeHeading(
-                  //   title: "Alteration Guide",
-                  // ),
-                  // SizedBox(
-                  //   height: 2.h,
-                  // ),
-                  // InkWell(
-                  //   onTap: () {
-                  //     PrimarySnackBar(
-                  //         context, "Coming soon. Stay Tuned.", Colors.green);
-                  //   },
-                  //   child: HomeTile(
-                  //     title: "Our professionally crafted guide, Just for you!",
-                  //     child: Assets.images.homeGuide.image(),
-                  //   ),
-                  // ),
-                  // SizedBox(
-                  //   height: 3.h,
-                  // ),
+                  const HomeHeading(
+                    title: "Custom Clothing",
+                  ),
+                  SizedBox(
+                    height: 2.h,
+                  ),
+                  InkWell(
+                      onTap: () {
+                        Navigator.pushNamed(context, '/custom-made-home');
+                      },
+                      child: Stack(
+                        children: [
+                          Assets.images.homeGuide.image(),
+                          Positioned(
+                            bottom: 20,
+                            left: 7.w,
+                            right: 7.w,
+                            child: Row(
+                              children: [
+                                Text(
+                                    "Our professionally crafted\nclothes, Just for you!",
+                                    textAlign: TextAlign.start,
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 16.sp,
+                                        fontWeight: FontWeight.w500)),
+                                const Spacer(),
+                                Container(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 4.w, vertical: 1.h),
+                                  decoration: BoxDecoration(
+                                      color: primaryBlue,
+                                      borderRadius: BorderRadius.circular(5),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.black.withValues(alpha: 0.25),
+                                          spreadRadius: 0,
+                                          blurRadius: 4,
+                                          offset: const Offset(0, 4),
+                                        )
+                                      ]),
+                                  child: Text(
+                                    "Explore",
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 15.sp,
+                                        fontWeight: FontWeight.w400),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      )),
+                  SizedBox(
+                    height: 3.h,
+                  ),
                   const HomeHeading(
                     title: "Our Journey",
                   ),
@@ -168,6 +215,8 @@ class Home extends StatelessWidget {
     );
   }
 }
+
+
 
 class HomeTile extends StatelessWidget {
   final Widget child;

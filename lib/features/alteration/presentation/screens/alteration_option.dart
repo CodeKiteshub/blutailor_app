@@ -7,7 +7,8 @@ import 'package:sizer/sizer.dart';
 
 class AlterationOption extends StatefulWidget {
   final SelectedAlterationCatEntity selectedCat;
-  const AlterationOption({super.key, required this.selectedCat});
+  final Function onTap;
+  const AlterationOption({super.key, required this.selectedCat, required this.onTap});
 
   @override
   State<AlterationOption> createState() => _AlterationOptionState();
@@ -102,7 +103,10 @@ class _AlterationOptionState extends State<AlterationOption> {
             onPressed: () {
               if (groupValue == 0 || groupValue == 1) {
                 Navigator.pushNamed(context, '/upload-image',
-                    arguments: widget.selectedCat);
+                    arguments: {
+                      "selectedCat": widget.selectedCat,
+                      "onTap": widget.onTap
+                    });
               } else {
                 Navigator.pushNamed(context, "/create-appointment",
                     arguments: true);

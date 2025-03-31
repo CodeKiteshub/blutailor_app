@@ -175,6 +175,7 @@ class _SelectStitchingCatState extends State<SelectStitchingCat> {
                                                         img: state
                                                             .categories[index]
                                                             .image,
+                                                            completedIndex: [],
                                                         length: 1));
                                               }
                                               setState(() {

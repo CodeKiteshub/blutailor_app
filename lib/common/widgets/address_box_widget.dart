@@ -1,3 +1,4 @@
+
 import 'package:bluetailor_app/core/theme/app_colors.dart';
 import 'package:bluetailor_app/features/address/domain/entities/address_entity.dart';
 import 'package:bluetailor_app/features/address/presentation/cubit/address_cubit.dart';
@@ -26,7 +27,7 @@ class AddressBoxWidget extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-               address.name == "" ? "Address" : address.name,
+                address.name == "" ? "Address" : address.name,
                 style: TextStyle(
                     fontWeight: FontWeight.w700,
                     fontSize: 15.sp,
@@ -182,6 +183,75 @@ class AddressBoxWidget extends StatelessWidget {
                         ),
                       ],
                     )
+            ],
+          ),
+        ),
+        Positioned(
+            bottom: 0,
+            right: 0,
+            child: Image.asset(
+              "assets/images/truck.png",
+              height: 8.h,
+            ))
+      ],
+    );
+  }
+}
+
+class EmptyAddressBox extends StatelessWidget {
+  const EmptyAddressBox({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        Container(
+          padding: const EdgeInsets.all(15),
+          width: 100.w,
+          decoration: BoxDecoration(
+              color: const Color(0xfff4f4f4),
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(color: const Color(0xffcecece), width: 0.5)),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text("No address available",
+                  style: TextStyle(
+                      fontWeight: FontWeight.w700,
+                      fontSize: 15.sp,
+                      color: black2)),
+              SizedBox(
+                height: 1.h,
+              ),
+              Text(
+                "Click on the button below to add a new address and get started",
+                style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 13.sp,
+                    color: black2),
+              ),
+              SizedBox(
+                height: 6.h,
+              ),
+              InkWell(
+                onTap: () {
+                  Navigator.pushNamed(context, "/add-address");
+                },
+                child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 1.h),
+                  decoration: BoxDecoration(
+                    gradient: primaryGradient,
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  child: Text("Add Address",
+                      style: TextStyle(
+                          fontWeight: FontWeight.w500,
+                          fontSize: 13.sp,
+                          color: Colors.white)),
+                ),
+              )
             ],
           ),
         ),

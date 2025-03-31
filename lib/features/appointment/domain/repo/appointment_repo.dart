@@ -13,6 +13,7 @@ abstract interface class AppointmentRepo {
       required String appointmentType,
       required DateEntity appointmentDate,
       required String appointmentSelectedTime,
-      required String lookingFor});
+      required String lookingFor,
+      Map<String, dynamic>? address});
       Future<Either<Failure, List<AppointmentEntity>>> fetchAppointments();
 }

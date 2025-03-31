@@ -18,11 +18,17 @@ class $AssetsIconsGen {
   /// File path: assets/icons/back-icon.svg
   String get backIcon => 'assets/icons/back-icon.svg';
 
+  /// File path: assets/icons/camera.svg
+  String get camera => 'assets/icons/camera.svg';
+
   /// File path: assets/icons/google.svg
   String get google => 'assets/icons/google.svg';
 
   /// File path: assets/icons/guest.svg
   String get guest => 'assets/icons/guest.svg';
+
+  /// File path: assets/icons/hanger.svg
+  String get hanger => 'assets/icons/hanger.svg';
 
   /// File path: assets/icons/home.svg
   String get home => 'assets/icons/home.svg';
@@ -34,16 +40,29 @@ class $AssetsIconsGen {
   String get order => 'assets/icons/order.svg';
 
   /// List of all assets
-  List<String> get values =>
-      [appointment, backIcon, google, guest, home, measurement, order];
+  List<String> get values => [
+        appointment,
+        backIcon,
+        camera,
+        google,
+        guest,
+        hanger,
+        home,
+        measurement,
+        order
+      ];
 }
 
 class $AssetsImagesGen {
   const $AssetsImagesGen();
 
-  /// File path: assets/images/back_img.png
-  AssetGenImage get backImg =>
-      const AssetGenImage('assets/images/back_img.png');
+  /// File path: assets/images/app_logo.jpg
+  AssetGenImage get appLogo =>
+      const AssetGenImage('assets/images/app_logo.jpg');
+
+  /// File path: assets/images/appointment_top.png
+  AssetGenImage get appointmentTop =>
+      const AssetGenImage('assets/images/appointment_top.png');
 
   /// File path: assets/images/chat_bg.png
   AssetGenImage get chatBg => const AssetGenImage('assets/images/chat_bg.png');
@@ -52,13 +71,25 @@ class $AssetsImagesGen {
   AssetGenImage get customIcon =>
       const AssetGenImage('assets/images/custom_icon.png');
 
+  /// File path: assets/images/custom_made_blazer.png
+  AssetGenImage get customMadeBlazer =>
+      const AssetGenImage('assets/images/custom_made_blazer.png');
+
+  /// File path: assets/images/custom_made_sherwani.png
+  AssetGenImage get customMadeSherwani =>
+      const AssetGenImage('assets/images/custom_made_sherwani.png');
+
+  /// File path: assets/images/custom_made_top.png
+  AssetGenImage get customMadeTop =>
+      const AssetGenImage('assets/images/custom_made_top.png');
+
+  /// File path: assets/images/custom_made_trouser.png
+  AssetGenImage get customMadeTrouser =>
+      const AssetGenImage('assets/images/custom_made_trouser.png');
+
   /// File path: assets/images/custom_size.png
   AssetGenImage get customSize =>
       const AssetGenImage('assets/images/custom_size.png');
-
-  /// File path: assets/images/front_img.png
-  AssetGenImage get frontImg =>
-      const AssetGenImage('assets/images/front_img.png');
 
   /// File path: assets/images/home_alteration.png
   AssetGenImage get homeAlteration =>
@@ -80,6 +111,10 @@ class $AssetsImagesGen {
   AssetGenImage get homeStitching =>
       const AssetGenImage('assets/images/home_stitching.png');
 
+  /// File path: assets/images/img_back.png
+  AssetGenImage get imgBack =>
+      const AssetGenImage('assets/images/img_back.png');
+
   /// File path: assets/images/login_img.png
   AssetGenImage get loginImg =>
       const AssetGenImage('assets/images/login_img.png');
@@ -91,13 +126,13 @@ class $AssetsImagesGen {
   /// File path: assets/images/logo.png
   AssetGenImage get logo => const AssetGenImage('assets/images/logo.png');
 
+  /// File path: assets/images/measurement_back.png
+  AssetGenImage get measurementBack =>
+      const AssetGenImage('assets/images/measurement_back.png');
+
   /// File path: assets/images/measurement_top.png
   AssetGenImage get measurementTop =>
       const AssetGenImage('assets/images/measurement_top.png');
-
-  /// File path: assets/images/side_img.png
-  AssetGenImage get sideImg =>
-      const AssetGenImage('assets/images/side_img.png');
 
   /// File path: assets/images/splash1.png
   AssetGenImage get splash1 => const AssetGenImage('assets/images/splash1.png');
@@ -116,28 +151,37 @@ class $AssetsImagesGen {
   AssetGenImage get standardSize =>
       const AssetGenImage('assets/images/standard_size.png');
 
+  /// File path: assets/images/truck.png
+  AssetGenImage get truck => const AssetGenImage('assets/images/truck.png');
+
   /// List of all assets
   List<AssetGenImage> get values => [
-        backImg,
+        appLogo,
+        appointmentTop,
         chatBg,
         customIcon,
+        customMadeBlazer,
+        customMadeSherwani,
+        customMadeTop,
+        customMadeTrouser,
         customSize,
-        frontImg,
         homeAlteration,
         homeAppointment,
         homeGuide,
         homeJourney1,
         homeStitching,
+        imgBack,
         loginImg,
         loginSuccess,
         logo,
+        measurementBack,
         measurementTop,
-        sideImg,
         splash1,
         splash2,
         splash3,
         standardIcon,
-        standardSize
+        standardSize,
+        truck
       ];
 }
 

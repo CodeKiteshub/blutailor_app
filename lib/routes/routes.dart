@@ -48,9 +48,11 @@ import 'package:bluetailor_app/features/measurement/presentation/screens/select_
 import 'package:bluetailor_app/features/measurement/presentation/screens/selected_cat.dart';
 import 'package:bluetailor_app/features/measurement/presentation/screens/standard_sizing.dart';
 import 'package:bluetailor_app/features/settings/domain/entities/order_entity.dart';
-import 'package:bluetailor_app/features/settings/presentation/bloc/settings_bloc.dart';
+import 'package:bluetailor_app/features/settings/presentation/bloc/product_order/product_order_cubit.dart';
+import 'package:bluetailor_app/features/settings/presentation/bloc/settings/settings_bloc.dart';
 import 'package:bluetailor_app/features/appointment/presentation/screens/appointment_details.dart';
 import 'package:bluetailor_app/features/appointment/presentation/screens/appointment_history.dart';
+import 'package:bluetailor_app/features/settings/presentation/bloc/store_order/store_order_cubit.dart';
 import 'package:bluetailor_app/features/settings/presentation/screens/edit_profile.dart';
 import 'package:bluetailor_app/features/settings/presentation/screens/order_detail.dart';
 import 'package:bluetailor_app/features/settings/presentation/screens/orders.dart';

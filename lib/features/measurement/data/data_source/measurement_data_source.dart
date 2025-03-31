@@ -179,7 +179,7 @@ query GetStandardSizeChart(\$catIds: [String]) {
 }
 """;
 
-    final variable = {"catId": catId};
+    final variable = {"catIds": catId};
 
     return apiClient.queryData(query: sizeChartSchema, variable: variable);
   }

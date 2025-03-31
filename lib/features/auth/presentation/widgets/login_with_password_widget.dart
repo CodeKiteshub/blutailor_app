@@ -25,7 +25,7 @@ class LoginWithPasswordWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
-        Text("Sign In",
+        Text("Sign In With Password",
             style: TextStyle(
                 color: Colors.white,
                 fontSize: 18.sp,

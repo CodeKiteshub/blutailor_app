@@ -38,11 +38,11 @@ class Routes {
                     BlocProvider.value(
                       value: sl<AddressCubit>(),
                     ),
-                    BlocProvider(
-                      create: (context) => sl<CartCubit>(),
+                    BlocProvider.value(
+                      value: sl<CartCubit>(),
                     ),
-                    BlocProvider(
-                      create: (context) => sl<ProductCartCubit>(),
+                    BlocProvider.value(
+                      value: sl<ProductCartCubit>(),
                     ),
                     BlocProvider(
                       create: (context) => sl<PlaceOrderCubit>(),
@@ -79,8 +79,18 @@ class Routes {
 
       case '/orders':
         return MaterialPageRoute(
-            builder: (_) => BlocProvider(
-                  create: (context) => sl<SettingsBloc>(),
+            builder: (_) => MultiBlocProvider(
+                  providers: [
+                    BlocProvider(
+                      create: (context) => sl<SettingsBloc>(),
+                    ),
+                    BlocProvider(
+                      create: (context) => sl<StoreOrderCubit>(),
+                    ),
+                    BlocProvider(
+                      create: (context) => sl<ProductOrderCubit>(),
+                    ),
+                  ],
                   child: const Orders(),
                 ));
 
@@ -95,7 +105,12 @@ class Routes {
       case '/order-detail':
         return MaterialPageRoute(
             builder: (_) => OrderDetail(
-                  order: settings.arguments as OrderEntity,
+                  orderDate: (settings.arguments as Map)["orderDate"] as String,
+                  orderPrice: (settings.arguments as Map)["orderPrice"] as int,
+                  orderStatus:
+                      (settings.arguments as Map)["orderStatus"] as String,
+                  orderSrNo:
+                      (settings.arguments as Map)["orderSrNo"] as dynamic,
                 ));
 
       case '/select-garment-cat':
@@ -197,15 +212,17 @@ class Routes {
       case '/alteration-option':
         return MaterialPageRoute(
             builder: (_) => AlterationOption(
-                  selectedCat:
-                      settings.arguments as SelectedAlterationCatEntity,
+                  selectedCat: (settings.arguments as Map)["selectedCat"]
+                      as SelectedAlterationCatEntity,
+                      onTap: (settings.arguments as Map)["onTap"] as Function,
                 ));
 
       case '/upload-image':
         return MaterialPageRoute(
             builder: (_) => UploadImage(
-                  selectedCat:
-                      settings.arguments as SelectedAlterationCatEntity,
+                  selectedCat: (settings.arguments as Map)["selectedCat"]
+                      as SelectedAlterationCatEntity,
+                      onTap: (settings.arguments as Map)["onTap"] as Function,
                 ));
 
       case '/alteration-details':
@@ -223,30 +240,46 @@ class Routes {
                     imgFile: (settings.arguments as Map)["imgFile"] as String,
                     videoFile:
                         (settings.arguments as Map)["videoFile"] as String,
-                    selectedCat: (settings.arguments as Map)["selectedCat"]
-                        as SelectedAlterationCatEntity,
+                  selectedCat: (settings.arguments as Map)["selectedCat"]
+                      as SelectedAlterationCatEntity,
+                      onTap: (settings.arguments as Map)["onTap"] as Function,
                   ),
                 ));
 
       case '/alteration-order-summary':
         return MaterialPageRoute(
-            builder: (_) => BlocProvider(
-                  create: (context) => sl<SaveAlterationCubit>(),
+            builder: (_) => MultiBlocProvider(
+                  providers: [
+                    BlocProvider(
+                      create: (context) => sl<SaveAlterationCubit>(),
+                    ),
+                    BlocProvider.value(
+                      value: sl<CartCubit>(),
+                    ),
+                  ],
                   child: AlterationOrderSummary(
                     alterations: (settings.arguments as Map)["alterations"]
                         as List<AlterationEntity>,
                     imgFile: (settings.arguments as Map)["imgFile"] as String,
                     videoFile:
                         (settings.arguments as Map)["videoFile"] as String,
-                    selectedCat: (settings.arguments as Map)["selectedCat"]
-                        as SelectedAlterationCatEntity,
+                  selectedCat: (settings.arguments as Map)["selectedCat"]
+                      as SelectedAlterationCatEntity,
+                      onTap: (settings.arguments as Map)["onTap"] as Function,
                   ),
                 ));
 
       case '/create-appointment':
         return MaterialPageRoute(
-            builder: (_) => BlocProvider(
-                  create: (context) => sl<AppointmentCubit>(),
+            builder: (_) => MultiBlocProvider(
+                  providers: [
+                    BlocProvider(
+                      create: (context) => sl<AppointmentCubit>(),
+                    ),
+                    BlocProvider.value(
+                      value: sl<AddressCubit>(),
+                    ),
+                  ],
                   child: CreateAppointment(isBack: settings.arguments as bool?),
                 ));
 
@@ -279,8 +312,9 @@ class Routes {
             builder: (_) => BlocProvider(
                   create: (context) => sl<CategoryCubit>(),
                   child: UploadData(
-                      selectedCat:
-                          settings.arguments as SelectedStitchingCatEntity),
+                    selectedCat: (settings.arguments as Map)["selectedCat"],
+                    onTap: (settings.arguments as Map)["onTap"] ,
+                      ),
                 ));
 
       case '/stitching-detail':
@@ -293,9 +327,13 @@ class Routes {
                     BlocProvider.value(
                       value: sl<StitchingCubit>(),
                     ),
+                    BlocProvider.value(
+                      value: sl<CartCubit>(),
+                    ),
                   ],
                   child: StitchingDetail(
                     selectedCat: (settings.arguments as Map)["selectedCat"],
+                    onTap: (settings.arguments as Map)["onTap"] ,
                     fabricLength: (settings.arguments as Map)["fabricLength"],
                     fabricWidth: (settings.arguments as Map)["fabricWidth"],
                     name: (settings.arguments as Map)["name"],
@@ -353,6 +391,7 @@ class Routes {
                     BlocProvider.value(
                       value: sl<StylingCubit>(),
                     ),
+                    BlocProvider.value(value: sl<ProductCartCubit>()),
                     BlocProvider(
                       create: (context) => sl<BodyProfileCubit>(),
                     ),

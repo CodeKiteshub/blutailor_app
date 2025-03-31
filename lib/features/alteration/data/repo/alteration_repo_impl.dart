@@ -5,7 +5,9 @@ import 'package:bluetailor_app/features/alteration/data/data_source/alteration_d
 import 'package:bluetailor_app/features/alteration/domain/entities/alteration_entity.dart';
 import 'package:bluetailor_app/features/alteration/domain/entities/alteration_image_video_entity.dart';
 import 'package:bluetailor_app/features/alteration/domain/repo/alteration_repo.dart';
+import 'package:bluetailor_app/service_locator.dart';
 import 'package:fpdart/fpdart.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AlterationRepoImpl implements AlterationRepo {
   final AlterationDataSource alterationDataSource;
@@ -73,9 +75,12 @@ class AlterationRepoImpl implements AlterationRepo {
   Future<Either<Failure, List<ProductConfigEntity>>> fetchUserMeasurement(
       {required String catId}) async {
     try {
+      if (sl<SharedPreferences>().getString("userId") == null) {
+        return left(Failure("User not logged in"));
+      }
+
       final result =
           await alterationDataSource.fetchUserMeasurement(catId: catId);
-
       if (result.hasException) {
         return left(Failure(result.exception!.graphqlErrors.first.message));
       } else {
@@ -95,6 +100,24 @@ class AlterationRepoImpl implements AlterationRepo {
       required String alterationId,
       required List<AlterationEntity> alterations}) async {
     try {
+      // if (sl<SharedPreferences>().getString("userId") == null) {
+      //   final cartService = GuestCartService();
+
+      //   // Adding an item to cart
+      //   final newItem = CartItemEntity(
+      //       id: "1",
+      //       catId: catId,
+      //       name: catName,
+      //       totalAmount: 100,
+      //       alterations: [
+      //         ...alterations.map((e) => CartItemChangeEntity(
+      //             name: e.name, label: e.label, price: e.price))
+      //       ],
+      //       stitching: null);
+
+      //   await cartService.addItemToCart(newItem);
+      //   return right("Item added to cart successfully.");
+      // }
       final result = await alterationDataSource.addAlterationItemToCart(
           catId: catId,
           catName: catName,

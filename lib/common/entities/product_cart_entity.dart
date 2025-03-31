@@ -1,5 +1,9 @@
 import 'dart:convert';
 
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../service_locator.dart';
+
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 
 class ProductCartEntity {
@@ -26,6 +30,17 @@ class ProductCartEntity {
       ),
     );
   }
+
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'gTotal': gTotal,
+      'discTotal': discTotal,
+      "userId": sl<SharedPreferences>().getString("userId"),
+      'items': items.map((x) => x.toMap()).toList(),
+    };
+  }
+
+  String toJson() => json.encode(toMap());
 }
 
 class ProductCartItemEntity {
@@ -35,6 +50,10 @@ class ProductCartItemEntity {
   dynamic discPrice;
   String name;
   String itemId;
+  String catId;
+  int deliveryDays;
+  bool isPer;
+  String producttypeId;
   List<String> images;
   ProductCartItemEntity({
     required this.price,
@@ -43,6 +62,10 @@ class ProductCartItemEntity {
     required this.discPrice,
     required this.name,
     required this.itemId,
+    required this.catId,
+    required this.deliveryDays,
+    required this.isPer,
+    required this.producttypeId,
     required this.images,
   });
 
@@ -54,11 +77,29 @@ class ProductCartItemEntity {
       discPrice: map['discPrice'] as dynamic,
       name: map['name'] as String,
       itemId: map['itemId'] as String,
+      catId: map['catId'] as String,
+      deliveryDays: map['deliveryDays'] as int,
+      isPer: map['isPer'],
+      producttypeId: map['producttypeId'] as String,
       images: (map['images'] as List).map<String>((x) => x as String).toList(),
     );
   }
 
-  factory ProductCartItemEntity.fromJson(String source) =>
-      ProductCartItemEntity.fromMap(
-          json.decode(source) as Map<String, dynamic>);
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'price': price,
+      'qty': qty,
+      'disc': disc,
+      'discPrice': discPrice,
+      'name': name,
+      'itemId': itemId,
+      'images': images,
+      "catId": catId,
+      "deliveryDays": deliveryDays,
+      "isPer": isPer,
+      "producttypeId": producttypeId,
+    };
+  }
+
+  String toJson() => json.encode(toMap());
 }

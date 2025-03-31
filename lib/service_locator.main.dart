@@ -52,7 +52,7 @@ void _initAuth() {
   sl.registerFactory<GetCurrentUserUsecase>(
       () => GetCurrentUserUsecase(authRepo: sl()));
   // Repository
-  sl.registerFactory<AuthRepo>(() => AuthRepoImpl(authDataSource: sl()));
+  sl.registerFactory<AuthRepo>(() => AuthRepoImpl(authDataSource: sl(), prefs: sl()));
   // Remote Data Source
   sl.registerFactory<AuthDataSource>(
       () => AuthDataSourceImpl(apiClient: sl(), prefs: sl()));
@@ -63,9 +63,13 @@ _initSettings() {
   sl.registerFactory<SettingsBloc>(() => SettingsBloc(
         editProfileUsecase: sl(),
         fetchProfilePictureSignedUrl: sl(),
-        fetchStoreOrderUsecase: sl(),
-        fetchProductOrderUsecase: sl(),
         fetchOrdersUsecase: sl(),
+      ));
+  sl.registerFactory<ProductOrderCubit>(() => ProductOrderCubit(
+        fetchProductOrderUsecase: sl(),
+      ));
+  sl.registerFactory<StoreOrderCubit>(() => StoreOrderCubit(
+        fetchStoreOrderUsecase: sl(),
       ));
   // Usecase
   sl.registerFactory<EditProfileUsecase>(
@@ -247,15 +251,18 @@ _initStitching() {
 
 _initCart() {
   // Bloc
-  sl.registerFactory<CartCubit>(
+  sl.registerLazySingleton<CartCubit>(
       () => CartCubit(fetchCartUsecase: sl(), removeCartItemUsecase: sl()));
-  sl.registerFactory<ProductCartCubit>(
-      () => ProductCartCubit(fetchProductCart: sl()));
+  sl.registerLazySingleton<ProductCartCubit>(() => ProductCartCubit(
+      fetchProductCart: sl(), validateProductCouponUsecase: sl(),
+      removeItemFromProductCart: sl()));
   sl.registerFactory<PlaceOrderCubit>(() => PlaceOrderCubit(
-      createAlterationOrderUsecase: sl(),
-      processAlterationOrderUsecase: sl(),
-      createStitchingOrderUsecase: sl(),
-      processStitchingOrderUsecase: sl()));
+        createAlterationOrderUsecase: sl(),
+        processAlterationOrderUsecase: sl(),
+        createStitchingOrderUsecase: sl(),
+        processStitchingOrderUsecase: sl(),
+        createProductOrderUsecase: sl(),
+      ));
 
   // Usecase
   sl.registerFactory<FetchCartUsecase>(() => FetchCartUsecase(cartRepo: sl()));
@@ -271,6 +278,12 @@ _initCart() {
       () => ProcessStitchingOrderUsecase(cartRepo: sl()));
   sl.registerFactory<FetchProductCartUsecase>(
       () => FetchProductCartUsecase(cartRepo: sl()));
+  sl.registerFactory<CreateProductOrderUsecase>(
+      () => CreateProductOrderUsecase(cartRepo: sl()));
+  sl.registerFactory<ValidateProductCouponUsecase>(
+      () => ValidateProductCouponUsecase(cartRepo: sl()));
+  sl.registerFactory<RemoveItemFromProductCart>(
+      () => RemoveItemFromProductCart(cartRepo: sl()));
 
   // Repo
   sl.registerFactory<CartRepo>(() => CartRepoImpl(cartDataSource: sl()));

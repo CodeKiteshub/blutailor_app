@@ -1,7 +1,7 @@
 import 'package:bluetailor_app/common/entities/user.dart';
 import 'package:bluetailor_app/core/errors/failure.dart';
 import 'package:bluetailor_app/features/address/data/data_source/address_data_source.dart';
-import 'package:bluetailor_app/features/address/data/model/address_model.dart';
+import 'package:bluetailor_app/common/models/address_model.dart';
 import 'package:bluetailor_app/features/address/domain/entities/address_entity.dart';
 import 'package:bluetailor_app/features/address/domain/repo/address_repo.dart';
 import 'package:fpdart/fpdart.dart';

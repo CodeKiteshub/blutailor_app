@@ -55,3 +55,5 @@ class GoogleLoginEvent extends AuthEvent {}
 class AuthIsLoggedIn extends AuthEvent {}
 
 class LogoutEvent extends AuthEvent {}
+
+class LoggedInAsGuest extends AuthEvent {}

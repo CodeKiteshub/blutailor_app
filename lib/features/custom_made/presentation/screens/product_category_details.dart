@@ -62,8 +62,8 @@ class _ProductCategoryDetailsState extends State<ProductCategoryDetails> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: const PrimaryAppBar(title: "Custom Made"),
-      body: SingleChildScrollView(
-        controller: scrollController,
+      body: Padding(
+        //  controller: scrollController,
         padding: EdgeInsets.only(left: 5.w, right: 5.w),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -92,44 +92,47 @@ class _ProductCategoryDetailsState extends State<ProductCategoryDetails> {
                   enabled: false,
                 )),
             SizedBox(height: 2.h),
-            BlocBuilder<ProductCubit, ProductState>(
-              builder: (context, state) {
-                if (state is ProductLoaded) {
-                  return MasonryGridView.count(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      mainAxisSpacing: 2.h,
-                      crossAxisSpacing: 2.h,
-                      crossAxisCount: 2,
-                      itemCount: state.products.length,
-                      itemBuilder: (context, index) => ProductBox(
-                            product: state.products[index],
-                          ));
-                } else {
-                  return Shimmer.fromColors(
-                    baseColor: Colors.grey.shade300,
-                    highlightColor: Colors.grey.shade100,
-                    child: MasonryGridView.count(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
+            Expanded(
+              child: BlocBuilder<ProductCubit, ProductState>(
+                builder: (context, state) {
+                  if (state is ProductLoaded) {
+                    return MasonryGridView.count(
+                      controller: scrollController,
+                        //   shrinkWrap: true,
+                      //  physics: const NeverScrollableScrollPhysics(),
                         mainAxisSpacing: 2.h,
                         crossAxisSpacing: 2.h,
                         crossAxisCount: 2,
-                        itemCount: 4,
-                        itemBuilder: (context, index) => const ProductBox()),
-                  );
-                }
-              },
+                        itemCount: state.products.length,
+                        itemBuilder: (context, index) => ProductBox(
+                              product: state.products[index],
+                            ));
+                  } else {
+                    return Shimmer.fromColors(
+                      baseColor: Colors.grey.shade300,
+                      highlightColor: Colors.grey.shade100,
+                      child: MasonryGridView.count(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          mainAxisSpacing: 2.h,
+                          crossAxisSpacing: 2.h,
+                          crossAxisCount: 2,
+                          itemCount: 4,
+                          itemBuilder: (context, index) => const ProductBox()),
+                    );
+                  }
+                },
+              ),
             ),
-            SizedBox(
-              height: 1.h,
-            ),
-            isLoading == true
-                ? const Center(child: CircularProgressIndicator())
-                : const SizedBox.shrink(),
-            SizedBox(
-              height: 2.h,
-            )
+            // SizedBox(
+            //   height: 1.h,
+            // ),
+            // isLoading == true
+            //     ? const Center(child: CircularProgressIndicator())
+            //     : const SizedBox.shrink(),
+            // SizedBox(
+            //   height: 2.h,
+            // )
           ],
         ),
       ),

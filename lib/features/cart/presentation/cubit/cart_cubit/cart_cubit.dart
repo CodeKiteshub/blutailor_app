@@ -15,11 +15,15 @@ class CartCubit extends Cubit<CartState> {
       : _fetchCartUsecase = fetchCartUsecase,
         _removeCartItemUsecase = removeCartItemUsecase,
         super(CartInitial());
+  CartEntity? cart;
 
   fetchCart() async {
     emit(CartLoading());
     final result = await _fetchCartUsecase();
-    result.fold((l) => emit(CartError()), (r) => emit(CartLoaded(cart: r)));
+    result.fold((l) => emit(CartError()), (r) {
+      cart = r;
+      emit(CartLoaded(cart: r));
+    });
   }
 
   removeItem({required String itemId}) async {

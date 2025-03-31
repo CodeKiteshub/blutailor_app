@@ -2,11 +2,9 @@ import 'package:bluetailor_app/common/cubit/category_cubit/category_cubit.dart';
 import 'package:bluetailor_app/common/widgets/gradient_text.dart';
 import 'package:bluetailor_app/common/widgets/primary_app_bar.dart';
 import 'package:bluetailor_app/common/widgets/primary_gradient_button.dart';
-import 'package:bluetailor_app/core/theme/app_colors.dart';
 import 'package:bluetailor_app/core/theme/app_strings.dart';
 import 'package:bluetailor_app/features/custom_made/presentation/cubit/product_cubit.dart';
 import 'package:bluetailor_app/features/custom_made/presentation/widgets/product_box.dart';
-import 'package:bluetailor_app/gen/assets.gen.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -93,77 +91,9 @@ class _CustomMadeHomeState extends State<CustomMadeHome> {
             SizedBox(
               height: 1.h,
             ),
-            Stack(
-              children: [
-                Image.asset(
-                  customMadeTop,
-                  width: 100.w,
-                ),
-                Positioned(
-                  top: 3.h,
-                  left: 7.w,
-                  right: 7.w,
-                  child: Container(
-                    decoration: const BoxDecoration(boxShadow: [
-                      BoxShadow(
-                        color: Colors.transparent,
-                        spreadRadius: 0,
-                        blurRadius: 9.9,
-                        offset: Offset(0, 4),
-                      )
-                    ]),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('End of Year Sale',
-                            style: TextStyle(
-                                fontWeight: FontWeight.w600,
-                                fontSize: 17.sp,
-                                color: Colors.white)),
-                        SizedBox(
-                          height: 1.h,
-                        ),
-                        Text(
-                            "Get upto 20% off select garments with our end of year sale.",
-                            style: TextStyle(
-                                fontWeight: FontWeight.w500,
-                                fontSize: 16.sp,
-                                color: Colors.white)),
-                      ],
-                    ),
-                  ),
-                ),
-                Positioned(
-                    bottom: 5.h,
-                    left: 7.w,
-                    child: Assets.images.logo.image(width: 35.w)),
-                Positioned(
-                  bottom: 5.h,
-                  right: 7.w,
-                  child: Container(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 4.w, vertical: 1.h),
-                    decoration: BoxDecoration(
-                        color: primaryBlue,
-                        borderRadius: BorderRadius.circular(5),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.25),
-                            spreadRadius: 0,
-                            blurRadius: 4,
-                            offset: const Offset(0, 4),
-                          )
-                        ]),
-                    child: Text(
-                      "Shop Now",
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 15.sp,
-                          fontWeight: FontWeight.w400),
-                    ),
-                  ),
-                )
-              ],
+            Image.asset(
+              customMadeTop,
+              width: 100.w,
             ),
             SizedBox(
               height: 3.h,
@@ -209,25 +139,25 @@ class _CustomMadeHomeState extends State<CustomMadeHome> {
             SizedBox(
               height: 3.h,
             ),
-            Padding(
-              padding: EdgeInsets.only(left: 5.w, right: 5.w),
-              child: const GradientText(text: "Recently Browsed"),
-            ),
-            SizedBox(
-              height: 2.h,
-            ),
-            MasonryGridView.count(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                padding: EdgeInsets.only(left: 5.w, right: 5.w),
-                mainAxisSpacing: 2.h,
-                crossAxisSpacing: 2.h,
-                crossAxisCount: 2,
-                itemCount: 2,
-                itemBuilder: (context, index) => const ProductBox()),
-            SizedBox(
-              height: 3.h,
-            ),
+            // Padding(
+            //   padding: EdgeInsets.only(left: 5.w, right: 5.w),
+            //   child: const GradientText(text: "Recently Browsed"),
+            // ),
+            // SizedBox(
+            //   height: 2.h,
+            // ),
+            // MasonryGridView.count(
+            //     shrinkWrap: true,
+            //     physics: const NeverScrollableScrollPhysics(),
+            //     padding: EdgeInsets.only(left: 5.w, right: 5.w),
+            //     mainAxisSpacing: 2.h,
+            //     crossAxisSpacing: 2.h,
+            //     crossAxisCount: 2,
+            //     itemCount: 2,
+            //     itemBuilder: (context, index) => const ProductBox()),
+            // SizedBox(
+            //   height: 3.h,
+            // ),
             Padding(
               padding: EdgeInsets.only(left: 5.w, right: 5.w),
               child:

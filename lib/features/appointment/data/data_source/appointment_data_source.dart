@@ -14,7 +14,8 @@ abstract interface class AppointmentDataSource {
       required String appointmentType,
       required DateEntity appointmentDate,
       required String appointmentSelectedTime,
-      required String lookingFor});
+      required String lookingFor,
+      Map<String, dynamic>? address});
   Future<QueryResult> fetchAppointments();
 }
 
@@ -33,7 +34,8 @@ class AppointmentDataSourceImpl implements AppointmentDataSource {
       required String appointmentSelectedTime,
       required String appointmentType,
       required DateEntity appointmentDate,
-      required String lookingFor}) async {
+      required String lookingFor,
+      Map<String, dynamic>? address}) async {
     String saveAppointmentSchema = r"""
 mutation SaveAppointment($body: AppointmentInput!) {
   saveAppointment(body: $body) {
@@ -54,7 +56,8 @@ mutation SaveAppointment($body: AppointmentInput!) {
         "appointmentType": appointmentType,
         "appointmentDate": appointmentDate.toJson(),
         "appointmentSelectedTimestamp": appointmentSelectedTime,
-        "lookingFor": lookingFor
+        "lookingFor": lookingFor,
+        "address": address
       }
     };
 
@@ -79,6 +82,7 @@ query GetAllAppointments($params: AppointmentFilterInput!) {
       }
       appointmentId
       _id
+      address
       appointmentSelectedTimestamp
       appointmentType
       lookingFor

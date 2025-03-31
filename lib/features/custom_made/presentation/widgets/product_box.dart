@@ -37,20 +37,11 @@ class ProductBox extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisSize: MainAxisSize.min,
           children: [
-            Container(
-              height: 20.h,
-              width: 40.w,
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: CachedNetworkImageProvider(
-                      product?.images.firstOrNull ?? emtyImage),
-                  fit: BoxFit.cover,
-                ),
+            ClipRRect(
                 borderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(10),
                     topRight: Radius.circular(10)),
-              ),
-            ),
+                    child: CachedNetworkImage(imageUrl: product?.images.firstOrNull ?? emtyImage,)),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Column(
@@ -66,7 +57,7 @@ class ProductBox extends StatelessWidget {
                         color: surfaceBlack),
                   ),
                   Text(
-                    product?.price.toString() ?? "",
+                   "₹${product?.price ?? ""}",
                     style: TextStyle(
                         fontWeight: FontWeight.w600,
                         fontSize: 15.sp,

@@ -1,38 +1,36 @@
 import 'dart:developer';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:bluetailor_app/core/api/api_client.dart';
-import 'package:bluetailor_app/core/errors/exceptions.dart';
 import 'package:bluetailor_app/features/auth/data/models/user_model.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:graphql_flutter/graphql_flutter.dart' as gq;
 import 'package:shared_preferences/shared_preferences.dart';
 
 abstract interface class AuthDataSource {
-  Future<String> loginWithOtp({required String phoneNumber});
-  Future<UserModel> verifyOtp(
+  Future<String?> loginWithOtp({required String phoneNumber});
+  Future<gq.QueryResult> verifyOtp(
       {required String otp, required String phoneNumber});
-  Future<UserModel> loginWithPassword(
+  Future<gq.QueryResult> loginWithPassword(
       {required String phoneNumber, required String password});
-  Future<String> register(
+  Future<String?> register(
       {required String email,
       required String firstName,
       required String lastName,
       required String password,
       required String phoneNumber,
       required String countryCode});
-  Future<String> resetPassword(
+  Future<String?> resetPassword(
       {required String phoneNumber,
       required String otp,
       required String password});
-  Future<UserModel> loginWithGoogle();
-  Future<UserModel> getUser();
+  Future<UserModel?> loginWithGoogle();
+  Future<UserModel?> getUser();
   void logout();
 }
 
 class AuthDataSourceImpl implements AuthDataSource {
   final ApiClient apiClient;
   final SharedPreferences prefs;
-
   AuthDataSourceImpl({required this.apiClient, required this.prefs});
 
   static const String userSchema = '''
@@ -65,22 +63,19 @@ class AuthDataSourceImpl implements AuthDataSource {
           await apiClient.queryData(query: query, variable: variables);
 
       if (result.hasException) {
-        throw ServerException(
-            result.exception?.graphqlErrors.first.message.toString() ??
-                "Invalid phone number or password");
+        return result.exception.toString();
       }
       log(result.data.toString(), name: "loginWithOtp");
 
       return "Success";
     } catch (e) {
-      throw ServerException(e.toString());
+      return e.toString();
     }
   }
 
   @override
-  Future<UserModel> verifyOtp(
+  Future<gq.QueryResult> verifyOtp(
       {required String otp, required String phoneNumber}) async {
-    try {
       const String query = r'''
 query ValidateLoginOtp($source: String!, $otp: String!) {
   validateLoginOtp(source: $source, otp: $otp) {
@@ -99,30 +94,13 @@ query ValidateLoginOtp($source: String!, $otp: String!) {
         "otp": otp
       };
 
-      final result =
+      return
           await apiClient.queryData(query: query, variable: variables);
-
-      if (result.hasException) {
-        throw ServerException(result.exception.toString());
-      }
-      if (result.data == null) {
-        throw const ServerException("Invalid phone number or password");
-      }
-
-      log(result.data!["validateLoginOtp"]["token"], name: "token");
-      prefs.setString("token", result.data!['validateLoginOtp']['token']);
-      prefs.setString(
-          "userId", result.data!['validateLoginOtp']['user']['_id']);
-      return UserModel.fromJson(result.data!['validateLoginOtp']['user']);
-    } catch (e) {
-      throw ServerException(e.toString());
-    }
   }
 
   @override
-  Future<UserModel> loginWithPassword(
+  Future<gq.QueryResult> loginWithPassword(
       {required String phoneNumber, required String password}) async {
-    try {
       const String query = r'''
 query Login($source: String!, $password: String!) {
   login(source: $source, password: $password) {
@@ -141,27 +119,13 @@ query Login($source: String!, $password: String!) {
         "password": password
       };
 
-      final result =
+      return
           await apiClient.queryData(query: query, variable: variables);
 
-      if (result.hasException) {
-        throw ServerException(result.exception.toString());
-      }
-      if (result.data == null) {
-        throw const ServerException("Invalid phone number or password");
-      }
-      //  log(result.data.toString(), name: "loginWithPassword");
-      log(result.data!["login"]["token"], name: "token");
-      prefs.setString("token", result.data!['login']['token']);
-      prefs.setString("userId", result.data!['login']['user']['_id']);
-      return UserModel.fromJson(result.data!['login']['user']);
-    } catch (e) {
-      throw ServerException(e.toString());
-    }
   }
 
   @override
-  Future<String> register(
+  Future<String?> register(
       {required String email,
       required String firstName,
       required String lastName,
@@ -191,20 +155,20 @@ mutation RegisterUser($email: String!, $phone: String!, $countryCode: String!, $
           await apiClient.mutateData(query: query, variable: variables);
 
       if (result.hasException) {
-        throw ServerException(result.exception.toString());
+        return null;
       }
       if (result.data == null) {
-        throw const ServerException("Invalid phone number or password");
+        return null;
       }
 
       return result.data!['registerUser']['_id'];
     } catch (e) {
-      throw ServerException(e.toString());
+      return null;
     }
   }
 
   @override
-  Future<String> resetPassword(
+  Future<String?> resetPassword(
       {required String phoneNumber,
       required String otp,
       required String password}) async {
@@ -225,17 +189,17 @@ query Query($source: String!, $otp: String!, $newPassword: String!) {
           await apiClient.queryData(query: query, variable: variables);
 
       if (result.hasException) {
-        throw ServerException(result.exception.toString());
+        return null;
       }
 
       return "Success";
     } catch (e) {
-      throw ServerException(e.toString());
+      return null;
     }
   }
 
   @override
-  Future<UserModel> getUser() async {
+  Future<UserModel?> getUser() async {
     try {
       final userId = prefs.getString("userId") ?? "";
       const String query = r'''
@@ -254,15 +218,15 @@ query User($userId: ID!) {
           await apiClient.queryData(query: query, variable: variables);
 
       if (result.hasException) {
-        throw ServerException(result.exception.toString());
+        return null;
       }
       if (result.data == null) {
-        throw const ServerException("User not found");
+        return null;
       }
       log(result.data.toString(), name: "user");
       return UserModel.fromJson(result.data!['user']);
     } catch (e) {
-      throw ServerException(e.toString());
+      return null;
     }
   }
 
@@ -273,7 +237,7 @@ query User($userId: ID!) {
   }
 
   @override
-  Future<UserModel> loginWithGoogle() async {
+  Future<UserModel?> loginWithGoogle() async {
     try {
       gq.QueryResult? result;
       final auth.UserCredential authResult = await _googleAuthentication();
@@ -286,7 +250,7 @@ query User($userId: ID!) {
               await _googleSignup(gUser, authResult.credential!.accessToken!);
 
           if (result.hasException) {
-            throw ServerException(result.exception.toString());
+            return null;
           }
 
           log(result.data.toString(), name: "signUpWithGoogle");
@@ -295,7 +259,7 @@ query User($userId: ID!) {
           result = await _googleLogin(gUser.uid);
 
           if (result.hasException) {
-            throw ServerException(result.exception.toString());
+            return null;
           }
 
           log(result.data.toString(), name: "loginWithGoogle");
@@ -304,9 +268,9 @@ query User($userId: ID!) {
         }
       }
 
-      throw const ServerException("Firebase user not found");
+      return null;
     } catch (e) {
-      throw ServerException(e.toString());
+      return null;
     }
   }
 

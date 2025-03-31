@@ -57,7 +57,7 @@ class PriceBoxWidget extends StatelessWidget {
                     color: black2),
               ),
               Text(
-                "Rs.$discTotal/-",
+                "Rs.${discTotal.round()}/-",
                 style: TextStyle(
                     fontWeight: FontWeight.w400,
                     fontSize: 15.sp,
@@ -127,7 +127,7 @@ class PriceBoxWidget extends StatelessWidget {
                     color: black2),
               ),
               Text(
-                "Rs.$gTotal/-",
+                "Rs.${gTotal.round()}/-",
                 style: TextStyle(
                     fontWeight: FontWeight.w600,
                     fontSize: 16.sp,

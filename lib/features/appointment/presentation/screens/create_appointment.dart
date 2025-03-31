@@ -1,16 +1,21 @@
 import 'package:bluetailor_app/common/cubit/user_cubit/app_user_cubit.dart';
+import 'package:bluetailor_app/common/models/address_model.dart';
+import 'package:bluetailor_app/common/widgets/address_box_widget.dart';
 import 'package:bluetailor_app/common/widgets/dialog_and_snackbar.dart.dart';
 import 'package:bluetailor_app/common/widgets/primary_gradient_button.dart';
 import 'package:bluetailor_app/common/widgets/primary_text_field.dart';
 import 'package:bluetailor_app/common/widgets/tab_tile.dart';
 import 'package:bluetailor_app/core/theme/app_colors.dart';
 import 'package:bluetailor_app/core/theme/app_strings.dart';
+import 'package:bluetailor_app/features/address/presentation/cubit/address_cubit.dart';
 import 'package:bluetailor_app/features/appointment/presentation/cubit/appointment_cubit.dart';
+import 'package:bluetailor_app/service_locator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:omni_datetime_picker/omni_datetime_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
 
 class CreateAppointment extends StatefulWidget {
@@ -27,6 +32,12 @@ class _CreateAppointmentState extends State<CreateAppointment> {
   String dateString = "Tap on Icon to select date and time";
 
   DateTime? selectedDate;
+
+  @override
+  void initState() {
+    context.read<AddressCubit>().fetchAddress();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,17 +58,23 @@ class _CreateAppointmentState extends State<CreateAppointment> {
                   left: 0,
                   right: 0,
                   child: Row(
-                    mainAxisAlignment: widget.isBack == true ? MainAxisAlignment.start :
-                    MainAxisAlignment.center,
+                    mainAxisAlignment: widget.isBack == true
+                        ? MainAxisAlignment.start
+                        : MainAxisAlignment.center,
                     children: [
-                      if(widget.isBack == true) ...[
-                      SizedBox(width: 5.w,),
-                      InkWell(
-                        onTap: () {
-                          Navigator.pop(context);
-                        },
-                        child: SvgPicture.asset(backIcon)),
-                      SizedBox(width: 5.w,),],
+                      if (widget.isBack == true) ...[
+                        SizedBox(
+                          width: 5.w,
+                        ),
+                        InkWell(
+                            onTap: () {
+                              Navigator.pop(context);
+                            },
+                            child: SvgPicture.asset(backIcon)),
+                        SizedBox(
+                          width: 5.w,
+                        ),
+                      ],
                       Text(
                         "Book an Appointment",
                         textAlign: TextAlign.center,
@@ -211,6 +228,25 @@ class _CreateAppointmentState extends State<CreateAppointment> {
                       ),
                     ),
                   ),
+                  if (selectedCat == "Door Visit") ...[
+                    SizedBox(
+                      height: 4.h,
+                    ),
+                    BlocBuilder<AddressCubit, AddressState>(
+                      builder: (context, state) {
+                        if (state.addressStatus == AddressStatus.loaded &&
+                            state.addresses!.isNotEmpty) {
+                          return AddressBoxWidget(
+                            address: state.addresses!.elementAt(
+                                context.read<AddressCubit>().selectedAddress),
+                            changeAddress: true,
+                          );
+                        } else {
+                          return const EmptyAddressBox();
+                        }
+                      },
+                    ),
+                  ],
                   SizedBox(
                     height: 4.h,
                   ),
@@ -259,18 +295,43 @@ class _CreateAppointmentState extends State<CreateAppointment> {
                     child: PrimaryGradientButton(
                       title: "Submit",
                       onPressed: () {
-                        if (selectedDate != null) {
-                          final user = (context.read<AppUserCubit>().state
-                                  as AppUserLoggedIn)
-                              .user;
-                          context.read<AppointmentCubit>().saveAppointment(
-                              user: user,
-                              lookingFor: purposeController.text,
-                              type: selectedCat,
-                              selectedDate: selectedDate!);
+                        if (sl<SharedPreferences>().getString("userId") ==
+                            null) {
+                          DefaultDialog(context,
+                              title: "Alert!",
+                              message:
+                                  "To use this feature, you will need to login as it is tied to your user specific profile",
+                              cancelText: "Cancel",
+                              confirmText: "Login/Signup", onCancel: () {
+                            Navigator.pop(context);
+                          }, onConfirm: () {
+                            Navigator.pushNamedAndRemoveUntil(
+                                context, "/auth-selection", (route) => false);
+                          });
                         } else {
-                          PrimarySnackBar(
-                              context, "Please Select Date", Colors.red);
+                          if (selectedDate != null) {
+                            final user = (context.read<AppUserCubit>().state
+                                    as AppUserLoggedIn)
+                                .user;
+
+                            final address = (context.read<AddressCubit>().state)
+                                .addresses!
+                                .elementAt(context
+                                    .read<AddressCubit>()
+                                    .selectedAddress);
+                            context.read<AppointmentCubit>().saveAppointment(
+                                user: user,
+                                lookingFor: purposeController.text,
+                                type: selectedCat,
+                                selectedDate: selectedDate!,
+                                address: selectedCat == "Door Visit"
+                                    ? (address as AddressModel)
+                                        .toMap(userId: user.id)
+                                    : null);
+                          } else {
+                            PrimarySnackBar(
+                                context, "Please Select Date", Colors.red);
+                          }
                         }
                       },
                     ),

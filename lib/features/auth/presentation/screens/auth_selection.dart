@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:bluetailor_app/common/widgets/dialog_and_snackbar.dart.dart';
+import 'package:bluetailor_app/common/widgets/primary_icon_button.dart';
 import 'package:bluetailor_app/core/theme/app_colors.dart';
 import 'package:bluetailor_app/core/theme/app_strings.dart';
 import 'package:bluetailor_app/features/auth/presentation/bloc/auth_bloc.dart';
@@ -37,7 +38,6 @@ class _AuthSelectionState extends State<AuthSelection> {
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _pinController = TextEditingController();
   String _countryCode = '+91';
-  
 
   @override
   void dispose() {
@@ -75,7 +75,7 @@ class _AuthSelectionState extends State<AuthSelection> {
                   ),
                   SizedBox(height: 8.h),
                   BlocListener<AuthBloc, AuthState>(
-                    bloc: context.read<AuthBloc>(),
+                      bloc: context.read<AuthBloc>(),
                       listener: (context, state) {
                         if (state is AuthLoading) {
                           LoadingDialog(context);
@@ -329,20 +329,17 @@ class _AuthSelectionState extends State<AuthSelection> {
                                                         }
                                                       },
                                                     )))),
-                  // if (_pageWidget == "auth") ...[
-                  //   SizedBox(height: 3.h),
-                  //   Padding(
-                  //     padding: EdgeInsets.symmetric(
-                  //       horizontal: 5.w,
-                  //     ),
-                  //     child: PrimaryIconButton(
-                  //         title: "Continue as Guest",
-                  //         icon: guest,
-                  //         onPressed: () {
-                  //           // Navigator.pushNamed(context, '/sign-in');
-                  //         }),
-                  //   ),
-                  // ]
+                  if (_pageWidget == "auth") ...[
+                    SizedBox(height: 3.h),
+                    PrimaryIconButton(
+                        title: "Continue as Guest",
+                        icon: guest,
+                        onPressed: () {
+                          context
+                              .read<AuthBloc>()
+                              .add(LoggedInAsGuest());
+                        }),
+                  ]
                 ],
               ),
             )

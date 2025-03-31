@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:bluetailor_app/common/entities/product_cart_entity.dart';
+import 'package:bluetailor_app/common/models/address_model.dart';
 import 'package:bluetailor_app/core/errors/failure.dart';
 import 'package:bluetailor_app/features/cart/data/data_source/cart_data_source.dart';
 import 'package:bluetailor_app/features/cart/data/model/cart_model.dart';
@@ -127,6 +128,55 @@ class CartRepoImpl implements CartRepo {
       }
 
       return right(ProductCartEntity.fromMap(result.data!["getUserCart"]));
+    } catch (e) {
+      return left(Failure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, String>> createProductOrder(
+      {required String razorpayId,
+      required AddressModel address,
+      required ProductCartEntity cart}) async {
+    try {
+      final result = await cartDataSource.createProductOrder(
+          razorpayId: razorpayId, address: address, cart: cart);
+
+      if (result.hasException) {
+        return left(Failure(result.exception.toString()));
+      }
+
+      return right(result.data!["createProductOrder"]["_id"]);
+    } catch (e) {
+      return left(Failure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, ProductCartEntity>> validateProductCartCoupon(
+      {required String code}) async {
+    try {
+      final result = await cartDataSource.validateProductCartCoupon(code: code);
+      if (result.hasException) {
+        return left(Failure(result.exception.toString()));
+      }
+      return right(ProductCartEntity.fromMap(result.data!["validateCoupons"]));
+    } catch (e) {
+      return left(Failure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, ProductCartEntity>> removeProductItemFromCart(
+      {required String itemId}) async {
+    try {
+      final result =
+          await cartDataSource.removeProductItemFromCart(itemId: itemId);
+      if (result.hasException) {
+        return left(Failure(result.exception.toString()));
+      }
+      return right(
+          ProductCartEntity.fromMap(result.data!["removeItemFromCart"]));
     } catch (e) {
       return left(Failure(e.toString()));
     }

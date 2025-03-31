@@ -1,12 +1,12 @@
 // ignore_for_file: deprecated_member_use
 
-import 'dart:developer';
-import 'dart:io';
-
 import 'package:bluetailor_app/core/theme/app_colors.dart';
 import 'package:bluetailor_app/core/theme/app_strings.dart';
+import 'package:bluetailor_app/features/address/presentation/cubit/address_cubit.dart';
 import 'package:bluetailor_app/features/appointment/presentation/cubit/appointment_cubit.dart';
 import 'package:bluetailor_app/features/appointment/presentation/screens/create_appointment.dart';
+import 'package:bluetailor_app/features/cart/presentation/cubit/cart_cubit/cart_cubit.dart';
+import 'package:bluetailor_app/features/cart/presentation/cubit/product_cart_cubit/product_cart_cubit.dart';
 import 'package:bluetailor_app/features/home/presentation/screens/home.dart';
 import 'package:bluetailor_app/service_locator.dart';
 import 'package:flutter/material.dart';
@@ -25,9 +25,26 @@ class BottomNavigationBarWidget extends StatefulWidget {
 class _BottomNavigationBarWidgetState extends State<BottomNavigationBarWidget> {
   int currentIndex = 0;
   final List<Widget> screens = [
-    const Home(),
-    BlocProvider(
-      create: (context) => sl<AppointmentCubit>(),
+    MultiBlocProvider(
+      providers: [
+        BlocProvider.value(
+          value: sl<CartCubit>(),
+        ),
+        BlocProvider.value(
+          value: sl<ProductCartCubit>(),
+        ),
+      ],
+      child: const Home(),
+    ),
+    MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => sl<AppointmentCubit>(),
+        ),
+        BlocProvider(
+          create: (context) => sl<AddressCubit>(),
+        ),
+      ],
       child: const CreateAppointment(),
     ),
     //  const Home(),

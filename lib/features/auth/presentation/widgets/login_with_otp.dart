@@ -1,6 +1,5 @@
 import 'package:bluetailor_app/common/widgets/phone_text_field.dart';
 import 'package:bluetailor_app/common/widgets/primary_gradient_button.dart';
-import 'package:bluetailor_app/common/widgets/primary_icon_button.dart';
 import 'package:bluetailor_app/core/theme/app_colors.dart';
 import 'package:bluetailor_app/core/theme/app_strings.dart';
 import 'package:country_code_picker/country_code_picker.dart';
@@ -27,7 +26,7 @@ class LoginWithOTP extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
-        Text("Sign In",
+        Text("Sign In With OTP",
             style: TextStyle(
                 color: Colors.white,
                 fontSize: 18.sp,
@@ -42,30 +41,38 @@ class LoginWithOTP extends StatelessWidget {
                 fontSize: 13.sp,
                 fontWeight: FontWeight.w500)),
         SizedBox(height: 2.h),
+    
+        PrimaryGradientButton(title: 'Generate OTP', onPressed: onLoginPressed),
+         SizedBox(height: 2.h),
         InkWell(
           onTap: onLoginPasswordPressed,
-          child: Text(
-            "Login with Password",
-            style: TextStyle(
+          child: Container(
+            alignment: Alignment.center,
+            width: double.infinity,
+            padding: EdgeInsets.symmetric(vertical: 1.5.h),
+            decoration: BoxDecoration(
               color: primaryRed,
-              fontSize: 15.sp,
-              fontWeight: FontWeight.w700,
-              decoration: TextDecoration.underline,
-              decorationColor: primaryRed,
+              borderRadius: BorderRadius.circular(5)
+            ),
+            child: Text(
+              "Login with Password",
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 15.sp,
+                fontWeight: FontWeight.w500,
+            
+              ),
             ),
           ),
         ),
-        SizedBox(height: 4.h),
-        PrimaryGradientButton(title: 'Proceed', onPressed: onLoginPressed),
-        SizedBox(height: 2.h),
-        Align(
-          alignment: Alignment.center,
-          child: Text("OR",
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 14.sp,
-                  fontWeight: FontWeight.w700)),
-        ),
+        // Align(
+        //   alignment: Alignment.center,
+        //   child: Text("OR",
+        //       style: TextStyle(
+        //           color: Colors.white,
+        //           fontSize: 14.sp,
+        //           fontWeight: FontWeight.w700)),
+        // ),
           // SizedBox(height: 2.h),
           // PrimaryIconButton(
           //     title: "Continue with Google",

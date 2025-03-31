@@ -13,7 +13,7 @@ import 'package:bluetailor_app/common/widgets/primary_text_field.dart';
 import 'package:bluetailor_app/core/img/functions_and_aws.dart';
 import 'package:bluetailor_app/core/theme/app_strings.dart';
 import 'package:bluetailor_app/features/auth/presentation/bloc/auth_bloc.dart';
-import 'package:bluetailor_app/features/settings/presentation/bloc/settings_bloc.dart';
+import 'package:bluetailor_app/features/settings/presentation/bloc/settings/settings_bloc.dart';
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

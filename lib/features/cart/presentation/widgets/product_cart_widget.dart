@@ -9,8 +9,21 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:sizer/sizer.dart';
 
-class ProductCartWidget extends StatelessWidget {
+class ProductCartWidget extends StatefulWidget {
   const ProductCartWidget({super.key});
+
+  @override
+  State<ProductCartWidget> createState() => _ProductCartWidgetState();
+}
+
+class _ProductCartWidgetState extends State<ProductCartWidget> {
+  final TextEditingController _couponController = TextEditingController();
+
+  @override
+  void dispose() {
+    _couponController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +73,8 @@ class ProductCartWidget extends StatelessWidget {
                         //     ])),
                         BlocBuilder<AddressCubit, AddressState>(
                           builder: (context, state) {
-                            if (state.addressStatus == AddressStatus.loaded) {
+                            if (state.addressStatus == AddressStatus.loaded &&
+                                state.addresses!.isNotEmpty) {
                               return Padding(
                                 padding: EdgeInsets.only(left: 5.w, right: 5.w),
                                 child: AddressBoxWidget(
@@ -71,40 +85,52 @@ class ProductCartWidget extends StatelessWidget {
                                 ),
                               );
                             } else {
-                              return const SizedBox.shrink();
+                              return Padding(
+                                padding: EdgeInsets.only(left: 5.w, right: 5.w),
+                                child: const EmptyAddressBox(),
+                              );
                             }
                           },
                         ),
                         SizedBox(
                           height: 3.h,
                         ),
-                        // Padding(
-                        //   padding: EdgeInsets.only(left: 5.w, right: 5.w),
-                        //   child: TextField(
-                        //     decoration: InputDecoration(
-                        //         hintText: "Add Coupon",
-                        //         hintStyle: TextStyle(
-                        //             color: Colors.black.withOpacity(0.27),
-                        //             fontSize: 16.sp,
-                        //             fontWeight: FontWeight.w400),
-                        //         border: const UnderlineInputBorder(
-                        //             borderSide:
-                        //                 BorderSide(color: Color(0xFFBEBEBE))),
-                        //         suffix: Container(
-                        //           padding: const EdgeInsets.all(8.0),
-                        //           decoration: BoxDecoration(
-                        //               color: primaryBlue,
-                        //               borderRadius: BorderRadius.circular(5)),
-                        //           child: const Icon(
-                        //             Icons.check,
-                        //             color: Colors.white,
-                        //           ),
-                        //         )),
-                        //   ),
-                        // ),
-                        // SizedBox(
-                        //   height: 3.h,
-                        // ),
+                        Padding(
+                          padding: EdgeInsets.only(left: 5.w, right: 5.w),
+                          child: TextField(
+                            controller: _couponController,
+                            decoration: InputDecoration(
+                                hintText: "Add Coupon",
+                                hintStyle: TextStyle(
+                                    color: Colors.black.withValues(alpha: 0.27),
+                                    fontSize: 16.sp,
+                                    fontWeight: FontWeight.w400),
+                                border: const UnderlineInputBorder(
+                                    borderSide:
+                                        BorderSide(color: Color(0xFFBEBEBE))),
+                                suffix: InkWell(
+                                  onTap: () {
+                                    context
+                                        .read<ProductCartCubit>()
+                                        .validateCoupon(
+                                            code: _couponController.text);
+                                  },
+                                  child: Container(
+                                    padding: const EdgeInsets.all(8.0),
+                                    decoration: BoxDecoration(
+                                        color: primaryBlue,
+                                        borderRadius: BorderRadius.circular(5)),
+                                    child: const Icon(
+                                      Icons.check,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                )),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 3.h,
+                        ),
                         PriceBoxWidget(
                           gTotal: state.cart.gTotal,
                           total: state.cart.totalAmount,

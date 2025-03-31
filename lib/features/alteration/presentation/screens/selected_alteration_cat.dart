@@ -8,9 +8,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:sizer/sizer.dart';
 
-class SelectedAlterationCat extends StatelessWidget {
+class SelectedAlterationCat extends StatefulWidget {
   final List<SelectedAlterationCatEntity> selectedCat;
   const SelectedAlterationCat({super.key, required this.selectedCat});
+
+  @override
+  State<SelectedAlterationCat> createState() => _SelectedAlterationCatState();
+}
+
+class _SelectedAlterationCatState extends State<SelectedAlterationCat> {
+  List<SelectedAlterationCatEntity> catList = [];
+
+  @override
+  void initState() {
+    catList = widget.selectedCat;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,14 +47,16 @@ class SelectedAlterationCat extends StatelessWidget {
                 separatorBuilder: (context, index) => SizedBox(
                       height: 1.h,
                     ),
-                itemCount: selectedCat.length,
+                itemCount: catList.length,
                 itemBuilder: (context, index) {
                   return ExpandablePanel(
                       theme: const ExpandableThemeData(hasIcon: false),
                       header: Row(
                         children: [
-                          CachedNetworkImage(imageUrl: selectedCat[index].img,
-                          height: 15.h,),
+                          CachedNetworkImage(
+                            imageUrl: catList[index].img,
+                            height: 15.h,
+                          ),
                           SizedBox(
                             width: 5.w,
                           ),
@@ -50,7 +65,7 @@ class SelectedAlterationCat extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                "${selectedCat[index].label} Stitching",
+                                "${catList[index].label} Stitching",
                                 style: TextStyle(
                                     fontWeight: FontWeight.w600,
                                     color: black2,
@@ -60,7 +75,7 @@ class SelectedAlterationCat extends StatelessWidget {
                                 height: 1.h,
                               ),
                               Text(
-                                "${selectedCat[index].length} Garments",
+                                "${catList[index].length} Garments",
                                 style: TextStyle(
                                     fontWeight: FontWeight.w500,
                                     color: black2,
@@ -81,13 +96,33 @@ class SelectedAlterationCat extends StatelessWidget {
                               ),
                           shrinkWrap: true,
                           padding: EdgeInsets.symmetric(vertical: 1.h),
-                          itemCount: selectedCat[index].length,
+                          itemCount: catList[index].length,
                           itemBuilder: (context, indx) {
                             return InkWell(
                               onTap: () {
-                                Navigator.pushNamed(
-                                    context, '/alteration-option',
-                                    arguments: selectedCat[index]);
+                                if (catList[index]
+                                        .completedIndex
+                                        .contains(indx) ==
+                                    false) {
+                                  Navigator.pushNamed(
+                                      context, '/alteration-option',
+                                      arguments: {
+                                        "selectedCat":
+                                            widget.selectedCat[index],
+                                        "onTap": () {
+                                          setState(() {
+                                            catList[index] =
+                                                catList[index].copyWith(
+                                              completedIndex: [
+                                                ...catList[index]
+                                                    .completedIndex,
+                                                indx
+                                              ], // Append new index
+                                            );
+                                          });
+                                        }
+                                      });
+                                }
                               },
                               child: Container(
                                 padding: EdgeInsets.symmetric(
@@ -108,12 +143,20 @@ class SelectedAlterationCat extends StatelessWidget {
                                       width: 5.w,
                                     ),
                                     Text(
-                                      "${selectedCat[index].label} ${indx + 1}",
+                                      "${catList[index].label} ${indx + 1}",
                                       style: TextStyle(
                                           fontWeight: FontWeight.w500,
                                           fontSize: 16.sp,
                                           color: black2),
-                                    )
+                                    ),
+                                    const Spacer(),
+                                    if (catList[index]
+                                        .completedIndex
+                                        .contains(indx))
+                                      const Icon(
+                                        Icons.check,
+                                        color: primaryRed,
+                                      )
                                   ],
                                 ),
                               ),

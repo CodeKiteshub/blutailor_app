@@ -1,7 +1,9 @@
 import 'package:bluetailor_app/common/entities/product_cart_entity.dart';
 import 'package:bluetailor_app/core/theme/app_colors.dart';
-import 'package:bluetailor_app/core/theme/app_strings.dart';
+import 'package:bluetailor_app/features/cart/presentation/cubit/product_cart_cubit/product_cart_cubit.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizer/sizer.dart';
 
 class ProductCartItemWidget extends StatelessWidget {
@@ -26,8 +28,11 @@ class ProductCartItemWidget extends StatelessWidget {
             children: [
               ClipRRect(
                 borderRadius: BorderRadius.circular(5),
-                child: Image.asset(appLogo,
-                    fit: BoxFit.fill, height: 120, width: 120),
+                child: CachedNetworkImage(
+                    imageUrl: cartItem[index].images.first,
+                    fit: BoxFit.fill,
+                    height: 120,
+                    width: 120),
               ),
               SizedBox(
                 width: 5.w,
@@ -57,7 +62,11 @@ class ProductCartItemWidget extends StatelessWidget {
                       height: 2.h,
                     ),
                     InkWell(
-                      onTap: () {},
+                      onTap: () {
+                        context
+                            .read<ProductCartCubit>()
+                            .removeItemFromCart(itemId: cartItem[index].itemId);
+                      },
                       child: Container(
                         padding: const EdgeInsets.all(8),
                         decoration: BoxDecoration(

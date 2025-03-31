@@ -20,7 +20,8 @@ class SaveAppointmentUsecase implements UseCase<String, SaveAppointmentParam> {
         appointmentType: params.appointmentType,
         appointmentDate: params.appointmentDate,
         appointmentSelectedTime: params.appointmentSelectedTime,
-        lookingFor: params.lookingFor);
+        lookingFor: params.lookingFor,
+        address: params.address);
   }
 }
 
@@ -34,6 +35,7 @@ class SaveAppointmentParam {
   DateEntity appointmentDate;
   String appointmentSelectedTime;
   String lookingFor;
+  Map<String, dynamic>? address;
   SaveAppointmentParam({
     required this.firstName,
     required this.lastName,
@@ -44,5 +46,6 @@ class SaveAppointmentParam {
     required this.appointmentDate,
     required this.appointmentSelectedTime,
     required this.lookingFor,
+    this.address,
   });
 }

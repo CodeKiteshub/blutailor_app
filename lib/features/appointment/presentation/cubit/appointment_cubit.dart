@@ -24,6 +24,7 @@ class AppointmentCubit extends Cubit<AppointmentState> {
     required String lookingFor,
     required String type,
     required DateTime selectedDate,
+    Map<String, dynamic>? address
   }) async {
     emit(AppointmentLoading());
     final date = DateEntity(
@@ -46,7 +47,8 @@ class AppointmentCubit extends Cubit<AppointmentState> {
             appointmentType: type,
             appointmentDate: date,
             appointmentSelectedTime: timeStmp,
-            lookingFor: lookingFor));
+            lookingFor: lookingFor,
+            address: address));
 
     res.fold((l) => emit(AppointmentError(error: l.message)),
         (r) => emit(AppointmentSaved()));

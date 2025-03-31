@@ -1,25 +1,26 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:sizer/sizer.dart';
 
 import 'package:bluetailor_app/core/theme/app_colors.dart';
-import 'package:bluetailor_app/features/settings/domain/entities/order_entity.dart';
+
 
 class OrderTile extends StatelessWidget {
-  final OrderEntity order;
+  final String orderNo;
+  final String orderDate;
+  final String orderPrice;
+  final String orderName;
   const OrderTile({
     super.key,
-    required this.order,
+    required this.orderNo,
+    required this.orderDate,
+    required this.orderPrice,
+    required this.orderName,
   });
 
   @override
   Widget build(BuildContext context) {
-    final date = DateFormat('dd-MM-yyyy').format(DateTime(
-        order.orderDateTime.year,
-        order.orderDateTime.month,
-        order.orderDateTime.day));
     return Container(
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10), color: primaryBlue),
@@ -31,13 +32,13 @@ class OrderTile extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(order.items.firstOrNull?.name ?? "",
+                Text(orderName,
                     style: TextStyle(
                         fontSize: 20.sp,
                         fontWeight: FontWeight.w700,
                         color: Colors.white)),
                 Text(
-                  "Order ${order.orderSrNo}",
+                  "Order $orderNo",
                   style: TextStyle(
                       fontSize: 15.sp,
                       fontWeight: FontWeight.w700,
@@ -45,7 +46,7 @@ class OrderTile extends StatelessWidget {
                 ),
                 SizedBox(height: 2.h),
                 Text(
-                  "Ordered on $date",
+                  "Ordered on $orderDate",
                   style: TextStyle(
                       fontSize: 13.sp,
                       fontWeight: FontWeight.w500,
@@ -62,7 +63,7 @@ class OrderTile extends StatelessWidget {
                 // ),
                 SizedBox(height: 1.h),
                 Text(
-                  "₹${order.orderTotal}",
+                  "₹$orderPrice",
                   style: TextStyle(
                       fontSize: 17.sp,
                       fontFamily: "dmsans",
